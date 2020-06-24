@@ -1,0 +1,4 @@
+spring:
+  #  激活的配置文件 dev|prod
+  profiles:
+    active: dev
