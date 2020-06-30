@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
+import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 
@@ -52,10 +53,12 @@ public class CodeGenerator {
         parentPackage，包名，形如com.izneus.bonfire
         baseDir，相对工程路径的基础目录，形如/src/main/java
          */
-        String parentPackage = "com.izneus.bonfire";
-        String baseDir = "/mpg";
+        String parentPackage = "com.izneus.bonfire.module.system";
+        String baseDir = "/src/main/java";
         // xml文件生成路径，根据需要酌情修改
-        String xmlDir = "/mpg/xml/";
+        String xmlDir = "/src/main/resources/mapper";
+        // 创建者
+        String author = "Izneus";
 
         // 代码生成器
         AutoGenerator mpg = new AutoGenerator();
@@ -64,10 +67,11 @@ public class CodeGenerator {
         GlobalConfig gc = new GlobalConfig();
         String projectPath = System.getProperty("user.dir");
         gc.setOutputDir(projectPath + baseDir);
-        gc.setAuthor("CodeGenerator");
+        gc.setAuthor(author);
         gc.setOpen(false);
         gc.setServiceName("%sService");
         gc.setEntityName("%sEntity");
+        gc.setDateType(DateType.ONLY_DATE);
         // gc.setSwagger2(true); 实体属性 Swagger2 注解
         mpg.setGlobalConfig(gc);
 
