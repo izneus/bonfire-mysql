@@ -3,6 +3,7 @@ package com.izneus.bonfire.common.exception;
 import com.izneus.bonfire.common.constant.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,6 +21,22 @@ import java.util.List;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+    /**
+     * 处理自定义异常
+     */
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ApiError> handleBadRequestException(BadRequestException e) {
+        log.error("BadRequestException", e);
+        // 提取错误码的前三位作为HttpStatusCode
+        String value = String.valueOf(e.getErrorCode().getValue());
+        String httpStatusCode = value.substring(0, 3);
+        // 构造返回
+        return new ResponseEntity<>(
+                new ApiError(e.getErrorCode(), e.getErrorMessage(), e.getMessage()),
+                HttpStatus.valueOf(Integer.parseInt(httpStatusCode))
+        );
+    }
+
     /**
      * 处理所有接口数据验证异常
      */

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
+ * mybatis-plus代码生成器
  * 演示例子，执行 main 方法控制台输入模块表名回车自动生成对应项目目录中
  *
  * @author AutoGenerator
@@ -53,10 +54,10 @@ public class CodeGenerator {
         parentPackage，包名，形如com.izneus.bonfire
         baseDir，相对工程路径的基础目录，形如/src/main/java
          */
-        String parentPackage = "com.izneus.bonfire.module.system";
-        String baseDir = "/src/main/java";
+        String parentPackage = "";
+        String baseDir = "/mpg";
         // xml文件生成路径，根据需要酌情修改
-        String xmlDir = "/src/main/resources/mapper";
+        String xmlDir = "/mpg/mapper";
         // 创建者
         String author = "Izneus";
 

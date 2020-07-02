@@ -4,7 +4,12 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * 错误码枚举
+ * 错误码枚举，
+ * 当前采用Http Status Code后面扩展2位的方法标记不同错误，
+ * 而不同业务系统各自有着自己的详细的错误信息，
+ * 可以写在ApiError返回的message字段或者扩展details字段作为user tip方便api调用者和终端用户查看
+ * 当前枚举的错误类型只粗略的分了大类，方便api调用出错时界定负责人，
+ * 比如400大多数为请求参数有误，而500是服务器异常
  *
  * @author Izneus
  * @date 2020/06/30
