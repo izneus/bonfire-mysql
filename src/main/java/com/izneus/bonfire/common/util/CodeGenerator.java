@@ -1,4 +1,4 @@
-package com.izneus.bonfire.generator;
+package com.izneus.bonfire.common.util;
 
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;

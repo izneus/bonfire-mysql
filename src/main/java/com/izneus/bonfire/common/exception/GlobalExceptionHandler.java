@@ -4,6 +4,8 @@ import com.izneus.bonfire.common.constant.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,7 +24,7 @@ import java.util.List;
 @Slf4j
 public class GlobalExceptionHandler {
     /**
-     * 处理自定义异常
+     * 处理自定义的错误请求类异常
      */
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ApiError> handleBadRequestException(BadRequestException e) {
@@ -35,6 +37,27 @@ public class GlobalExceptionHandler {
                 new ApiError(e.getErrorCode(), e.getErrorMessage(), e.getMessage()),
                 HttpStatus.valueOf(Integer.parseInt(httpStatusCode))
         );
+    }
+
+    /**
+     * 主要是处理loadUserByUsername里抛出的UsernameNotFoundException，会转为BadCredentialsException
+     */
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ApiError badCredentialsException(BadCredentialsException e) {
+        log.error("BadCredentialsException", e);
+        return new ApiError(ErrorCode.UNAUTHENTICATED, e.getMessage(), e.getMessage());
+    }
+
+    /**
+     * InternalAuthenticationServiceException
+     * 主要是处理loadUserByUsername里抛出的自定义错误
+     */
+    @ExceptionHandler(InternalAuthenticationServiceException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ApiError handleInternalAuthenticationServiceException(InternalAuthenticationServiceException e) {
+        log.error("InternalAuthenticationServiceException", e);
+        return new ApiError(ErrorCode.UNAUTHENTICATED, e.getMessage(), e.getMessage());
     }
 
     /**
@@ -58,6 +81,7 @@ public class GlobalExceptionHandler {
      * 处理所有其他异常
      */
     @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiError handleException(Exception e) {
         // 打印堆栈信息
         log.error("Exception", e);

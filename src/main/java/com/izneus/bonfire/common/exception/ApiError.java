@@ -10,7 +10,7 @@ import lombok.Data;
  * @date 2020/06/30
  */
 @Data
-class ApiError {
+public class ApiError {
     private int code;
     private String message;
     private String status;
@@ -18,7 +18,7 @@ class ApiError {
     // 可以按需添加自定义内容丰富错误返回，帮助debug
     // private List<ErrorDetail> details;
 
-    ApiError(ErrorCode errorCode, String message, String exception) {
+    public ApiError(ErrorCode errorCode, String message, String exception) {
         this.message = message;
         this.code = errorCode.getValue();
         this.status = errorCode.getReason();
