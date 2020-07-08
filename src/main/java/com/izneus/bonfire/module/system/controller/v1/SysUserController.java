@@ -1,6 +1,9 @@
 package com.izneus.bonfire.module.system.controller.v1;
 
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -13,8 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Izneus
  * @since 2020-06-28
  */
+@Api(tags = "系统：用户")
 @RestController
-@RequestMapping("//sys-user-entity")
+@RequestMapping("/api/v1/users")
 public class SysUserController {
+
+    @ApiOperation("aaa")
+    @GetMapping("aaa")
+    public String listUsers() {
+        return "aaa";
+    }
+
 
 }

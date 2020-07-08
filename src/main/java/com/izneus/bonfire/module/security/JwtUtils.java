@@ -40,7 +40,7 @@ public class JwtUtils {
         Date nowDate = new Date();
         Date expireDate = new Date(nowDate.getTime() + jwtProperties.getExpire() * 1000);
         return Jwts.builder()
-//                .setSubject(userId)
+                .setSubject(authentication.getName())
                 .setId(UUID.randomUUID().toString())
                 .setExpiration(expireDate)
                 .setIssuedAt(nowDate)
@@ -64,7 +64,7 @@ public class JwtUtils {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList())
                 : Collections.emptyList();
-        User principal = new User(claims.getSubject(), "", authorities);
+        User principal = new User(claims.getSubject(), "*", authorities);
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 }

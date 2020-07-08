@@ -27,7 +27,7 @@ public class LoginServiceImpl implements LoginService {
     public LoginDTO login(LoginQuery loginQuery) {
         // todo 验证码
 
-        // 集成spring security的账号密码验证
+        // 调用spring security的账号密码验证
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginQuery.getUsername(), loginQuery.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);

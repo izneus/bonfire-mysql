@@ -46,8 +46,8 @@ public class JwtFilter extends OncePerRequestFilter {
         String bearerToken = request.getHeader(jwtProperties.getHeader());
         // 判断token类型
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(jwtProperties.getType())) {
-            // 去掉令牌前缀
-            return bearerToken.replace(jwtProperties.getType(), "");
+            // 去掉令牌前缀，注意type后面的空格
+            return bearerToken.replace(jwtProperties.getType(), "").trim();
         } else {
             log.debug("非法Token：{}", bearerToken);
         }
