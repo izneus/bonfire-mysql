@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 登录
+ * 登录，当前默认用户名admin1，默认密码Admin123
  *
  * @author Izneus
  * @date 2020/06/28
@@ -32,6 +32,7 @@ public class LoginController {
         return loginService.login(loginQuery);
     }
 
+    @ApiOperation("登出")
     @PostMapping("/logout")
     public String logout() {
         return null;

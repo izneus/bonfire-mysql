@@ -29,11 +29,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-    @Bean
+/*    @Bean
     GrantedAuthorityDefaults grantedAuthorityDefaults() {
         // 去除 ROLE_ 前缀
         return new GrantedAuthorityDefaults("");
-    }
+    }*/
 
     @Bean
     public PasswordEncoder passwordEncoder() {
