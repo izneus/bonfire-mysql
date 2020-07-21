@@ -26,4 +26,8 @@ public class LoginQuery {
     @ApiModelProperty(value = "验证码", required = true)
     @NotBlank(message = "验证码不能为空")
     private String captcha;
+
+    @ApiModelProperty(value = "验证码id", required = true)
+    @NotBlank(message = "验证码id不能为空")
+    private String captchaId;
 }

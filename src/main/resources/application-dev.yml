@@ -1,7 +1,15 @@
 spring:
-  #  数据源
+  # 数据源
   datasource:
     driver-class-name: oracle.jdbc.OracleDriver
     url: jdbc:oracle:thin:@144.52.16.141:1521:orcl
     username: BONFIRE
     password: BONFIRE
+  # redis
+  redis:
+    host: 144.52.16.143
+    password: foobared
+    # 启用连接池
+    lettuce:
+      pool:
+        max-active: 8

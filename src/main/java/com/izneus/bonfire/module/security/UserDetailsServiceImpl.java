@@ -39,7 +39,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (user.getState() == null || !user.getState().equals(Dict.UserState.OK.getCode())) {
             throw new BadRequestException(ErrorCode.PERMISSION_DENIED, "账号异常已被锁定，请联系系统管理员");
         }
-        return new User(user.getUsername(), user.getPassword(),
+        return new JwtUser(user.getId(), user.getUsername(), user.getPassword(),
                 AuthorityUtils.createAuthorityList("ADMIN"));
     }
 }

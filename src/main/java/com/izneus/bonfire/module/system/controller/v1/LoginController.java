@@ -2,15 +2,13 @@ package com.izneus.bonfire.module.system.controller.v1;
 
 import com.izneus.bonfire.module.system.controller.v1.query.LoginQuery;
 import com.izneus.bonfire.module.system.service.LoginService;
+import com.izneus.bonfire.module.system.service.dto.CaptchaDTO;
 import com.izneus.bonfire.module.system.service.dto.LoginDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 登录，当前默认用户名admin1，默认密码Admin123
@@ -23,8 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
 public class LoginController {
-
     private final LoginService loginService;
+
+    @ApiOperation("获得验证码")
+    @GetMapping("/captcha")
+    public CaptchaDTO getCaptcha() {
+        return loginService.getCaptcha();
+    }
 
     @ApiOperation("登录")
     @PostMapping("/login")

@@ -13,7 +13,6 @@ import lombok.Data;
 public class LoginDTO {
     @ApiModelProperty("用户名")
     private final String username;
-
     @ApiModelProperty("jwt")
     private final String token;
 }

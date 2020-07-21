@@ -40,7 +40,7 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     /**
-     * 初步校验Token
+     * 初步校验Token类型
      */
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(jwtProperties.getHeader());

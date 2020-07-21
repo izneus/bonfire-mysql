@@ -64,6 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/*/api-docs").permitAll()
                 // 登录允许匿名访问
                 .antMatchers("/api/v1/login").permitAll()
+                .antMatchers("/api/v1/captcha").permitAll()
                 .anyRequest().authenticated();
     }
 }
