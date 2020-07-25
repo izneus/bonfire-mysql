@@ -73,4 +73,8 @@ public class RedisUtils {
     public void del(String key) {
         redisTemplate.delete(key);
     }
+
+    public void expire(String key, long time, TimeUnit timeUnit) {
+        redisTemplate.expire(key, time, timeUnit);
+    }
 }

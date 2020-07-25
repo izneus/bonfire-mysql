@@ -13,3 +13,8 @@ spring:
     lettuce:
       pool:
         max-active: 8
+
+# 工程自定义参数
+bonfire:
+  # 登录是否启用验证码校验
+  captchaEnabled: false

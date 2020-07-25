@@ -40,7 +40,8 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 主要是处理loadUserByUsername里抛出的UsernameNotFoundException，会转为BadCredentialsException
+     * 主要是处理loadUserByUsername里抛出的UsernameNotFoundException，
+     * 因为hideUserNotFoundExceptions=true会转为BadCredentialsException
      */
     @ExceptionHandler(BadCredentialsException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
@@ -85,6 +86,7 @@ public class GlobalExceptionHandler {
     public ApiError handleException(Exception e) {
         // 打印堆栈信息
         log.error("Exception", e);
-        return new ApiError(ErrorCode.INTERNAL, "服务器内部错误，请联系管理员", e.getMessage());
+        return new ApiError(ErrorCode.INTERNAL, "服务器内部错误，请联系管理员",
+                e + ": " + e.getMessage());
     }
 }

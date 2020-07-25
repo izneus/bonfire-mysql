@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
  */
 @Component
 public class JwtUtils {
+
     private final JwtProperties jwtProperties;
     private final RedisUtils redisUtils;
 
@@ -33,24 +34,36 @@ public class JwtUtils {
         this.key = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8));
     }
 
-    public String createToken(Authentication authentication) {
-        JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
+    public String createToken(String userId) {
+        Date nowDate = new Date();
+        Date expireDate = new Date(nowDate.getTime() + jwtProperties.getExpire() * 1000);
+        return Jwts.builder()
+                .setSubject(userId)
+                .setId(UUID.randomUUID().toString())
+                .setExpiration(expireDate)
+                .setIssuedAt(nowDate)
+                .signWith(key)
+                .compact();
+    }
+
+    /*public String createToken(Authentication authentication) {
+        SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
         // 设置权限字符串
-        /*String authorities = authentication.getAuthorities().stream()
+        *//*String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));*/
+                .collect(Collectors.joining(","));*//*
 
         Date nowDate = new Date();
         Date expireDate = new Date(nowDate.getTime() + jwtProperties.getExpire() * 1000);
         return Jwts.builder()
-                .setSubject(jwtUser.getId())
+                .setSubject(securityUser.getId())
                 .setId(UUID.randomUUID().toString())
                 .setExpiration(expireDate)
                 .setIssuedAt(nowDate)
                 // .claim("auth", authorities)
                 .signWith(key)
                 .compact();
-    }
+    }*/
 
     public Authentication getAuthentication(String token) {
         // 获得claims
@@ -69,7 +82,7 @@ public class JwtUtils {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList())
                 : Collections.emptyList();
-        JwtUser principal = new JwtUser(claims.getSubject(), null, null, authorities);
+        SecurityUser principal = new SecurityUser(claims.getSubject(), "*", "*", authorities);
 //        User principal = new User(claims.getSubject(), "*", authorities);
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }

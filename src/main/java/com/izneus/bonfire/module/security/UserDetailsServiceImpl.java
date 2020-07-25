@@ -8,7 +8,6 @@ import com.izneus.bonfire.module.system.entity.SysUserEntity;
 import com.izneus.bonfire.module.system.mapper.SysUserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,13 +32,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .eq(SysUserEntity::getUsername, username));
         // 找不到用户
         if (user == null) {
-            throw new BadRequestException(ErrorCode.INVALID_ARGUMENT, "用户名或密码错误");
+            throw new BadRequestException(ErrorCode.INVALID_ARGUMENT, "用户名不存在或密码错误");
         }
         // 账号状态
         if (user.getState() == null || !user.getState().equals(Dict.UserState.OK.getCode())) {
             throw new BadRequestException(ErrorCode.PERMISSION_DENIED, "账号异常已被锁定，请联系系统管理员");
         }
-        return new JwtUser(user.getId(), user.getUsername(), user.getPassword(),
+        return new SecurityUser(user.getId(), user.getUsername(), user.getPassword(),
                 AuthorityUtils.createAuthorityList("ADMIN"));
     }
 }
