@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
 public class LoginController {
+
     private final LoginService loginService;
 
     @ApiOperation("获得验证码")

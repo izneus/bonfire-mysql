@@ -49,7 +49,7 @@ public class LoginServiceImpl implements LoginService {
                     "因连续密码输入错误，该用户已被锁定，请30分钟之后重试");
         }
 
-        if (bonfireProperties.isCaptchaEnabled()) {
+        if (bonfireProperties.getCaptchaEnabled()) {
             /// 查询验证码
             String key = REDIS_KEY_TYPE_CAPTCHA + loginQuery.getCaptchaId();
             String captcha = (String) redisUtils.get(key);

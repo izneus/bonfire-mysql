@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author Izneus
- * @since 2020-07-02
+ * @since 2020-07-26
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -80,14 +80,20 @@ public class SysUserEntity implements Serializable {
     /**
      * 备注
      */
-    @TableField("NOTE")
-    private String note;
+    @TableField("REMARK")
+    private String remark;
 
     /**
      * 账号状态
      */
     @TableField("STATE")
     private String state;
+
+    /**
+     * 创建者的user_id
+     */
+    @TableField("CREATE_USER_ID")
+    private String createUserId;
 
 
 }

@@ -9,12 +9,18 @@ import com.izneus.bonfire.module.system.service.dto.LoginDTO;
  * @date 2020/07/17
  */
 public interface LoginService {
+    /**
+     * 登录
+     *
+     * @param loginQuery login表单
+     * @return LoginDTO
+     */
     LoginDTO login(LoginQuery loginQuery);
 
     /**
      * 生成登录用的验证码，缓存在redis里等待校验
      *
-     * @return return
+     * @return CaptchaDTO
      */
     CaptchaDTO getCaptcha();
 }

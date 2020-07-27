@@ -1,8 +1,8 @@
 package com.izneus.bonfire.module.system.service;
 
-import com.izneus.bonfire.module.system.controller.v1.query.LoginQuery;
-import com.izneus.bonfire.module.system.entity.SysUserEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.izneus.bonfire.module.system.controller.v1.query.CreateUserQuery;
+import com.izneus.bonfire.module.system.entity.SysUserEntity;
 
 /**
  * <p>
@@ -13,5 +13,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2020-06-28
  */
 public interface SysUserService extends IService<SysUserEntity> {
+
+    /**
+     * 新增用户
+     *
+     * @param createUserQuery 用户
+     * @return 新建成功返回用户id，失败返回null
+     */
+    String createUser(CreateUserQuery createUserQuery);
 
 }
