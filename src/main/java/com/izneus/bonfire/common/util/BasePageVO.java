@@ -1,5 +1,6 @@
 package com.izneus.bonfire.common.util;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -22,4 +23,10 @@ public class BasePageVO {
 
     @ApiModelProperty("一页的数据条数")
     private Long pageSize;
+
+    public BasePageVO(Page page) {
+        totalSize = page.getTotal();
+        pageNumber = page.getCurrent();
+        pageSize = page.getSize();
+    }
 }
