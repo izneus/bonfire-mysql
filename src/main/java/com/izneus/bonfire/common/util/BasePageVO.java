@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- * 这是分页返回的基类，比请求的基类多了一个totalSize属性
+ * 这是分页返回的基类，比请求的基类多了一个totalSize属性以及分页参数的构造函数
  *
  * @author Izneus
  * @date 2020/07/29
