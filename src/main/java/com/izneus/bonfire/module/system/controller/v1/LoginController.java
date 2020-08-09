@@ -1,5 +1,6 @@
 package com.izneus.bonfire.module.system.controller.v1;
 
+import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.module.system.controller.v1.query.LoginQuery;
 import com.izneus.bonfire.module.system.service.LoginService;
 import com.izneus.bonfire.module.system.service.dto.CaptchaDTO;
@@ -30,7 +31,8 @@ public class LoginController {
         return loginService.getCaptcha();
     }
 
-    @ApiOperation("登录")
+    @ApiOperation("用户登录")
+    @AccessLog("用户登录")
     @PostMapping("/login")
     public LoginDTO login(@Validated @RequestBody LoginQuery loginQuery) {
         return loginService.login(loginQuery);

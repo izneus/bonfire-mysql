@@ -1,4 +1,4 @@
-package com.izneus.bonfire.common.util;
+package com.izneus.bonfire.common.base;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

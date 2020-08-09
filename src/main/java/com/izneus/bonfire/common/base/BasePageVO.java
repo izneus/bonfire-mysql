@@ -1,4 +1,4 @@
-package com.izneus.bonfire.common.util;
+package com.izneus.bonfire.common.base;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.ApiModel;

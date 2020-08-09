@@ -1,7 +1,7 @@
 package com.izneus.bonfire.module.system.controller.v1.vo;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.izneus.bonfire.common.util.BasePageVO;
+import com.izneus.bonfire.common.base.BasePageVO;
 import com.izneus.bonfire.common.util.BeanCopyUtils;
 import com.izneus.bonfire.module.system.entity.SysUserEntity;
 import com.izneus.bonfire.module.system.service.dto.ListUserDTO;

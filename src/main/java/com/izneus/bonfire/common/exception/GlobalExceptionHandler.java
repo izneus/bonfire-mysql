@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
         String httpStatusCode = value.substring(0, 3);
         // 构造返回
         return new ResponseEntity<>(
-                new ApiError(e.getErrorCode(), e.getErrorMessage(), e.getMessage()),
+                new ApiError(e.getErrorCode(), e.getErrorMessage(), e.toString()),
                 HttpStatus.valueOf(Integer.parseInt(httpStatusCode))
         );
     }
@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ApiError badCredentialsException(BadCredentialsException e) {
         log.error("BadCredentialsException", e);
-        return new ApiError(ErrorCode.UNAUTHENTICATED, e.getMessage(), e.getMessage());
+        return new ApiError(ErrorCode.UNAUTHENTICATED, e.getMessage(), e.toString());
     }
 
     /**
@@ -58,7 +58,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ApiError handleInternalAuthenticationServiceException(InternalAuthenticationServiceException e) {
         log.error("InternalAuthenticationServiceException", e);
-        return new ApiError(ErrorCode.UNAUTHENTICATED, e.getMessage(), e.getMessage());
+        return new ApiError(ErrorCode.UNAUTHENTICATED, e.getMessage(), e.toString());
     }
 
     /**
@@ -75,7 +75,7 @@ public class GlobalExceptionHandler {
         for (ObjectError error : errors) {
             message.append(error.getDefaultMessage()).append("。");
         }
-        return new ApiError(ErrorCode.INVALID_ARGUMENT, message.toString(), e.getMessage());
+        return new ApiError(ErrorCode.INVALID_ARGUMENT, message.toString(), e.toString());
     }
 
     /**
@@ -86,7 +86,6 @@ public class GlobalExceptionHandler {
     public ApiError handleException(Exception e) {
         // 打印堆栈信息
         log.error("Exception", e);
-        return new ApiError(ErrorCode.INTERNAL, "服务器内部错误，请联系管理员",
-                e + ": " + e.getMessage());
+        return new ApiError(ErrorCode.INTERNAL, "服务器内部错误，请联系管理员", e.toString());
     }
 }

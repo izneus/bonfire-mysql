@@ -2,9 +2,8 @@ package com.izneus.bonfire.module.system.controller.v1;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.izneus.bonfire.common.util.BeanCopyUtils;
+import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.module.system.controller.v1.query.CreateUserQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.ListUserQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.UpdateUserQuery;
@@ -13,7 +12,6 @@ import com.izneus.bonfire.module.system.controller.v1.vo.GetUserVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.ListUserVO;
 import com.izneus.bonfire.module.system.entity.SysUserEntity;
 import com.izneus.bonfire.module.system.service.SysUserService;
-import com.izneus.bonfire.module.system.service.dto.ListUserDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * <p>
@@ -34,13 +30,14 @@ import java.util.List;
  * @since 2020-06-28
  */
 @Api(tags = "系统：用户")
-@RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
+@RestController
 public class SysUserController {
 
     private final SysUserService sysUserService;
 
+    @AccessLog("用户列表")
     @ApiOperation("用户列表")
     @GetMapping("/users")
     public ListUserVO listUsers(ListUserQuery listUserQuery) {
@@ -70,6 +67,7 @@ public class SysUserController {
         return new CreateUserVO(id);
     }
 
+    @AccessLog("用户详情")
     @ApiOperation("查询用户详情")
     @GetMapping("/users/{userId}")
     public GetUserVO getUserById(@PathVariable String userId) {
@@ -82,6 +80,7 @@ public class SysUserController {
         return userVO;
     }
 
+    @AccessLog("更新用户")
     @ApiOperation("更新用户")
     @PutMapping("/users/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

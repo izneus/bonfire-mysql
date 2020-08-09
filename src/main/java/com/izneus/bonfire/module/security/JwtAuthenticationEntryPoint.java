@@ -35,6 +35,6 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         objectMapper.writeValue(httpServletResponse.getWriter(),
                 new ApiError(
                         ErrorCode.UNAUTHENTICATED, "由于令牌丢失、无效或过期，请求未通过身份验证",
-                        e.getMessage()));
+                        e.toString()));
     }
 }

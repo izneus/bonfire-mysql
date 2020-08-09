@@ -34,6 +34,6 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
         objectMapper.writeValue(httpServletResponse.getWriter(),
                 new ApiError(
                         ErrorCode.PERMISSION_DENIED, "无权限访问资源",
-                        e.getMessage()));
+                        e.toString()));
     }
 }
