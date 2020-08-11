@@ -12,15 +12,16 @@ import com.izneus.bonfire.module.system.entity.SysUserEntity;
 import com.izneus.bonfire.module.system.mapper.SysUserMapper;
 import com.izneus.bonfire.module.system.service.LoginService;
 import com.izneus.bonfire.module.system.service.dto.CaptchaDTO;
+import com.izneus.bonfire.module.system.service.dto.ListAuthorityDTO;
 import com.izneus.bonfire.module.system.service.dto.LoginDTO;
 import com.wf.captcha.SpecCaptcha;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static com.izneus.bonfire.common.constant.Constant.MAX_PASSWORD_RETRY_COUNT;
@@ -38,6 +39,9 @@ public class LoginServiceImpl implements LoginService {
     private final RedisUtils redisUtils;
     private final SysUserMapper sysUserMapper;
     private final BonfireProperties bonfireProperties;
+
+    @Value("${jwt.expire}")
+    private Long jwtExpire;
 
     @Override
     public LoginDTO login(LoginQuery loginQuery) {
@@ -106,7 +110,18 @@ public class LoginServiceImpl implements LoginService {
         // 登录成功，生成jwt
         String token = jwtUtils.createToken(user.getId());
 
-        // todo 保存权限到redis
+        // 保存权限到redis
+        List<ListAuthorityDTO> authorityList = sysUserMapper.listAuthoritiesByUserId(user.getId());
+        if (authorityList != null && authorityList.size() > 0) {
+            Set<String> authoritySet = new HashSet<>();
+            for (ListAuthorityDTO authority : authorityList) {
+                authoritySet.add("ROLE_" + authority.getRoleName());
+                authoritySet.add(authority.getAuthority());
+            }
+            String authorities = StringUtils.arrayToCommaDelimitedString(authoritySet.toArray());
+            redisUtils.set("user:" + user.getId() + ":authorities",
+                    authorities, jwtExpire, TimeUnit.SECONDS);
+        }
 
         // todo single login
 

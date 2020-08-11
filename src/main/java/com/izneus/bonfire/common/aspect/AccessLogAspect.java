@@ -82,6 +82,7 @@ public class AccessLogAspect {
         UserAgent ua = UserAgentUtil.parse(request.getHeader("User-Agent"));
         String browser = ua.getBrowser().toString();
         String os = ua.getOs().toString();
+        // todo 请求用户和请求耗费时间
 
         // 写库
         SysAccessLogEntity accessLogEntity = new SysAccessLogEntity();

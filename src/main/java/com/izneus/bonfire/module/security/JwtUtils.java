@@ -46,25 +46,6 @@ public class JwtUtils {
                 .compact();
     }
 
-    /*public String createToken(Authentication authentication) {
-        SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
-        // 设置权限字符串
-        *//*String authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));*//*
-
-        Date nowDate = new Date();
-        Date expireDate = new Date(nowDate.getTime() + jwtProperties.getExpire() * 1000);
-        return Jwts.builder()
-                .setSubject(securityUser.getId())
-                .setId(UUID.randomUUID().toString())
-                .setExpiration(expireDate)
-                .setIssuedAt(nowDate)
-                // .claim("auth", authorities)
-                .signWith(key)
-                .compact();
-    }*/
-
     public Authentication getAuthentication(String token) {
         // 获得claims
         Claims claims = Jwts.parserBuilder()
@@ -73,17 +54,13 @@ public class JwtUtils {
                 .parseClaimsJws(token)
                 .getBody();
         // redis获得权限字符串
-//        String authString = claims.get("auth", String.class);
         String userId = claims.getSubject();
         String authString = (String) redisUtils.get("user:" + userId + ":authorities");
         // 构造Authority
-        Collection<? extends GrantedAuthority> authorities = StringUtils.hasText(authString) ?
-                Arrays.stream(authString.split(","))
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList())
-                : Collections.emptyList();
+        Collection<? extends GrantedAuthority> authorities = StringUtils.hasText(authString)
+                ? Arrays.stream(authString.split(",")).map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList()) : Collections.emptyList();
         SecurityUser principal = new SecurityUser(claims.getSubject(), "*", "*", authorities);
-//        User principal = new User(claims.getSubject(), "*", authorities);
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 }

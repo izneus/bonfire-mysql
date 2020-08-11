@@ -1,6 +1,7 @@
 package com.izneus.bonfire.module.system.controller.v1;
 
 
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -13,8 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Izneus
  * @since 2020-08-08
  */
+@Api(tags = "访问日志")
+@RequestMapping("/api/v1")
 @RestController
-@RequestMapping("//sys-access-log-entity")
 public class SysAccessLogController {
 
 }

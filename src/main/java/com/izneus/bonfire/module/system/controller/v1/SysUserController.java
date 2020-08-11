@@ -17,6 +17,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +41,7 @@ public class SysUserController {
     @AccessLog("用户列表")
     @ApiOperation("用户列表")
     @GetMapping("/users")
+    @PreAuthorize("hasRole('admin')")
     public ListUserVO listUsers(ListUserQuery listUserQuery) {
         // GET /users 一般用来返回简单的用户列表，比如单表查询，
         // 实际开发中可能会涉及复杂到丧心病狂的动态查询条件以及连表查询其他关联信息
@@ -55,6 +57,7 @@ public class SysUserController {
 
     @ApiOperation("查询用户")
     @PostMapping("/users:search")
+    @PreAuthorize("hasRole('sys:users:search')")
     public String searchUsers() {
         return "aaa";
     }
@@ -70,6 +73,7 @@ public class SysUserController {
     @AccessLog("用户详情")
     @ApiOperation("查询用户详情")
     @GetMapping("/users/{userId}")
+    @PreAuthorize("hasAuthority('sys:users:get')")
     public GetUserVO getUserById(@PathVariable String userId) {
         SysUserEntity userEntity = sysUserService.getById(userId);
         if (userEntity == null) {
@@ -99,5 +103,10 @@ public class SysUserController {
         sysUserService.removeById(userId);
     }
 
+    @ApiOperation("当前用户权限")
+    @GetMapping("/user/authorities")
+    public void listCurrentUserAuthoriries() {
+
+    }
 
 }
