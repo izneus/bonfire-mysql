@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.*;
  * @author Izneus
  * @since 2020-06-28
  */
-@Api(tags = "系统：用户")
+@Api(tags = "系统:用户")
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
 @RestController
@@ -41,7 +41,7 @@ public class SysUserController {
     @AccessLog("用户列表")
     @ApiOperation("用户列表")
     @GetMapping("/users")
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasAuthority('sys:users:list')")
     public ListUserVO listUsers(ListUserQuery listUserQuery) {
         // GET /users 一般用来返回简单的用户列表，比如单表查询，
         // 实际开发中可能会涉及复杂到丧心病狂的动态查询条件以及连表查询其他关联信息
@@ -55,15 +55,18 @@ public class SysUserController {
         return new ListUserVO(page);
     }
 
+    @AccessLog("查询用户")
     @ApiOperation("查询用户")
     @PostMapping("/users:search")
-    @PreAuthorize("hasRole('sys:users:search')")
+    @PreAuthorize("hasAuthority('sys:users:search')")
     public String searchUsers() {
-        return "aaa";
+        return "users:search";
     }
 
+    @AccessLog("新增用户")
     @ApiOperation("新增用户")
     @PostMapping("/users")
+    @PreAuthorize("hasAuthority('sys:users:create')")
     @ResponseStatus(HttpStatus.CREATED)
     public CreateUserVO createUser(@Validated @RequestBody CreateUserQuery createUserQuery) {
         String id = sysUserService.createUser(createUserQuery);
@@ -86,6 +89,7 @@ public class SysUserController {
 
     @AccessLog("更新用户")
     @ApiOperation("更新用户")
+    @PreAuthorize("hasAuthority('sys:users:update')")
     @PutMapping("/users/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateUserById(@PathVariable String userId,
@@ -96,8 +100,10 @@ public class SysUserController {
         sysUserService.updateById(userEntity);
     }
 
+    @AccessLog("删除用户")
     @ApiOperation("删除用户")
     @DeleteMapping("/users/{userId}")
+    @PreAuthorize("hasAuthority('sys:users:delete')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUserById(@PathVariable String userId) {
         sysUserService.removeById(userId);

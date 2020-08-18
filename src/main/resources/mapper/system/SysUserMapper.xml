@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.izneus.bonfire.module.system.mapper.SysUserMapper">
-    <select id="listAuthoritiesByUserId" resultType="com.izneus.bonfire.module.system.service.dto.ListAuthorityDTO">
+    <select id="listAuthoritiesByUserId" resultType="com.izneus.bonfire.module.system.service.dto.ListAuthDTO">
         select t1.ID as USER_ID, t3.ROLE_NAME, t5.AUTHORITY
         from SYS_USER t1,
              SYS_USER_ROLE t2,

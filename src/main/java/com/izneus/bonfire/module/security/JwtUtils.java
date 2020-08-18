@@ -31,6 +31,7 @@ public class JwtUtils {
     public JwtUtils(JwtProperties jwtProperties, RedisUtils redisUtils) {
         this.jwtProperties = jwtProperties;
         this.redisUtils = redisUtils;
+        // todo 如果要给其他系统解析jwt，最好明确指定key
         this.key = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8));
     }
 

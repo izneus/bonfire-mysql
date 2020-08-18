@@ -12,7 +12,7 @@ import com.izneus.bonfire.module.system.entity.SysUserEntity;
 import com.izneus.bonfire.module.system.mapper.SysUserMapper;
 import com.izneus.bonfire.module.system.service.LoginService;
 import com.izneus.bonfire.module.system.service.dto.CaptchaDTO;
-import com.izneus.bonfire.module.system.service.dto.ListAuthorityDTO;
+import com.izneus.bonfire.module.system.service.dto.ListAuthDTO;
 import com.izneus.bonfire.module.system.service.dto.LoginDTO;
 import com.wf.captcha.SpecCaptcha;
 import lombok.RequiredArgsConstructor;
@@ -111,10 +111,10 @@ public class LoginServiceImpl implements LoginService {
         String token = jwtUtils.createToken(user.getId());
 
         // 保存权限到redis
-        List<ListAuthorityDTO> authorityList = sysUserMapper.listAuthoritiesByUserId(user.getId());
+        List<ListAuthDTO> authorityList = sysUserMapper.listAuthoritiesByUserId(user.getId());
         if (authorityList != null && authorityList.size() > 0) {
             Set<String> authoritySet = new HashSet<>();
-            for (ListAuthorityDTO authority : authorityList) {
+            for (ListAuthDTO authority : authorityList) {
                 authoritySet.add("ROLE_" + authority.getRoleName());
                 authoritySet.add(authority.getAuthority());
             }
