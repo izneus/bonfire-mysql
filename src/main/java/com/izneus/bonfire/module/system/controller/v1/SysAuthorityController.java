@@ -1,12 +1,12 @@
 package com.izneus.bonfire.module.system.controller.v1;
 
-
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.module.system.controller.v1.query.CreateAuthQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.ListAuthQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.GetAuthVO;
+import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.ListAuthVO;
 import com.izneus.bonfire.module.system.entity.SysAuthorityEntity;
 import com.izneus.bonfire.module.system.service.SysAuthorityService;
@@ -38,7 +38,7 @@ public class SysAuthorityController {
     @ApiOperation("权限列表")
     @GetMapping("/authorities")
     @PreAuthorize("hasAuthority('sys:authorities:list')")
-    public ListAuthVO listAuthorities(ListAuthQuery query) {
+    public ListAuthVO listAuthorities(@Validated ListAuthQuery query) {
         Page<SysAuthorityEntity> page = sysAuthorityService.page(
                 new Page<>(query.getPageNumber(), query.getPageSize()),
                 new LambdaQueryWrapper<SysAuthorityEntity>()
@@ -58,10 +58,11 @@ public class SysAuthorityController {
     @ApiOperation("新增权限")
     @PostMapping("/authorities")
     @PreAuthorize("hasAuthority('sys:authorities:create')")
-    public String createAuthority(CreateAuthQuery query) {
+    public IdVO createAuthority(@Validated CreateAuthQuery query) {
         SysAuthorityEntity authorityEntity = new SysAuthorityEntity();
         BeanUtils.copyProperties(query, authorityEntity);
-        return sysAuthorityService.save(authorityEntity) ? authorityEntity.getId() : null;
+        String id = sysAuthorityService.save(authorityEntity) ? authorityEntity.getId() : null;
+        return new IdVO(id);
     }
 
     @AccessLog("权限详情")
