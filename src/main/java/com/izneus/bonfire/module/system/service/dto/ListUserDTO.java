@@ -18,6 +18,18 @@ public class ListUserDTO {
     @ApiModelProperty("用户名")
     private String username;
 
+    @ApiModelProperty("昵称")
+    private String nickname;
+
+    @ApiModelProperty("邮件")
+    private String email;
+
+    @ApiModelProperty("电话")
+    private String mobile;
+
     @ApiModelProperty("备注")
     private String remark;
+
+    @ApiModelProperty("账号状态")
+    private String state;
 }

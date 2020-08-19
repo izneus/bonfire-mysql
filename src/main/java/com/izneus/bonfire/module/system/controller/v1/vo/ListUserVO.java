@@ -6,6 +6,7 @@ import com.izneus.bonfire.common.util.BeanCopyUtils;
 import com.izneus.bonfire.module.system.entity.SysUserEntity;
 import com.izneus.bonfire.module.system.service.dto.ListUserDTO;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,11 +16,12 @@ import java.util.List;
  * @author Izneus
  * @date 2020/07/29
  */
-@EqualsAndHashCode(callSuper = true)
 @ApiModel("用户列表vo")
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class ListUserVO extends BasePageVO {
 
+    @ApiModelProperty("用户列表")
     private List<ListUserDTO> users;
 
     public ListUserVO(Page<SysUserEntity> page) {

@@ -10,8 +10,8 @@ import lombok.Data;
  * @author Izneus
  * @date 2020/07/29
  */
-@Data
 @ApiModel("分页查询请求参数基类")
+@Data
 public class BasePageDTO {
 
     @ApiModelProperty("页码")

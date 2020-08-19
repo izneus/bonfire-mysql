@@ -7,8 +7,8 @@ import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.module.system.controller.v1.query.CreateUserQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.ListUserQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.UpdateUserQuery;
-import com.izneus.bonfire.module.system.controller.v1.vo.CreateUserVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.GetUserVO;
+import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.ListUserVO;
 import com.izneus.bonfire.module.system.entity.SysUserEntity;
 import com.izneus.bonfire.module.system.service.SysUserService;
@@ -42,15 +42,15 @@ public class SysUserController {
     @ApiOperation("用户列表")
     @GetMapping("/users")
     @PreAuthorize("hasAuthority('sys:users:list')")
-    public ListUserVO listUsers(ListUserQuery listUserQuery) {
+    public ListUserVO listUsers(ListUserQuery query) {
         // GET /users 一般用来返回简单的用户列表，比如单表查询，
         // 实际开发中可能会涉及复杂到丧心病狂的动态查询条件以及连表查询其他关联信息
         // 这种情况下可以考虑使用自定义动词，比如 POST /users:search 来解决
         Page<SysUserEntity> page = sysUserService.page(
-                new Page<>(listUserQuery.getPageNumber(), listUserQuery.getPageSize()),
+                new Page<>(query.getPageNumber(), query.getPageSize()),
                 new LambdaQueryWrapper<SysUserEntity>()
-                        .like(StringUtils.hasText(listUserQuery.getUsername()),
-                                SysUserEntity::getUsername, listUserQuery.getUsername())
+                        .like(StringUtils.hasText(query.getUsername()),
+                                SysUserEntity::getUsername, query.getUsername())
         );
         return new ListUserVO(page);
     }
@@ -68,9 +68,9 @@ public class SysUserController {
     @PostMapping("/users")
     @PreAuthorize("hasAuthority('sys:users:create')")
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateUserVO createUser(@Validated @RequestBody CreateUserQuery createUserQuery) {
+    public IdVO createUser(@Validated @RequestBody CreateUserQuery createUserQuery) {
         String id = sysUserService.createUser(createUserQuery);
-        return new CreateUserVO(id);
+        return new IdVO(id);
     }
 
     @AccessLog("用户详情")

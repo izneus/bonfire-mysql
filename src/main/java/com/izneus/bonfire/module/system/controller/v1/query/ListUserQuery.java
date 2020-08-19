@@ -11,7 +11,7 @@ import lombok.ToString;
  * @author Izneus
  * @date 2020/07/20
  */
-@ApiModel("用户列表")
+@ApiModel("用户列表query")
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)

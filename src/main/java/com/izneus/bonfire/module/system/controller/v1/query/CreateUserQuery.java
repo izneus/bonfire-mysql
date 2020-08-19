@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.Pattern;
+import java.util.List;
 
 /**
  * @author Izneus
@@ -19,6 +20,24 @@ public class CreateUserQuery {
     @Pattern(regexp = RegExp.USERNAME, message = "用户名必须为6-20位字母或者数字")
     private String username;
 
+    @ApiModelProperty("昵称")
+    private String nickname;
+
+    @ApiModelProperty("全名")
+    private String fullname;
+
+    @ApiModelProperty("邮件")
+    private String email;
+
+    @ApiModelProperty("电话")
+    private String mobile;
+
     @ApiModelProperty("备注")
     private String remark;
+
+    @ApiModelProperty("账号状态")
+    private String state;
+
+    @ApiModelProperty("角色id列表")
+    private List<String> roleIds;
 }
