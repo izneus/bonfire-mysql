@@ -1,10 +1,11 @@
-package com.izneus.bonfire.module.system.controller.v1.query;
+package com.izneus.bonfire.module.system.service.dto;
 
 import com.izneus.bonfire.common.constant.RegExp;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
  */
 @ApiModel("新增用户Query")
 @Data
-public class CreateUserQuery {
+public class UserDTO {
 
     @ApiModelProperty(value = "用户名", required = true)
     @Pattern(regexp = RegExp.USERNAME, message = "用户名必须为6-20位字母或者数字")
@@ -27,6 +28,7 @@ public class CreateUserQuery {
     private String fullname;
 
     @ApiModelProperty("邮件")
+    @Email
     private String email;
 
     @ApiModelProperty("电话")
