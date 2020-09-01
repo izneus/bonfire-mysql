@@ -1,6 +1,7 @@
 package com.izneus.bonfire.module.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.izneus.bonfire.module.system.service.dto.GetUserDTO;
 import com.izneus.bonfire.module.system.service.dto.UserDTO;
 import com.izneus.bonfire.module.system.entity.SysUserEntity;
 
@@ -26,9 +27,9 @@ public interface SysUserService extends IService<SysUserEntity> {
      * 通过id获取用户详情
      *
      * @param userId userId
-     * @return userDTO
+     * @return GetUserDTO
      */
-    UserDTO getUserById(String userId);
+    GetUserDTO getUserById(String userId);
 
     /**
      * 通过id更新用户信息

@@ -1,22 +1,19 @@
 package com.izneus.bonfire.module.system.controller.v1;
 
-
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.module.system.controller.v1.query.ListUserQuery;
-import com.izneus.bonfire.module.system.controller.v1.query.UpdateUserQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.ListUserVO;
 import com.izneus.bonfire.module.system.entity.SysUserEntity;
-import com.izneus.bonfire.module.system.entity.SysUserRoleEntity;
 import com.izneus.bonfire.module.system.service.SysUserRoleService;
 import com.izneus.bonfire.module.system.service.SysUserService;
+import com.izneus.bonfire.module.system.service.dto.GetUserDTO;
 import com.izneus.bonfire.module.system.service.dto.UserDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
@@ -24,8 +21,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <p>
@@ -42,7 +37,6 @@ import java.util.List;
 public class SysUserController {
 
     private final SysUserService userService;
-    private final SysUserRoleService userRoleService;
 
     @AccessLog("用户列表")
     @ApiOperation("用户列表")
@@ -80,10 +74,10 @@ public class SysUserController {
     }
 
     @AccessLog("用户详情")
-    @ApiOperation("查询用户详情")
+    @ApiOperation("用户详情")
     @GetMapping("/users/{userId}")
     @PreAuthorize("hasAuthority('sys:users:get')")
-    public UserDTO getUserById(@NotBlank @PathVariable String userId) {
+    public GetUserDTO getUserById(@NotBlank @PathVariable String userId) {
         return userService.getUserById(userId);
     }
 

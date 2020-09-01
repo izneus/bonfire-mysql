@@ -2,6 +2,7 @@ package com.izneus.bonfire.module.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.izneus.bonfire.config.BonfireProperties;
+import com.izneus.bonfire.module.system.service.dto.GetUserDTO;
 import com.izneus.bonfire.module.system.service.dto.UserDTO;
 import com.izneus.bonfire.module.system.entity.SysUserEntity;
 import com.izneus.bonfire.module.system.entity.SysUserRoleEntity;
@@ -47,13 +48,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     }
 
     @Override
-    public UserDTO getUserById(String userId) {
+    public GetUserDTO getUserById(String userId) {
         // 查询用户表
         SysUserEntity userEntity = getById(userId);
         if (userEntity == null) {
             return null;
         }
-        UserDTO userDTO = new UserDTO();
+        GetUserDTO userDTO = new GetUserDTO();
         BeanUtils.copyProperties(userEntity, userDTO);
         // 查询用户角色
         List<SysUserRoleEntity> userRoles = userRoleService.list(
