@@ -3,7 +3,7 @@ package com.izneus.bonfire.module.system.controller.v1;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
-import com.izneus.bonfire.module.system.controller.v1.query.CreateAuthQuery;
+import com.izneus.bonfire.module.system.service.dto.AuthDTO;
 import com.izneus.bonfire.module.system.controller.v1.query.ListAuthQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.GetAuthVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
@@ -58,9 +58,9 @@ public class SysAuthorityController {
     @ApiOperation("新增权限")
     @PostMapping("/authorities")
     @PreAuthorize("hasAuthority('sys:authorities:create')")
-    public IdVO createAuthority(@Validated CreateAuthQuery query) {
+    public IdVO createAuthority(@Validated AuthDTO authDTO) {
         SysAuthorityEntity authorityEntity = new SysAuthorityEntity();
-        BeanUtils.copyProperties(query, authorityEntity);
+        BeanUtils.copyProperties(authDTO, authorityEntity);
         String id = sysAuthorityService.save(authorityEntity) ? authorityEntity.getId() : null;
         return new IdVO(id);
     }
@@ -84,9 +84,9 @@ public class SysAuthorityController {
     @PutMapping("/authorities/{id}")
     @PreAuthorize("hasAuthority('sys:authorities:update')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateAuthorityById(@PathVariable String id, @Validated @RequestBody CreateAuthQuery query) {
+    public void updateAuthorityById(@PathVariable String id, @Validated @RequestBody AuthDTO authDTO) {
         SysAuthorityEntity authorityEntity = new SysAuthorityEntity();
-        BeanUtils.copyProperties(query, authorityEntity);
+        BeanUtils.copyProperties(authDTO, authorityEntity);
         authorityEntity.setId(id);
         sysAuthorityService.updateById(authorityEntity);
     }
