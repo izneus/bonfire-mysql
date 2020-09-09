@@ -16,7 +16,7 @@ public class Dict {
      */
     @RequiredArgsConstructor
     @Getter
-    public enum UserState {
+    public enum UserStatus {
         /**
          * 正常
          */

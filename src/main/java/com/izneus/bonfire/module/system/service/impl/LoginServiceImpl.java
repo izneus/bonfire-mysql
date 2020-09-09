@@ -82,7 +82,7 @@ public class LoginServiceImpl implements LoginService {
             throw new BadRequestException(ErrorCode.UNAUTHENTICATED, "用户名不存在或密码错误");
         }
         // 账号状态
-        if (user.getState() == null || !user.getState().equals(Dict.UserState.OK.getCode())) {
+        if (user.getStatus() == null || !user.getStatus().equals(Dict.UserStatus.OK.getCode())) {
             throw new BadRequestException(ErrorCode.PERMISSION_DENIED, "账号异常已被锁定，请联系系统管理员");
         }
         // 校验密码

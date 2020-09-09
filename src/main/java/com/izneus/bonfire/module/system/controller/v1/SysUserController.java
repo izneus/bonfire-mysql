@@ -86,7 +86,7 @@ public class SysUserController {
     @PreAuthorize("hasAuthority('sys:users:update')")
     @PutMapping("/users/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateUserById(@PathVariable String userId,
+    public void updateUserById(@NotBlank @PathVariable String userId,
                                @Validated @RequestBody UserDTO userDTO) {
         userService.updateUserById(userId, userDTO);
     }

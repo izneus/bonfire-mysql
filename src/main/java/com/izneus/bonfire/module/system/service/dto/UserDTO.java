@@ -16,7 +16,6 @@ import java.util.List;
 @ApiModel("新增用户Query")
 @Data
 public class UserDTO {
-
     @ApiModelProperty(value = "用户名", required = true)
     @Pattern(regexp = RegExp.USERNAME, message = "用户名必须为6-20位字母或者数字")
     private String username;

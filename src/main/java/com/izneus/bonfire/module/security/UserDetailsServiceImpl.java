@@ -35,7 +35,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new BadRequestException(ErrorCode.INVALID_ARGUMENT, "用户名不存在或密码错误");
         }
         // 账号状态
-        if (user.getState() == null || !user.getState().equals(Dict.UserState.OK.getCode())) {
+        if (user.getStatus() == null || !user.getStatus().equals(Dict.UserStatus.OK.getCode())) {
             throw new BadRequestException(ErrorCode.PERMISSION_DENIED, "账号异常已被锁定，请联系系统管理员");
         }
         return new SecurityUser(user.getId(), user.getUsername(), user.getPassword(),
