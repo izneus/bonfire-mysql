@@ -30,4 +30,24 @@ public class Dict {
         private final String code;
         private final String name;
     }
+
+    /**
+     * 字典状态
+     */
+    @RequiredArgsConstructor
+    @Getter
+    public enum DictStatus {
+        /**
+         * 正常
+         */
+        OK("0", "正常"),
+
+        /**
+         * 已禁用
+         */
+        DISABLED("1", "已禁用");
+
+        private final String code;
+        private final String name;
+    }
 }
