@@ -10,16 +10,16 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 系统_用户_角色关联表
+ * 上传文件信息表
  * </p>
  *
  * @author Izneus
- * @since 2020-09-15
+ * @since 2020-09-21
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("SYS_USER_ROLE")
-public class SysUserRoleEntity implements Serializable {
+@TableName("SYS_FILE")
+public class SysFileEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,16 +30,34 @@ public class SysUserRoleEntity implements Serializable {
     private String id;
 
     /**
-     * 用户id
+     * 文件名，特指上传之前的文件名
      */
-    @TableField("USER_ID")
-    private String userId;
+    @TableField("FILENAME")
+    private String filename;
 
     /**
-     * 角色id
+     * 哈希文件名，特指服务器保存在硬盘上的文件名，目前为uuid
      */
-    @TableField("ROLE_ID")
-    private String roleId;
+    @TableField("UNIQUE_FILENAME")
+    private String uniqueFilename;
+
+    /**
+     * 后缀
+     */
+    @TableField("SUFFIX")
+    private String suffix;
+
+    /**
+     * 文件路径
+     */
+    @TableField("PATH")
+    private String path;
+
+    /**
+     * 文件大小
+     */
+    @TableField("FILE_SIZE")
+    private Long fileSize;
 
     /**
      * 创建时间

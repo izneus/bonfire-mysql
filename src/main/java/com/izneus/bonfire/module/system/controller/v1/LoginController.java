@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * @author Izneus
  * @date 2020/06/28
  */
-@Api(tags = "登录")
+@Api(tags = "系统:登录")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
