@@ -54,7 +54,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFileEntity
             multipartFile.transferTo(file);
         } catch (IOException e) {
             log.error("IOException", e);
-            throw new BadRequestException(ErrorCode.INTERNAL, "转储文件失败");
+            throw new BadRequestException(ErrorCode.INTERNAL, "转储文件失败", e);
         }
         // 保存记录到文件表
         SysFileEntity fileEntity = new SysFileEntity();

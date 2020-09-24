@@ -70,10 +70,10 @@ public class SysDictController {
     }
 
     /// 字典一般没什么详情好看的
-    /*@AccessLog("用户详情")
-    @ApiOperation("用户详情")
+    /*@AccessLog("字典详情")
+    @ApiOperation("字典详情")
     @GetMapping("/dicts/{id}")
-    @PreAuthorize("hasAuthority('sys:users:get')")
+    @PreAuthorize("hasAuthority('sys:dicts:get')")
     public GetDictVO getDictById(@NotBlank @PathVariable String id) {
 
     }*/

@@ -11,11 +11,18 @@ import lombok.Getter;
  */
 @Getter
 public class BadRequestException extends RuntimeException {
+
     private final ErrorCode errorCode;
     private final String errorMessage;
 
     public BadRequestException(ErrorCode errorCode, String errorMessage) {
         super(errorMessage);
+        this.errorCode = errorCode;
+        this.errorMessage = errorMessage;
+    }
+
+    public BadRequestException(ErrorCode errorCode, String errorMessage, Throwable cause) {
+        super(errorMessage, cause);
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
     }
