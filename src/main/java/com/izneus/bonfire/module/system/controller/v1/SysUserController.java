@@ -7,7 +7,6 @@ import com.izneus.bonfire.module.system.controller.v1.query.ListUserQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.ListUserVO;
 import com.izneus.bonfire.module.system.entity.SysUserEntity;
-import com.izneus.bonfire.module.system.service.SysUserRoleService;
 import com.izneus.bonfire.module.system.service.SysUserService;
 import com.izneus.bonfire.module.system.service.dto.GetUserDTO;
 import com.izneus.bonfire.module.system.service.dto.UserDTO;

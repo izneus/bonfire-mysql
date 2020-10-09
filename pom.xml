@@ -193,6 +193,13 @@
             <scope>provided</scope>
         </dependency>
 
+        <!--os和硬件监控-->
+        <dependency>
+            <groupId>com.github.oshi</groupId>
+            <artifactId>oshi-core</artifactId>
+            <version>5.2.5</version>
+        </dependency>
+
     </dependencies>
 
     <build>

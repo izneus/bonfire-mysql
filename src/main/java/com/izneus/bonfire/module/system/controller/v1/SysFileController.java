@@ -52,7 +52,7 @@ public class SysFileController {
     @AccessLog("文件列表")
     @ApiOperation("文件列表")
     @GetMapping("/files")
-//    @PreAuthorize("hasAuthority('sys:files:list')")
+    @PreAuthorize("hasAuthority('sys:files:list')")
     public ListFileVO listFiles(ListFileQuery query) {
         // todo 文件上传可能会有权限控制，比如admin看所有，user看自己上传的
         // 检查是否包含起止时间
@@ -90,7 +90,7 @@ public class SysFileController {
     @PreAuthorize("hasAuthority('sys:files:update')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateAuthorityById(@NotBlank @PathVariable String id, @Validated @RequestBody FileQuery query) {
-        // 这里只是简单的更新文件表中的记录，并不修改硬盘上保存的文件
+        // todo 这里只是简单的更新文件表中的记录，并不修改硬盘上保存的文件
         SysFileEntity fileEntity = new SysFileEntity();
         BeanUtils.copyProperties(query, fileEntity);
         fileEntity.setId(id);
@@ -104,7 +104,7 @@ public class SysFileController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAuthorityById(@NotBlank @PathVariable String id) {
         fileService.removeById(id);
-        // 有需要也可以继续删除硬盘上的文件
+        // todo 有需要也可以继续删除硬盘上的文件
     }
 
 
