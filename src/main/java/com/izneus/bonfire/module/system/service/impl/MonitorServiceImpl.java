@@ -28,8 +28,8 @@ public class MonitorServiceImpl implements MonitorService {
         // todo cpu用hutool
         CpuInfo cpuInfo = OshiUtil.getCpuInfo();
 
-        // cpu
-        long[] prevTicks = OshiUtil.getProcessor().getSystemCpuLoadTicks();
+        /// cpu
+        /*long[] prevTicks = OshiUtil.getProcessor().getSystemCpuLoadTicks();
         Util.sleep(1000);
         long[] ticks = OshiUtil.getProcessor().getSystemCpuLoadTicks();
         long nice = ticks[TickType.NICE.getIndex()] - prevTicks[TickType.NICE.getIndex()];
@@ -41,12 +41,12 @@ public class MonitorServiceImpl implements MonitorService {
         long iowait = ticks[TickType.IOWAIT.getIndex()] - prevTicks[TickType.IOWAIT.getIndex()];
         long idle = ticks[TickType.IDLE.getIndex()] - prevTicks[TickType.IDLE.getIndex()];
         long totalCpu = user + nice + sys + idle + iowait + irq + softirq + steal;
-//        cpu.setCpuNum(OshiUtil.getProcessor().getLogicalProcessorCount());
-//        cpu.setTotal(totalCpu);
-//        cpu.setSys(cSys);
-//        cpu.setUsed(user);
-//        cpu.setWait(iowait);
-//        cpu.setFree(idle);
+        cpu.setCpuNum(OshiUtil.getProcessor().getLogicalProcessorCount());
+        cpu.setTotal(totalCpu);
+        cpu.setSys(cSys);
+        cpu.setUsed(user);
+        cpu.setWait(iowait);
+        cpu.setFree(idle);*/
 
         // 内存
         long totalMemory = OshiUtil.getMemory().getTotal();
