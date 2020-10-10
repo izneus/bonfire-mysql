@@ -2,6 +2,7 @@ package com.izneus.bonfire.module.system.controller.v1;
 
 import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.module.system.service.MonitorService;
+import com.izneus.bonfire.module.system.service.dto.MonitorDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +26,8 @@ public class MonitorController {
     @AccessLog("系统详情")
     @ApiOperation("系统详情")
     @GetMapping("/monitors")
-//    @PreAuthorize("hasAuthority('sys:monitors:list')")
-    public void listMonitors(){
-        monitorService.listMonitors();
+    @PreAuthorize("hasAuthority('sys:monitors:list')")
+    public MonitorDTO listMonitors() {
+        return monitorService.listMonitors();
     }
 }

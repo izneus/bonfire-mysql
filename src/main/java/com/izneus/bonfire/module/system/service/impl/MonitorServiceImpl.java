@@ -4,10 +4,9 @@ import cn.hutool.system.SystemUtil;
 import cn.hutool.system.oshi.CpuInfo;
 import cn.hutool.system.oshi.OshiUtil;
 import com.izneus.bonfire.module.system.service.MonitorService;
-import org.springframework.beans.BeanUtils;
+import com.izneus.bonfire.module.system.service.dto.MonitorDTO;
 import org.springframework.stereotype.Service;
-import oshi.hardware.CentralProcessor.TickType;
-import oshi.util.Util;
+import oshi.util.FormatUtil;
 
 /**
  * @author Izneus
@@ -17,7 +16,7 @@ import oshi.util.Util;
 public class MonitorServiceImpl implements MonitorService {
 
     @Override
-    public void listMonitors() {
+    public MonitorDTO listMonitors() {
         // 主机名，系统，ip，系统架构等
         String hostAddress = SystemUtil.getHostInfo().getAddress();
         String hostName = SystemUtil.getHostInfo().getName();
@@ -25,28 +24,8 @@ public class MonitorServiceImpl implements MonitorService {
         String osName = SystemUtil.getOsInfo().getName();
         String osVersion = SystemUtil.getOsInfo().getVersion();
 
-        // todo cpu用hutool
+        // cpu相关
         CpuInfo cpuInfo = OshiUtil.getCpuInfo();
-
-        /// cpu
-        /*long[] prevTicks = OshiUtil.getProcessor().getSystemCpuLoadTicks();
-        Util.sleep(1000);
-        long[] ticks = OshiUtil.getProcessor().getSystemCpuLoadTicks();
-        long nice = ticks[TickType.NICE.getIndex()] - prevTicks[TickType.NICE.getIndex()];
-        long irq = ticks[TickType.IRQ.getIndex()] - prevTicks[TickType.IRQ.getIndex()];
-        long softirq = ticks[TickType.SOFTIRQ.getIndex()] - prevTicks[TickType.SOFTIRQ.getIndex()];
-        long steal = ticks[TickType.STEAL.getIndex()] - prevTicks[TickType.STEAL.getIndex()];
-        long sys = ticks[TickType.SYSTEM.getIndex()] - prevTicks[TickType.SYSTEM.getIndex()];
-        long user = ticks[TickType.USER.getIndex()] - prevTicks[TickType.USER.getIndex()];
-        long iowait = ticks[TickType.IOWAIT.getIndex()] - prevTicks[TickType.IOWAIT.getIndex()];
-        long idle = ticks[TickType.IDLE.getIndex()] - prevTicks[TickType.IDLE.getIndex()];
-        long totalCpu = user + nice + sys + idle + iowait + irq + softirq + steal;
-        cpu.setCpuNum(OshiUtil.getProcessor().getLogicalProcessorCount());
-        cpu.setTotal(totalCpu);
-        cpu.setSys(cSys);
-        cpu.setUsed(user);
-        cpu.setWait(iowait);
-        cpu.setFree(idle);*/
 
         // 内存
         long totalMemory = OshiUtil.getMemory().getTotal();
@@ -63,6 +42,36 @@ public class MonitorServiceImpl implements MonitorService {
         String jreName = SystemUtil.getJavaRuntimeInfo().getName();
         String jreVersion = SystemUtil.getJavaRuntimeInfo().getVersion();
 
+        // 开始各种set填充返回
+        MonitorDTO monitorDTO = new MonitorDTO();
 
+        monitorDTO.setHostAddress(hostAddress);
+        monitorDTO.setHostName(hostName);
+
+        monitorDTO.setOsArch(osArch);
+        monitorDTO.setOsName(osName);
+        monitorDTO.setOsVersion(osVersion);
+
+        monitorDTO.setCpuModel(cpuInfo.getCpuModel());
+        monitorDTO.setCpuNum(cpuInfo.getCpuNum());
+        monitorDTO.setCpuTotal(cpuInfo.getToTal());
+        monitorDTO.setCpuFree(cpuInfo.getFree());
+        monitorDTO.setCpuSys(cpuInfo.getSys());
+        monitorDTO.setCpuUsed(cpuInfo.getUsed());
+        monitorDTO.setCpuWait(cpuInfo.getWait());
+
+        monitorDTO.setTotalMemory(FormatUtil.formatBytes(totalMemory));
+        monitorDTO.setFreeMemory(FormatUtil.formatBytes(freeMemory));
+        monitorDTO.setUsedMemory(FormatUtil.formatBytes(usedMemory));
+
+        monitorDTO.setJvmTotalMemory(FormatUtil.formatBytes(jvmTotalMemory));
+        monitorDTO.setJvmFreeMemory(FormatUtil.formatBytes(jvmFreeMemory));
+        monitorDTO.setJvmName(jvmName);
+        monitorDTO.setJvmVersion(jvmVersion);
+
+        monitorDTO.setJreName(jreName);
+        monitorDTO.setJreVersion(jreVersion);
+
+        return monitorDTO;
     }
 }

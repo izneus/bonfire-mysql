@@ -1,10 +1,17 @@
 package com.izneus.bonfire.module.system.service;
 
+import com.izneus.bonfire.module.system.service.dto.MonitorDTO;
+
 /**
  * @author Izneus
  * @date 2020/09/24
  */
 public interface MonitorService {
 
-    void listMonitors();
+    /**
+     * 主机性能监控，包括cpu、内存、jvm、jre等
+     *
+     * @return MonitorDTO
+     */
+    MonitorDTO listMonitors();
 }
