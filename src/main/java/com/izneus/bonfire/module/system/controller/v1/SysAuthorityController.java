@@ -40,7 +40,7 @@ public class SysAuthorityController {
     @PreAuthorize("hasAuthority('sys:authorities:list')")
     public ListAuthVO listAuthorities(@Validated ListAuthQuery query) {
         Page<SysAuthorityEntity> page = sysAuthorityService.page(
-                new Page<>(query.getPageNumber(), query.getPageSize()),
+                new Page<>(query.getPageNum(), query.getPageSize()),
                 new LambdaQueryWrapper<SysAuthorityEntity>()
                         .eq(StringUtils.hasText(query.getType()), SysAuthorityEntity::getType, query.getType())
                         .and(i -> i

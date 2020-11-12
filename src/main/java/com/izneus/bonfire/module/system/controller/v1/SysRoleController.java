@@ -43,7 +43,7 @@ public class SysRoleController {
     @PreAuthorize("hasAuthority('sys:roles:list')")
     public ListRoleVO listRoles(ListRoleQuery query) {
         Page<SysRoleEntity> page = roleService.page(
-                new Page<>(query.getPageNumber(), query.getPageSize()),
+                new Page<>(query.getPageNum(), query.getPageSize()),
                 new LambdaQueryWrapper<SysRoleEntity>()
                         .like(StringUtils.hasText(query.getQuery()), SysRoleEntity::getRoleName, query.getQuery())
                         .or()

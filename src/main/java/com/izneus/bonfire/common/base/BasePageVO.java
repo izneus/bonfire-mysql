@@ -19,14 +19,14 @@ public class BasePageVO {
     private Long totalSize;
 
     @ApiModelProperty("页码")
-    private Long pageNumber;
+    private Long pageNum;
 
     @ApiModelProperty("一页的数据条数")
     private Long pageSize;
 
     public BasePageVO(Page page) {
         totalSize = page.getTotal();
-        pageNumber = page.getCurrent();
+        pageNum = page.getCurrent();
         pageSize = page.getSize();
     }
 }

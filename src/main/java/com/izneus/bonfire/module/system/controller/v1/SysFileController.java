@@ -58,7 +58,7 @@ public class SysFileController {
         // 检查是否包含起止时间
         boolean isTimes = query.getCreateTimes() != null && query.getCreateTimes().size() == 2;
         Page<SysFileEntity> page = fileService.page(
-                new Page<>(query.getPageNumber(), query.getPageSize()),
+                new Page<>(query.getPageNum(), query.getPageSize()),
                 new LambdaQueryWrapper<SysFileEntity>()
                         .between(isTimes, SysFileEntity::getCreateTime,
                                 query.getCreateTimes().get(0), query.getCreateTimes().get(1))

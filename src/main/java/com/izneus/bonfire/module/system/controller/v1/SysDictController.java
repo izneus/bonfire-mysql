@@ -45,7 +45,7 @@ public class SysDictController {
     @PreAuthorize("hasAuthority('sys:dicts:list')")
     public ListDictVO listDicts(ListDictQuery query) {
         Page<SysDictEntity> page = dictService.page(
-                new Page<>(query.getPageNumber(), query.getPageSize()),
+                new Page<>(query.getPageNum(), query.getPageSize()),
                 new LambdaQueryWrapper<SysDictEntity>()
                         .like(StringUtils.hasText(query.getDictType()),
                                 SysDictEntity::getDictType, query.getDictType())

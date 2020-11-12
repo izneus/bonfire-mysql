@@ -23,9 +23,9 @@ public class Dict {
         OK("0", "正常"),
 
         /**
-         * 已锁定
+         * 锁定
          */
-        LOCKED("1", "已锁定");
+        LOCK("1", "已锁定");
 
         private final String code;
         private final String name;
@@ -43,11 +43,28 @@ public class Dict {
         OK("0", "正常"),
 
         /**
-         * 已禁用
+         * 禁用
          */
-        DISABLED("1", "已禁用");
+        DISABLE("1", "已禁用");
 
         private final String code;
         private final String name;
     }
+
+    @RequiredArgsConstructor
+    @Getter
+    public enum JobStatus {
+        /**
+         * 正常
+         */
+        OK("0"),
+
+        /**
+         * 暂停
+         */
+        PAUSE("1");
+
+        private final String value;
+    }
+
 }

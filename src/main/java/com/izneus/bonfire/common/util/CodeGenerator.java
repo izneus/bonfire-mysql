@@ -54,7 +54,7 @@ public class CodeGenerator {
         parentPackage，包名，形如com.izneus.bonfire
         baseDir，相对工程路径的基础目录，形如/src/main/java
          */
-        String parentPackage = "com.izneus.bonfire.module.system";
+        String parentPackage = "com.izneus.bonfire.module.quartz";
         String baseDir = "/mpg";
         // xml文件生成路径，根据需要酌情修改
         String xmlDir = "/mpg/mapper";

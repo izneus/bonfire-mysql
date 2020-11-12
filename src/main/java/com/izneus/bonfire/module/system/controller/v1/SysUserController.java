@@ -46,7 +46,7 @@ public class SysUserController {
         // 实际开发中可能会涉及复杂到丧心病狂的动态查询条件以及连表查询其他关联信息
         // 这种情况下可以考虑使用自定义动词，比如 POST /users:search 来解决
         Page<SysUserEntity> page = userService.page(
-                new Page<>(query.getPageNumber(), query.getPageSize()),
+                new Page<>(query.getPageNum(), query.getPageSize()),
                 new LambdaQueryWrapper<SysUserEntity>()
                         .like(StringUtils.hasText(query.getUsername()),
                                 SysUserEntity::getUsername, query.getUsername())

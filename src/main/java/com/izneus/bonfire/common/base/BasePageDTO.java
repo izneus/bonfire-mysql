@@ -19,7 +19,7 @@ public class BasePageDTO {
 
     @ApiModelProperty("页码")
     @Min(value = 1)
-    private Long pageNumber;
+    private Long pageNum;
 
     @ApiModelProperty("一页的数据条数")
     @Range(min = 1, max = 500)
