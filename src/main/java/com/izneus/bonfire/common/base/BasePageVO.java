@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
+import lombok.experimental.SuperBuilder;
 
 /**
  * 这是分页返回的基类，比请求的基类多了一个totalSize属性以及分页参数的构造函数
@@ -13,6 +15,7 @@ import lombok.Data;
  */
 @ApiModel("分页查询返回数据基类")
 @Data
+@SuperBuilder
 public class BasePageVO {
 
     @ApiModelProperty("总数据条数")
