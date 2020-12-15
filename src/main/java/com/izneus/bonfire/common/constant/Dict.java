@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * 字典类常量，数据库字典表中的字典，如果出现在业务逻辑判断里，补充在该类中
+ * 字典类常量，都为枚举类型，数据库字典表中的字典，如果出现在业务逻辑判断里，补充在该类中
  *
  * @author Izneus
  * @date 2020/07/06
@@ -51,6 +51,9 @@ public class Dict {
         private final String name;
     }
 
+    /**
+     * 调度任务状态
+     */
     @RequiredArgsConstructor
     @Getter
     public enum JobStatus {
@@ -63,6 +66,25 @@ public class Dict {
          * 暂停
          */
         PAUSE("1");
+
+        private final String value;
+    }
+
+    /**
+     * 通知类型
+     */
+    @RequiredArgsConstructor
+    @Getter
+    public enum NoticeType {
+        /**
+         * 全局公告
+         */
+        GLOBAL("0"),
+
+        /**
+         * 对用户(组)的消息
+         */
+        PM("1");
 
         private final String value;
     }
