@@ -10,60 +10,39 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 上传文件信息表
+ * 用户通知表
  * </p>
  *
  * @author Izneus
- * @since 2020-09-21
+ * @since 2020-12-10
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("SYS_FILE")
-public class SysFileEntity implements Serializable {
+@TableName("SYS_USER_NOTICE")
+public class SysUserNoticeEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * id
-     */
     @TableId("ID")
     private String id;
 
     /**
-     * 文件名，特指上传之前的文件名
+     * 用户id，sys_user表主键id
      */
-    @TableField("FILENAME")
-    private String filename;
+    @TableField("USER_ID")
+    private String userId;
 
     /**
-     * 哈希文件名，特指服务器保存在硬盘上的文件名，目前为uuid
+     * 通知id，sys_notice表主键id
      */
-    @TableField("UNIQUE_FILENAME")
-    private String uniqueFilename;
+    @TableField("NOTICE_ID")
+    private String noticeId;
 
     /**
-     * 后缀
+     * 通知状态
      */
-    @TableField("SUFFIX")
-    private String suffix;
-
-    /**
-     * 文件路径
-     */
-    @TableField("PATH")
-    private String path;
-
-    /**
-     * 文件大小
-     */
-    @TableField("FILE_SIZE")
-    private Long fileSize;
-
-    /**
-     * 创建时间
-     */
-    @TableField("CREATE_TIME")
-    private Date createTime;
+    @TableField("STATUS")
+    private String status;
 
     /**
      * 创建人
@@ -72,16 +51,22 @@ public class SysFileEntity implements Serializable {
     private String createUser;
 
     /**
-     * 更新时间
+     * 创建时间
      */
-    @TableField("UPDATE_TIME")
-    private Date updateTime;
+    @TableField("CREATE_TIME")
+    private Date createTime;
 
     /**
      * 更新人
      */
     @TableField("UPDATE_USER")
     private String updateUser;
+
+    /**
+     * 更新时间
+     */
+    @TableField("UPDATE_TIME")
+    private Date updateTime;
 
     /**
      * 备注

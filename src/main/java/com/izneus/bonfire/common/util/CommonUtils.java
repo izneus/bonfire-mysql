@@ -1,6 +1,11 @@
 package com.izneus.bonfire.common.util;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.EnumUtil;
+import com.izneus.bonfire.common.constant.Dict;
+
+import java.util.Map;
 
 /**
  * 其他通用工具类
@@ -28,6 +33,23 @@ public class CommonUtils {
             return false;
         }
         return !FileUtil.containsInvalid(filename);
+    }
+
+    /**
+     * 通过枚举中自定义字段的值，获得枚举实例
+     *
+     * @param enumClass  枚举类
+     * @param fieldName  字段名
+     * @param fieldValue 字段值
+     * @param <E>        枚举类
+     * @return 枚举实例
+     */
+    public static <E extends Enum<E>> E getEnum(Class<E> enumClass, String fieldName, Object fieldValue) {
+        // 先获得name:value的map，再互换key:value的位置，通过value获得name，然后获得枚举实例
+        Map<String, Object> enumMap = EnumUtil.getNameFieldMap(enumClass, fieldName);
+        Map<Object, String> inverseMap = MapUtil.inverse(enumMap);
+        String enumName = MapUtil.getStr(inverseMap, fieldValue);
+        return EnumUtil.fromString(enumClass, enumName);
     }
 
 }

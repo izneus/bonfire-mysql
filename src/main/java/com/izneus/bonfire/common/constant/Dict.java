@@ -1,7 +1,9 @@
 package com.izneus.bonfire.common.constant;
 
+import com.izneus.bonfire.common.exception.BadRequestException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 
 /**
  * 字典类常量，都为枚举类型，数据库字典表中的字典，如果出现在业务逻辑判断里，补充在该类中
@@ -88,5 +90,30 @@ public class Dict {
 
         private final String value;
     }
+
+    /**
+     * 用户通知状态
+     */
+    @RequiredArgsConstructor
+    @Getter
+    public enum UserNoticeStatus {
+        /**
+         * 未读
+         */
+        UNREAD("0"),
+
+        /**
+         * 已读
+         */
+        READ("1"),
+
+        /**
+         * 删除
+         */
+        DELETE("2");
+
+        private final String value;
+    }
+
 
 }

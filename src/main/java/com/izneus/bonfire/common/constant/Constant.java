@@ -26,4 +26,7 @@ public class Constant {
     public static final String YES = "1";
     public static final String NO = "0";
 
+    public static final String NOTICE_TYPE_GLOBAL = "0";
+    public static final String NOTICE_TYPE_PM = "1";
+
 }
