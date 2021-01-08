@@ -2,6 +2,8 @@ package com.izneus.bonfire.module.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.izneus.bonfire.common.constant.Dict;
+import com.izneus.bonfire.common.constant.ErrorCode;
+import com.izneus.bonfire.common.exception.BadRequestException;
 import com.izneus.bonfire.module.security.CurrentUserUtil;
 import com.izneus.bonfire.module.system.controller.v1.query.ReplyTicketQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.TicketQuery;
@@ -54,15 +56,30 @@ public class SysTicketServiceImpl extends ServiceImpl<SysTicketMapper, SysTicket
 
     @Override
     public String replyTicket(ReplyTicketQuery query) {
+        // 不能回复已经关闭的工单
+        SysTicketEntity ticket = getById(query.getTicketId());
+        if (Dict.TicketStatus.CLOSED.getValue().equals(ticket.getStatus())) {
+            throw new BadRequestException(ErrorCode.FAILED_PRECONDITION, "工单已经关闭");
+        }
         String userId = CurrentUserUtil.getUser().getId();
         // 普通用户只能回复自己的工单，或者管理员回复任何工单
-        SysTicketEntity ticket = getById(query.getTicketId());
         if (userId.equals(ticket.getCreateUser()) || CurrentUserUtil.hasRole("ADMIN")) {
             SysTicketFlowEntity flow = BeanUtil.copyProperties(query, SysTicketFlowEntity.class);
             flowService.save(flow);
-            // todo 修改工单状态为正在处理
+            // 未处理的工单状态改为处理中
+            if (Dict.TicketStatus.PENDING.getValue().equals(ticket.getStatus())) {
+                updateTicketStatus(query.getTicketId(), Dict.TicketStatus.PROCESSING.getValue());
+            }
             return flow.getId();
         }
         return null;
+    }
+
+    @Override
+    public boolean updateTicketStatus(String id, String status) {
+        SysTicketEntity entity = new SysTicketEntity();
+        entity.setId(id);
+        entity.setStatus(status);
+        return updateById(entity);
     }
 }

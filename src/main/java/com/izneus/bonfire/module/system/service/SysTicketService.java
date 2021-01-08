@@ -40,4 +40,13 @@ public interface SysTicketService extends IService<SysTicketEntity> {
      */
     String replyTicket(ReplyTicketQuery query);
 
+    /**
+     * 更新工单状态
+     *
+     * @param id     工单id
+     * @param status 工单状态
+     * @return boolean
+     */
+    boolean updateTicketStatus(String id, String status);
+
 }

@@ -5,7 +5,9 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
+import com.izneus.bonfire.common.constant.Dict;
 import com.izneus.bonfire.common.util.BeanCopyUtil;
+import com.izneus.bonfire.module.system.controller.v1.query.IdQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.ListTicketQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.ReplyTicketQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.TicketQuery;
@@ -91,10 +93,18 @@ public class SysTicketController {
     @ApiOperation("回复工单")
     @PostMapping("/tickets:reply")
     @PreAuthorize("hasAuthority('sys:tickets:reply')")
-    @ResponseStatus(HttpStatus.CREATED)
-    public IdVO replyTicket(@Validated @RequestBody ReplyTicketQuery query) {
-        String id = ticketService.replyTicket(query);
-        return new IdVO(id);
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void replyTicket(@Validated @RequestBody ReplyTicketQuery query) {
+        ticketService.replyTicket(query);
+    }
+
+    @AccessLog("关闭工单")
+    @ApiOperation("关闭工单")
+    @PostMapping("/tickets:close")
+    @PreAuthorize("hasAuthority('sys:tickets:close')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void closeTicket(@Validated @RequestBody IdQuery query) {
+        ticketService.updateTicketStatus(query.getId(), Dict.TicketStatus.CLOSED.getValue());
     }
 
 
