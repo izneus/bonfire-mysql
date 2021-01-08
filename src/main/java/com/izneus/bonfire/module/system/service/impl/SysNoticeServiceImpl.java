@@ -3,9 +3,8 @@ package com.izneus.bonfire.module.system.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.izneus.bonfire.common.constant.Constant;
 import com.izneus.bonfire.common.constant.Dict;
-import com.izneus.bonfire.common.util.CommonUtils;
+import com.izneus.bonfire.common.util.CommonUtil;
 import com.izneus.bonfire.module.system.controller.v1.query.NoticeQuery;
 import com.izneus.bonfire.module.system.entity.SysNoticeEntity;
 import com.izneus.bonfire.module.system.entity.SysUserNoticeEntity;
@@ -45,7 +44,7 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
         对于全局通知，在用户拉取通知列表的时候，生成未读记录，
         对于点对点或者点对面的通知，在用户通知关联表里生成一条未读记录，你也可以根据实际情况优化生成逻辑
         */
-        Dict.NoticeType noticeType = CommonUtils.getEnum(Dict.NoticeType.class, "value",
+        Dict.NoticeType noticeType = CommonUtil.getEnum(Dict.NoticeType.class, "value",
                 notice.getNoticeType());
         switch (noticeType) {
             case GLOBAL:

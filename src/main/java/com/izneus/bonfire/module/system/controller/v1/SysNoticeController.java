@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
-import com.izneus.bonfire.common.util.BeanCopyUtils;
+import com.izneus.bonfire.common.util.BeanCopyUtil;
 import com.izneus.bonfire.module.system.controller.v1.query.ListNoticeQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.NoticeQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
@@ -22,7 +22,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -53,9 +52,14 @@ public class SysNoticeController {
                         .or()
                         .like(StrUtil.isNotBlank(query.getQuery()), SysNoticeEntity::getNotice, query.getQuery())
         );
-        // 转vo
-        List<NoticeItemVO> notices = BeanCopyUtils.copyListProperties(page.getRecords(), NoticeItemVO::new);
-        return ListNoticeVO.builder().notices(notices).pageNum(page.getCurrent()).pageSize(page.getSize()).build();
+        // 组装vo
+        List<NoticeItemVO> notices = BeanCopyUtil.copyListProperties(page.getRecords(), NoticeItemVO::new);
+        return ListNoticeVO.builder()
+                .notices(notices)
+                .pageNum(page.getCurrent())
+                .pageSize(page.getSize())
+                .totalSize(page.getTotal())
+                .build();
     }
 
     @AccessLog("新增通知")

@@ -2,7 +2,7 @@ package com.izneus.bonfire.module.system.controller.v1.vo;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.base.BasePageVO;
-import com.izneus.bonfire.common.util.BeanCopyUtils;
+import com.izneus.bonfire.common.util.BeanCopyUtil;
 import com.izneus.bonfire.module.system.entity.SysAuthorityEntity;
 import com.izneus.bonfire.module.system.service.dto.ListAuthDTO;
 import lombok.Data;
@@ -22,6 +22,6 @@ public class ListAuthVO extends BasePageVO {
 
     public ListAuthVO(Page<SysAuthorityEntity> page) {
         super(page);
-        authorities = BeanCopyUtils.copyListProperties(page.getRecords(), ListAuthDTO::new);
+        authorities = BeanCopyUtil.copyListProperties(page.getRecords(), ListAuthDTO::new);
     }
 }

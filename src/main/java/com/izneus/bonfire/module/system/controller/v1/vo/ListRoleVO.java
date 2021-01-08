@@ -2,7 +2,7 @@ package com.izneus.bonfire.module.system.controller.v1.vo;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.base.BasePageVO;
-import com.izneus.bonfire.common.util.BeanCopyUtils;
+import com.izneus.bonfire.common.util.BeanCopyUtil;
 import com.izneus.bonfire.module.system.entity.SysRoleEntity;
 import com.izneus.bonfire.module.system.service.dto.ListRoleDTO;
 import io.swagger.annotations.ApiModel;
@@ -26,6 +26,6 @@ public class ListRoleVO extends BasePageVO {
 
     public ListRoleVO(Page<SysRoleEntity> page) {
         super(page);
-        roles = BeanCopyUtils.copyListProperties(page.getRecords(), ListRoleDTO::new);
+        roles = BeanCopyUtil.copyListProperties(page.getRecords(), ListRoleDTO::new);
     }
 }

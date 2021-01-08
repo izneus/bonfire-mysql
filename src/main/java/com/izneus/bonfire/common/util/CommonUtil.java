@@ -13,7 +13,7 @@ import java.util.Map;
  * @author Izneus
  * @date 2020/08/03
  */
-public class CommonUtils {
+public class CommonUtil {
 
     private static final int MAX_FILENAME_LENGTH = 255;
     private static final String RELATIVE_PATH = "..";

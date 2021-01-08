@@ -10,7 +10,7 @@ import java.util.function.Supplier;
  * @author Izneus
  * @date 2020/08/04
  */
-public class BeanCopyUtils {
+public class BeanCopyUtil {
 
     @FunctionalInterface
     public interface OnCopyProperties<S, T> {

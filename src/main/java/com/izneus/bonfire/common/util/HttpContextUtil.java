@@ -10,7 +10,7 @@ import java.util.Objects;
  * @author Izneus
  * @date 2020/08/06
  */
-public class HttpContextUtils {
+public class HttpContextUtil {
 
     public static HttpServletRequest getHttpServletRequest() {
         return ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))

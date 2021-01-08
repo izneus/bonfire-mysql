@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
-import com.izneus.bonfire.common.util.BeanCopyUtils;
+import com.izneus.bonfire.common.util.BeanCopyUtil;
 import com.izneus.bonfire.module.quartz.controller.v1.query.JobQuery;
 import com.izneus.bonfire.module.quartz.controller.v1.query.ListJobQuery;
 import com.izneus.bonfire.module.quartz.controller.v1.query.ListLogQuery;
@@ -134,7 +134,7 @@ public class SchedJobController {
                         .orderByDesc(SchedJobLogEntity::getCreateTime)
         );
         // 查询结果转换成vo
-        List<LogItemVO> logs = BeanCopyUtils.copyListProperties(page.getRecords(), LogItemVO::new);
+        List<LogItemVO> logs = BeanCopyUtil.copyListProperties(page.getRecords(), LogItemVO::new);
         return ListLogVO.builder()
                 .logs(logs)
                 .pageNum(page.getCurrent())

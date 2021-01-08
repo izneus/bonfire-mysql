@@ -2,7 +2,7 @@ package com.izneus.bonfire.module.system.controller.v1.vo;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.base.BasePageVO;
-import com.izneus.bonfire.common.util.BeanCopyUtils;
+import com.izneus.bonfire.common.util.BeanCopyUtil;
 import com.izneus.bonfire.module.system.entity.SysFileEntity;
 import com.izneus.bonfire.module.system.service.dto.ListFileDTO;
 import io.swagger.annotations.ApiModel;
@@ -25,6 +25,6 @@ public class ListFileVO extends BasePageVO {
 
     public ListFileVO(Page<SysFileEntity> page) {
         super(page);
-        files = BeanCopyUtils.copyListProperties(page.getRecords(), ListFileDTO::new);
+        files = BeanCopyUtil.copyListProperties(page.getRecords(), ListFileDTO::new);
     }
 }

@@ -7,7 +7,7 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.izneus.bonfire.common.annotation.AccessLog;
-import com.izneus.bonfire.common.util.HttpContextUtils;
+import com.izneus.bonfire.common.util.HttpContextUtil;
 import com.izneus.bonfire.module.system.entity.SysAccessLogEntity;
 import com.izneus.bonfire.module.system.service.SysAccessLogService;
 import lombok.RequiredArgsConstructor;
@@ -75,7 +75,7 @@ public class AccessLogAspect {
         // 注解描述
         String description = annotation.value();
         // 获取request
-        HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
+        HttpServletRequest request = HttpContextUtil.getHttpServletRequest();
         // 客户端ip
         String clientIp = ServletUtil.getClientIP(request);
         // ua和解析出的浏览器和系统

@@ -24,7 +24,7 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtProperties jwtProperties;
-    private final JwtUtils jwtUtils;
+    private final JwtUtil jwtUtil;
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
@@ -32,7 +32,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String token = resolveToken(httpServletRequest);
         if (StringUtils.hasText(token)) {
             // todo jwt保存在redis，扩展实现黑名单等功能
-            Authentication authentication = jwtUtils.getAuthentication(token);
+            Authentication authentication = jwtUtil.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             // todo jwt续期
         }

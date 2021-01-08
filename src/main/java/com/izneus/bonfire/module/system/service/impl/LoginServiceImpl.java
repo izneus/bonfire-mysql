@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.izneus.bonfire.common.constant.Dict;
 import com.izneus.bonfire.common.constant.ErrorCode;
 import com.izneus.bonfire.common.exception.BadRequestException;
-import com.izneus.bonfire.common.util.RedisUtils;
+import com.izneus.bonfire.common.util.RedisUtil;
 import com.izneus.bonfire.config.BonfireProperties;
-import com.izneus.bonfire.module.security.JwtUtils;
+import com.izneus.bonfire.module.security.JwtUtil;
 import com.izneus.bonfire.module.system.controller.v1.query.LoginQuery;
 import com.izneus.bonfire.module.system.entity.SysUserEntity;
 import com.izneus.bonfire.module.system.mapper.SysUserMapper;
@@ -35,8 +35,8 @@ import static com.izneus.bonfire.common.constant.Constant.REDIS_KEY_TYPE_CAPTCHA
 @RequiredArgsConstructor
 public class LoginServiceImpl implements LoginService {
 
-    private final JwtUtils jwtUtils;
-    private final RedisUtils redisUtils;
+    private final JwtUtil jwtUtil;
+    private final RedisUtil redisUtil;
     private final SysUserMapper sysUserMapper;
     private final BonfireProperties bonfireProperties;
 
@@ -47,7 +47,7 @@ public class LoginServiceImpl implements LoginService {
     public LoginDTO login(LoginQuery loginQuery) {
         // 检查连续密码输入错误次数
         String retryKey = "user:" + loginQuery.getUsername() + ":password-retry-count";
-        int passwordRetryCount = (int) Optional.ofNullable(redisUtils.get(retryKey)).orElse(0);
+        int passwordRetryCount = (int) Optional.ofNullable(redisUtil.get(retryKey)).orElse(0);
         if (passwordRetryCount >= MAX_PASSWORD_RETRY_COUNT) {
             throw new BadRequestException(ErrorCode.PERMISSION_DENIED,
                     "因连续密码输入错误，该用户已被锁定，请30分钟之后重试");
@@ -56,9 +56,9 @@ public class LoginServiceImpl implements LoginService {
         if (bonfireProperties.getCaptchaEnabled()) {
             /// 查询验证码
             String key = REDIS_KEY_TYPE_CAPTCHA + loginQuery.getCaptchaId();
-            String captcha = (String) redisUtils.get(key);
+            String captcha = (String) redisUtil.get(key);
             // 查询过的验证码及时清除
-            redisUtils.del(key);
+            redisUtil.del(key);
             if (!StringUtils.hasText(captcha)) {
                 throw new BadRequestException(ErrorCode.INVALID_ARGUMENT, "验证码已过期");
             }
@@ -92,9 +92,9 @@ public class LoginServiceImpl implements LoginService {
             passwordRetryCount++;
             if (passwordRetryCount >= MAX_PASSWORD_RETRY_COUNT) {
                 // 5分钟内连续输错5次密码，锁定账号30分钟
-                redisUtils.set(retryKey, passwordRetryCount, 30, TimeUnit.MINUTES);
+                redisUtil.set(retryKey, passwordRetryCount, 30, TimeUnit.MINUTES);
             } else {
-                redisUtils.set(retryKey, passwordRetryCount, 5, TimeUnit.MINUTES);
+                redisUtil.set(retryKey, passwordRetryCount, 5, TimeUnit.MINUTES);
             }
             throw new BadRequestException(ErrorCode.UNAUTHENTICATED,
                     "用户名不存在或密码错误，密码错误次数：" + passwordRetryCount);
@@ -108,7 +108,7 @@ public class LoginServiceImpl implements LoginService {
         SecurityContextHolder.getContext().setAuthentication(authentication);*/
 
         // 登录成功，生成jwt
-        String token = jwtUtils.createToken(user.getId());
+        String token = jwtUtil.createToken(user.getId());
 
         // 保存权限到redis
         List<ListAuthDTO> authorityList = sysUserMapper.listAuthoritiesByUserId(user.getId());
@@ -119,7 +119,7 @@ public class LoginServiceImpl implements LoginService {
                 authoritySet.add(authority.getAuthority());
             }
             String authorities = StringUtils.arrayToCommaDelimitedString(authoritySet.toArray());
-            redisUtils.set("user:" + user.getId() + ":authorities",
+            redisUtil.set("user:" + user.getId() + ":authorities",
                     authorities, jwtExpire, TimeUnit.SECONDS);
         }
 
@@ -136,7 +136,7 @@ public class LoginServiceImpl implements LoginService {
         String uuid = UUID.randomUUID().toString();
         String key = REDIS_KEY_TYPE_CAPTCHA + uuid;
         // 保存验证码到redis缓存，2分钟后过期
-        redisUtils.set(key, value, 2L, TimeUnit.MINUTES);
+        redisUtil.set(key, value, 2L, TimeUnit.MINUTES);
         return new CaptchaDTO(uuid, specCaptcha.toBase64());
     }
 }

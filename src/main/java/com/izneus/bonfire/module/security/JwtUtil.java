@@ -1,6 +1,6 @@
 package com.izneus.bonfire.module.security;
 
-import com.izneus.bonfire.common.util.RedisUtils;
+import com.izneus.bonfire.common.util.RedisUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -21,16 +21,16 @@ import java.util.stream.Collectors;
  * @date 2020/06/20
  */
 @Component
-public class JwtUtils {
+public class JwtUtil {
 
     private final JwtProperties jwtProperties;
-    private final RedisUtils redisUtils;
+    private final RedisUtil redisUtil;
 
     private Key key;
 
-    public JwtUtils(JwtProperties jwtProperties, RedisUtils redisUtils) {
+    public JwtUtil(JwtProperties jwtProperties, RedisUtil redisUtil) {
         this.jwtProperties = jwtProperties;
-        this.redisUtils = redisUtils;
+        this.redisUtil = redisUtil;
         // todo 如果要给其他系统解析jwt，最好明确指定key
         this.key = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8));
     }
@@ -56,7 +56,7 @@ public class JwtUtils {
                 .getBody();
         // redis获得权限字符串
         String userId = claims.getSubject();
-        String authString = (String) redisUtils.get("user:" + userId + ":authorities");
+        String authString = (String) redisUtil.get("user:" + userId + ":authorities");
         // 构造Authority
         Collection<? extends GrantedAuthority> authorities = StringUtils.hasText(authString)
                 ? Arrays.stream(authString.split(",")).map(SimpleGrantedAuthority::new)

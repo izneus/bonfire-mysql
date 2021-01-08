@@ -5,7 +5,7 @@ import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.izneus.bonfire.common.constant.ErrorCode;
 import com.izneus.bonfire.common.exception.BadRequestException;
-import com.izneus.bonfire.common.util.CommonUtils;
+import com.izneus.bonfire.common.util.CommonUtil;
 import com.izneus.bonfire.module.system.entity.SysFileEntity;
 import com.izneus.bonfire.module.system.mapper.SysFileMapper;
 import com.izneus.bonfire.module.system.service.SysFileService;
@@ -39,7 +39,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFileEntity
             throw new BadRequestException(ErrorCode.INVALID_ARGUMENT, "文件不能为空");
         }
         String filename = multipartFile.getOriginalFilename();
-        if (!CommonUtils.isValidFilename(filename)) {
+        if (!CommonUtil.isValidFilename(filename)) {
             throw new BadRequestException(ErrorCode.INVALID_ARGUMENT, "非法的文件名");
         }
         // 文件大小，单位字节

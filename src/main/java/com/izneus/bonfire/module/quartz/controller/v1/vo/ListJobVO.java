@@ -2,7 +2,7 @@ package com.izneus.bonfire.module.quartz.controller.v1.vo;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.base.BasePageVO;
-import com.izneus.bonfire.common.util.BeanCopyUtils;
+import com.izneus.bonfire.common.util.BeanCopyUtil;
 import com.izneus.bonfire.module.quartz.entity.SchedJobEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -25,7 +25,7 @@ public class ListJobVO extends BasePageVO {
 
     public ListJobVO(Page<SchedJobEntity> page) {
         super(page);
-        jobs = BeanCopyUtils.copyListProperties(page.getRecords(), JobItemVO::new);
+        jobs = BeanCopyUtil.copyListProperties(page.getRecords(), JobItemVO::new);
     }
 
 }

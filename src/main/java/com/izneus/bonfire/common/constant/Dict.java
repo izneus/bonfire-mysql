@@ -1,9 +1,7 @@
 package com.izneus.bonfire.common.constant;
 
-import com.izneus.bonfire.common.exception.BadRequestException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.Accessors;
 
 /**
  * 字典类常量，都为枚举类型，数据库字典表中的字典，如果出现在业务逻辑判断里，补充在该类中
@@ -111,6 +109,40 @@ public class Dict {
          * 删除
          */
         DELETE("2");
+
+        private final String value;
+    }
+
+    /**
+     * 工单状态
+     */
+    @RequiredArgsConstructor
+    @Getter
+    public enum TicketStatus {
+        /**
+         * 待处理
+         */
+        PENDING("0"),
+
+        /**
+         * 处理中
+         */
+        PROCESSING("1"),
+
+        /**
+         * 已解决
+         */
+        SOLVED("2"),
+
+        /**
+         * 已关闭
+         */
+        CLOSED("3"),
+
+        /**
+         * 已评价
+         */
+        EVALUATED("4");
 
         private final String value;
     }

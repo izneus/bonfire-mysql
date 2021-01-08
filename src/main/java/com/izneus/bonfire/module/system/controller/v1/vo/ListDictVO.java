@@ -2,7 +2,7 @@ package com.izneus.bonfire.module.system.controller.v1.vo;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.base.BasePageVO;
-import com.izneus.bonfire.common.util.BeanCopyUtils;
+import com.izneus.bonfire.common.util.BeanCopyUtil;
 import com.izneus.bonfire.module.system.entity.SysDictEntity;
 import com.izneus.bonfire.module.system.service.dto.ListDictDTO;
 import io.swagger.annotations.ApiModel;
@@ -25,6 +25,6 @@ public class ListDictVO extends BasePageVO {
 
     public ListDictVO(Page<SysDictEntity> page) {
         super(page);
-        dicts = BeanCopyUtils.copyListProperties(page.getRecords(), ListDictDTO::new);
+        dicts = BeanCopyUtil.copyListProperties(page.getRecords(), ListDictDTO::new);
     }
 }
