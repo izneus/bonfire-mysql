@@ -41,4 +41,13 @@ public class CurrentUserUtil {
                 .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(roleName));
     }
 
+    /**
+     * 获取当前用户的id
+     *
+     * @return userId
+     */
+    public static String getUserId() {
+        return getUser().getId();
+    }
+
 }

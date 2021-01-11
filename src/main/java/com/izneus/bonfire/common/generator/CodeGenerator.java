@@ -1,11 +1,13 @@
-package com.izneus.bonfire.common.util;
+package com.izneus.bonfire.common.generator;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
+import com.baomidou.mybatisplus.generator.config.po.TableFill;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
@@ -73,6 +75,7 @@ public class CodeGenerator {
         gc.setOpen(false);
         gc.setServiceName("%sService");
         gc.setEntityName("%sEntity");
+        // 生成时间字段的类型，这里采用date，预防一些druid等连接池版本造成的SQLFeatureNotSupportedException问题
         gc.setDateType(DateType.ONLY_DATE);
         // gc.setSwagger2(true); 实体属性 Swagger2 注解
         mpg.setGlobalConfig(gc);
@@ -91,6 +94,13 @@ public class CodeGenerator {
         /// pc.setModuleName(scanner("模块名"));
         pc.setParent(parentPackage);
         mpg.setPackageInfo(pc);
+
+        // 自定义填充字段
+        List<TableFill> tableFills = new ArrayList<>();
+        tableFills.add(new TableFill("create_time", FieldFill.INSERT));
+        tableFills.add(new TableFill("create_user", FieldFill.INSERT));
+        tableFills.add(new TableFill("update_time", FieldFill.INSERT_UPDATE));
+        tableFills.add(new TableFill("update_user", FieldFill.INSERT_UPDATE));
 
         // 自定义配置
         InjectionConfig cfg = new InjectionConfig() {
@@ -162,6 +172,7 @@ public class CodeGenerator {
         strategy.setInclude(scanner().split(","));
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setTablePrefix(pc.getModuleName() + "_");
+        strategy.setTableFillList(tableFills);
         mpg.setStrategy(strategy);
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());
         mpg.execute();
