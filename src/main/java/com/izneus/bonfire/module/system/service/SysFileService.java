@@ -18,4 +18,6 @@ public interface SysFileService extends IService<SysFileEntity> {
 
     String uploadFile(MultipartFile multipartFile);
 
+
+
 }

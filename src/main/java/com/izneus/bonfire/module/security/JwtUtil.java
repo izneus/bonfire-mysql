@@ -47,6 +47,19 @@ public class JwtUtil {
                 .compact();
     }
 
+    public String createToken(String userId, Long expireSeconds, Map<String, Object> claims) {
+        Date nowDate = new Date();
+        Date expireDate = new Date(nowDate.getTime() + expireSeconds * 1000);
+        return Jwts.builder()
+                .setSubject(userId)
+                .setId(UUID.randomUUID().toString())
+                .setExpiration(expireDate)
+                .setIssuedAt(nowDate)
+                .addClaims(claims)
+                .signWith(key)
+                .compact();
+    }
+
     public Authentication getAuthentication(String token) {
         // 获得claims
         Claims claims = Jwts.parserBuilder()
@@ -63,5 +76,13 @@ public class JwtUtil {
                 .collect(Collectors.toList()) : Collections.emptyList();
         SecurityUser principal = new SecurityUser(claims.getSubject(), "*", "*", authorities);
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+    }
+
+    public Claims getClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 }

@@ -29,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-/*    @Bean
+    /*@Bean
     GrantedAuthorityDefaults grantedAuthorityDefaults() {
         // 去除 ROLE_ 前缀
         return new GrantedAuthorityDefaults("");
@@ -63,8 +63,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/webjars/**").permitAll()
                 .antMatchers("/*/api-docs").permitAll()
                 // 登录允许匿名访问
-                .antMatchers("/api/v1/login").permitAll()
-                .antMatchers("/api/v1/captcha").permitAll()
+                .antMatchers("/api/*/login").permitAll()
+                .antMatchers("/api/*/captcha").permitAll()
+                // 下载文件路径
+                .antMatchers("/api/*/files:export").permitAll()
                 .anyRequest().authenticated();
     }
 }

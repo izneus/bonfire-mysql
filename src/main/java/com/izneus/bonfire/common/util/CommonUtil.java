@@ -16,7 +16,7 @@ import java.util.Map;
 public class CommonUtil {
 
     private static final int MAX_FILENAME_LENGTH = 255;
-    private static final String RELATIVE_PATH = "..";
+    private static final String PARENT_DIR = "..";
 
     /**
      * 判断是否是合法的文件名
@@ -29,7 +29,7 @@ public class CommonUtil {
             return false;
         }
         // 是否含有相对路径，只是个简单的安全性检查
-        if (filename.contains(RELATIVE_PATH)) {
+        if (filename.contains(PARENT_DIR)) {
             return false;
         }
         return !FileUtil.containsInvalid(filename);

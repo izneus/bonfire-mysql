@@ -29,8 +29,8 @@ import java.io.IOException;
 @Slf4j
 public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFileEntity> implements SysFileService {
 
-    @Value("${bonfire.uploadBasePath}")
-    private String uploadBasePath;
+    @Value("${bonfire.uploadPath}")
+    private String uploadPath;
 
     @Override
     public String uploadFile(MultipartFile multipartFile) {
@@ -48,7 +48,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFileEntity
         String suffix = FileUtil.getSuffix(filename);
         String uniqueFilename = IdUtil.fastSimpleUUID() + "." + suffix;
         // 创建文件
-        File file = FileUtil.touch(uploadBasePath + File.separator + uniqueFilename);
+        File file = FileUtil.touch(uploadPath + File.separator + uniqueFilename);
         // 转储文件
         try {
             multipartFile.transferTo(file);

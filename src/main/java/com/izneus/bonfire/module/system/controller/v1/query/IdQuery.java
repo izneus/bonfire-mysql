@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
  * @date 2021/01/08
  */
 @Data
-@ApiModel("IdQuery")
+@ApiModel("通用idQuery")
 public class IdQuery {
     @ApiModelProperty(value = "id", required = true)
     @NotBlank(message = "id不能为空")

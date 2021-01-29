@@ -1,6 +1,8 @@
 package com.izneus.bonfire.module.system.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.izneus.bonfire.module.system.controller.v1.query.ListUserQuery;
 import com.izneus.bonfire.module.system.service.dto.GetUserDTO;
 import com.izneus.bonfire.module.system.service.dto.UserDTO;
 import com.izneus.bonfire.module.system.entity.SysUserEntity;
@@ -14,6 +16,8 @@ import com.izneus.bonfire.module.system.entity.SysUserEntity;
  * @since 2020-06-28
  */
 public interface SysUserService extends IService<SysUserEntity> {
+
+    Page<SysUserEntity> listUsers(ListUserQuery query);
 
     /**
      * 新增用户
@@ -45,5 +49,9 @@ public interface SysUserService extends IService<SysUserEntity> {
      * @param userId userId
      */
     void removeUserById(String userId);
+
+    String exportUsers(ListUserQuery query);
+
+    boolean resetPassword(String userId);
 
 }

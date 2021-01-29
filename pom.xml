@@ -190,6 +190,12 @@
             <artifactId>hutool-all</artifactId>
             <version>5.3.10</version>
         </dependency>
+        <!--操作excel-->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>4.1.2</version>
+        </dependency>
         <!--hutool的ServletUtil需要依赖-->
         <dependency>
             <groupId>javax.servlet</groupId>

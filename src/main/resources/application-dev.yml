@@ -20,4 +20,5 @@ bonfire:
   captchaEnabled: false
   # 默认密码
   defaultPassword: Password666
-  uploadBasePath: /Users/sunhz/Downloads/uploads
+  uploadPath: /Users/sunhz/Developer/Temp
+  tempPath: /Users/sunhz/Developer/Temp
