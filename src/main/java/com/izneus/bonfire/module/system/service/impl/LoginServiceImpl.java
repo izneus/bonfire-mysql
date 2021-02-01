@@ -87,7 +87,6 @@ public class LoginServiceImpl implements LoginService {
         }
         // 校验密码
         if (!new BCryptPasswordEncoder().matches(loginQuery.getPassword(), user.getPassword())) {
-            // todo redis下各种高并发、集群、脏读等问题，欢迎各路大神pr，这里只是一个小功能就别介了
             // 密码错误，累计错误次数
             Long retryCount = redisUtil.incr(retryKey);
 //            passwordRetryCount++;
