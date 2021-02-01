@@ -119,6 +119,16 @@ public class SysUserController {
                 .build();
     }
 
+    @AccessLog("导入用户")
+    @ApiOperation("导入用户")
+    @PostMapping("/users:import")
+//    @PreAuthorize("hasAuthority('sys:users:import')")
+    public void importUsers(@Validated IdQuery query) {
+        // todo 谨慎开启导入功能
+        // todo 太大的导入文件或是太复杂的导入逻辑，建议调度任务完成，否则会有长时间的执行时间，直观表现就是页面timeout等
+        userService.importUsers(query.getId());
+    }
+
     /**
      * 重置用户密码，一般是用户管理员使用
      *

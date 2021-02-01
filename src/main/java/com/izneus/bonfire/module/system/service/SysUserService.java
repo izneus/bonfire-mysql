@@ -54,4 +54,6 @@ public interface SysUserService extends IService<SysUserEntity> {
 
     boolean resetPassword(String userId);
 
+    void importUsers(String fileId);
+
 }

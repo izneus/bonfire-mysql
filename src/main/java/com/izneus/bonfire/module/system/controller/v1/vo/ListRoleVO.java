@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ import java.util.List;
  */
 @ApiModel("角色列表vo")
 @Data
+@SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 public class ListRoleVO extends BasePageVO {
 

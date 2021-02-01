@@ -2,11 +2,14 @@ package com.izneus.bonfire.module.system.service.impl;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.poi.excel.BigExcelWriter;
+import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.config.BonfireProperties;
 import com.izneus.bonfire.module.system.controller.v1.query.ListUserQuery;
+import com.izneus.bonfire.module.system.entity.SysFileEntity;
+import com.izneus.bonfire.module.system.service.SysFileService;
 import com.izneus.bonfire.module.system.service.dto.GetUserDTO;
 import com.izneus.bonfire.module.system.service.dto.UserDTO;
 import com.izneus.bonfire.module.system.entity.SysUserEntity;
@@ -29,6 +32,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -45,8 +49,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     @Value("${bonfire.tempPath}")
     private String tempPath;
 
+    @Value("${bonfire.uploadPath}")
+    private String uploadPath;
+
     private final BonfireProperties bonfireProperties;
     private final SysUserRoleService userRoleService;
+    private final SysFileService fileService;
 
     @Override
     public Page<SysUserEntity> listUsers(ListUserQuery query) {
@@ -151,6 +159,27 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         userEntity.setId(userId);
         userEntity.setPassword(new BCryptPasswordEncoder().encode(bonfireProperties.getDefaultPassword()));
         return updateById(userEntity);
+    }
+
+    @Override
+    public void importUsers(String fileId) {
+        // 获得提前上传的导入文件
+        SysFileEntity fileEntity = fileService.getById(fileId);
+        String filePath = uploadPath + File.separator + fileEntity.getUniqueFilename();
+        // 解析excel写用户表
+        ExcelReader reader = ExcelUtil.getReader(filePath);
+        List<Map<String, Object>> users = reader.readAll();
+        List<SysUserEntity> userEntities = users.stream().map(user -> {
+            SysUserEntity userEntity = new SysUserEntity();
+            userEntity.setUsername((String) user.get("用户名"));
+            userEntity.setNickname((String) user.get("昵称"));
+            userEntity.setFullname((String) user.get("全名"));
+            userEntity.setEmail((String) user.get("email"));
+            userEntity.setMobile((String) user.get("手机"));
+            userEntity.setRemark((String) user.get("备注"));
+            return userEntity;
+        }).collect(Collectors.toList());
+        saveBatch(userEntities);
     }
 
     private void saveUserRoles(String userId, List<String> roleIds) {
