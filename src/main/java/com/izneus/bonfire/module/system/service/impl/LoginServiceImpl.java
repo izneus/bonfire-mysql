@@ -89,12 +89,16 @@ public class LoginServiceImpl implements LoginService {
         if (!new BCryptPasswordEncoder().matches(loginQuery.getPassword(), user.getPassword())) {
             // todo redis下各种高并发、集群、脏读等问题，欢迎各路大神pr，这里只是一个小功能就别介了
             // 密码错误，累计错误次数
-            passwordRetryCount++;
-            if (passwordRetryCount >= MAX_PASSWORD_RETRY_COUNT) {
+            Long retryCount = redisUtil.incr(retryKey);
+//            passwordRetryCount++;
+            if (retryCount >= MAX_PASSWORD_RETRY_COUNT) {
                 // 5分钟内连续输错5次密码，锁定账号30分钟
-                redisUtil.set(retryKey, passwordRetryCount, 30, TimeUnit.MINUTES);
+                /// redisUtil.set(retryKey, passwordRetryCount, 30, TimeUnit.MINUTES);
+                redisUtil.expire(retryKey, 30, TimeUnit.MINUTES);
             } else {
-                redisUtil.set(retryKey, passwordRetryCount, 5, TimeUnit.MINUTES);
+                /// redisUtil.set(retryKey, passwordRetryCount, 5, TimeUnit.MINUTES);
+                redisUtil.expire(retryKey, 5, TimeUnit.MINUTES);
+
             }
             throw new BadRequestException(ErrorCode.UNAUTHENTICATED,
                     "用户名不存在或密码错误，密码错误次数：" + passwordRetryCount);

@@ -74,7 +74,25 @@ public class RedisUtil {
         redisTemplate.delete(key);
     }
 
+    /**
+     * 设置过期时间
+     *
+     * @param key      键
+     * @param time     时间
+     * @param timeUnit 单位
+     */
     public void expire(String key, long time, TimeUnit timeUnit) {
         redisTemplate.expire(key, time, timeUnit);
     }
+
+    /**
+     * 原子加1
+     *
+     * @param key 键
+     * @return ？
+     */
+    public Long incr(String key) {
+        return redisTemplate.opsForValue().increment(key);
+    }
+
 }
