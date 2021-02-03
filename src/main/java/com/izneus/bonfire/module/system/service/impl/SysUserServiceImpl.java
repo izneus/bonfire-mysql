@@ -6,6 +6,7 @@ import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.izneus.bonfire.common.util.RedisUtil;
 import com.izneus.bonfire.config.BonfireProperties;
 import com.izneus.bonfire.module.system.controller.v1.query.ListUserQuery;
 import com.izneus.bonfire.module.system.entity.SysFileEntity;
@@ -55,6 +56,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     private final BonfireProperties bonfireProperties;
     private final SysUserRoleService userRoleService;
     private final SysFileService fileService;
+    private final RedisUtil redisUtil;
 
     @Override
     public Page<SysUserEntity> listUsers(ListUserQuery query) {
@@ -180,6 +182,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
             return userEntity;
         }).collect(Collectors.toList());
         saveBatch(userEntities);
+    }
+
+    @Override
+    public void unlockUser(String username) {
+        String retryKey = "user:" + username + ":password-retry-count";
+        redisUtil.del(retryKey);
     }
 
     private void saveUserRoles(String userId, List<String> roleIds) {

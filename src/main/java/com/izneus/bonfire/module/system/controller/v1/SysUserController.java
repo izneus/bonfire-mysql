@@ -143,4 +143,22 @@ public class SysUserController {
         userService.resetPassword(query.getId());
     }
 
+    @AccessLog("锁定用户")
+    @ApiOperation("锁定用户")
+    @PostMapping("/users:listLocked")
+    @PreAuthorize("hasAuthority('sys:users:listLocked')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void listLockedUsers() {
+//        userService.resetPassword(query.getId());
+    }
+
+    @AccessLog("解锁用户")
+    @ApiOperation("解锁用户")
+    @PostMapping("/users:unlock")
+    @PreAuthorize("hasAuthority('sys:users:unlock')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void unlockUser() {
+//        userService.resetPassword(query.getId());
+    }
+
 }

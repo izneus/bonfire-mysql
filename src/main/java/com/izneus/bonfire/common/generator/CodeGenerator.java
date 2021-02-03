@@ -47,10 +47,19 @@ public class CodeGenerator {
     public static void main(String[] args) {
         // 设置代码生成器运行用参数
         // 数据库连接
-        String dataSourceDriverClassName = "oracle.jdbc.OracleDriver";
+        // oracle
+        /*String dataSourceDriverClassName = "oracle.jdbc.OracleDriver";
         String dataSourceUrl = "jdbc:oracle:thin:@144.52.16.141:1521:orcl";
         String dataSourceUsername = "BONFIRE";
-        String dataSourcePassword = "BONFIRE";
+        String dataSourcePassword = "BONFIRE";*/
+
+        // mysql
+        String dataSourceDriverClassName = "com.mysql.cj.jdbc.Driver";
+        String dataSourceUrl = "jdbc:mysql://144.52.16.141:3306/lamp?serverTimezone=Asia/Shanghai" +
+                "&useUnicode=true&characterEncoding=UTF-8";
+        String dataSourceUsername = "root";
+        String dataSourcePassword = "123456";
+
         /*
         java代码生成路径，根据需要酌情修改，
         临时可以放在/mpg，自己手动移动生成的文件至对应目录，xml文件相同处理

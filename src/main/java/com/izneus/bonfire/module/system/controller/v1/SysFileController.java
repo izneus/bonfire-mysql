@@ -1,6 +1,5 @@
 package com.izneus.bonfire.module.system.controller.v1;
 
-
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
@@ -61,15 +60,6 @@ public class SysFileController {
     private final SysFileService fileService;
     private final JwtUtil jwtUtil;
 
-    @AccessLog("上传文件")
-    @ApiOperation("上传文件")
-    @PostMapping("/files")
-    @PreAuthorize("hasAuthority('sys:files:create')")
-    public IdVO uploadFile(@RequestParam("file") MultipartFile multipartFile) {
-        String fileId = fileService.uploadFile(multipartFile);
-        return new IdVO(fileId);
-    }
-
     @AccessLog("文件列表")
     @ApiOperation("文件列表")
     @GetMapping("/files")
@@ -128,6 +118,15 @@ public class SysFileController {
         // todo 有需要也可以继续删除硬盘上的文件
     }
 
+    @AccessLog("上传文件")
+    @ApiOperation("上传文件")
+    @PostMapping("/files:upload")
+    @PreAuthorize("hasAuthority('sys:files:upload')")
+    public IdVO uploadFile(@RequestParam("file") MultipartFile multipartFile) {
+        String fileId = fileService.uploadFile(multipartFile);
+        return new IdVO(fileId);
+    }
+
     /**
      * 下载文件统一都是先返回jwt和文件名
      */
@@ -150,7 +149,6 @@ public class SysFileController {
     @GetMapping("/files:export")
     public ResponseEntity<Resource> exportFile(ExportFileQuery query) {
         // 校验token有效性
-        // todo 等待测试jwt时效性
         Claims claims = jwtUtil.getClaims(query.getToken());
         String filename = (String) claims.get("filename");
         if (!query.getFilename().equals(filename)) {
