@@ -15,11 +15,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * @author Izneus
  * @date 2020/12/15
  */
+@SuppressWarnings("unused")
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Documented
 @Constraint(validatedBy = ValueOfEnumValidator.class)
-@SuppressWarnings("unused")
 public @interface ValueOfEnum {
     Class<? extends Enum<?>> enumClass();
 

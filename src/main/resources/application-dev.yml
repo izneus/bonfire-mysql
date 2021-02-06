@@ -15,7 +15,6 @@ spring:
           url: jdbc:mysql://144.52.16.141:3306/lamp?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF-8
           username: root
           password: 123456
-  # redis
   redis:
     host: 144.52.16.143
     password: foobared
@@ -30,5 +29,12 @@ bonfire:
   captchaEnabled: false
   # 默认密码
   defaultPassword: Password666
-  uploadPath: /Users/sunhz/Developer/Temp
-  tempPath: /Users/sunhz/Developer/Temp
+  mac:
+    uploadPath: ~/Developer/bonfire/upload
+    tempPath: ~/Developer/bonfire/temp
+  win:
+    uploadPath: C:\bonfire\upload
+    tempPath: C:\bonfire\temp
+  linux:
+    uploadPath: /home/bonfire/upload
+    tempPath: /home/bonfire/temp

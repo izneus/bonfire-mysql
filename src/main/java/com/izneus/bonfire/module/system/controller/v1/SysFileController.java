@@ -6,6 +6,7 @@ import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.common.constant.ErrorCode;
 import com.izneus.bonfire.common.exception.BadRequestException;
 import com.izneus.bonfire.common.util.CommonUtil;
+import com.izneus.bonfire.config.BonfireProperties;
 import com.izneus.bonfire.module.security.JwtUtil;
 import com.izneus.bonfire.module.system.controller.v1.query.DownloadFileQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.ExportFileQuery;
@@ -54,11 +55,9 @@ import java.nio.file.Paths;
 @RequestMapping("/api/v1")
 public class SysFileController {
 
-    @Value("${bonfire.tempPath}")
-    private String tempPath;
-
     private final SysFileService fileService;
     private final JwtUtil jwtUtil;
+    private final BonfireProperties bonfireProperties;
 
     @AccessLog("文件列表")
     @ApiOperation("文件列表")
@@ -159,7 +158,7 @@ public class SysFileController {
             throw new BadRequestException(ErrorCode.INVALID_ARGUMENT, "非法文件名");
         }
         // todo 可以考虑增加允许下载的文件后缀白名单
-        String filePath = tempPath + File.separator + query.getFilename();
+        String filePath = bonfireProperties.getPath().getTempPath() + File.separator + query.getFilename();
         Path path = Paths.get(filePath);
         try {
             Resource resource = new UrlResource(path.toUri());

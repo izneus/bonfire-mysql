@@ -47,12 +47,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity> implements SysUserService {
 
-    @Value("${bonfire.tempPath}")
-    private String tempPath;
-
-    @Value("${bonfire.uploadPath}")
-    private String uploadPath;
-
     private final BonfireProperties bonfireProperties;
     private final SysUserRoleService userRoleService;
     private final SysFileService fileService;
@@ -127,7 +121,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     @Override
     public String exportUsers(ListUserQuery query) {
         String filename = IdUtil.fastSimpleUUID() + ".xlsx";
-        String filePath = tempPath + File.separator + filename;
+        String filePath = bonfireProperties.getPath().getTempPath() + File.separator + filename;
         // 创建excel writer
         BigExcelWriter writer = ExcelUtil.getBigWriter(filePath);
         List<Map<String, Object>> exportData = new ArrayList<>();
@@ -167,7 +161,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     public void importUsers(String fileId) {
         // 获得提前上传的导入文件
         SysFileEntity fileEntity = fileService.getById(fileId);
-        String filePath = uploadPath + File.separator + fileEntity.getUniqueFilename();
+        String filePath = bonfireProperties.getPath().getUploadPath() + File.separator + fileEntity.getUniqueFilename();
         // 解析excel写用户表
         ExcelReader reader = ExcelUtil.getReader(filePath);
         List<Map<String, Object>> users = reader.readAll();

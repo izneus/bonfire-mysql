@@ -17,10 +17,10 @@ import java.time.LocalDateTime;
  * @author Izneus
  * @date 2002/10/30
  */
+@SuppressWarnings("unused")
 @Component("sysTask")
 @RequiredArgsConstructor
 @Slf4j
-@SuppressWarnings("unused")
 public class SysTask {
 
     private final SysAccessLogService accessLogService;
