@@ -100,4 +100,13 @@ public class SysDictController {
         dictService.removeById(id);
     }
 
+    @AccessLog("缓存字典")
+    @ApiOperation("缓存字典")
+    @PostMapping("/dicts:cache")
+//    @PreAuthorize("hasAuthority('sys:dicts:cache')")
+    public String cacheDicts() {
+        return dictService.cacheDicts();
+    }
+
+
 }

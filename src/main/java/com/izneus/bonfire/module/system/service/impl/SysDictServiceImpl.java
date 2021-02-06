@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.izneus.bonfire.module.system.entity.SysDictEntity;
 import com.izneus.bonfire.module.system.mapper.SysDictMapper;
 import com.izneus.bonfire.module.system.service.SysDictService;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,6 +17,12 @@ import org.springframework.stereotype.Service;
  * @since 2020-09-08
  */
 @Service
+@CacheConfig(cacheNames = "dict")
 public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDictEntity> implements SysDictService {
 
+    @Override
+    @Cacheable(key = "'all'")
+    public String cacheDicts() {
+        return "999xxx";
+    }
 }

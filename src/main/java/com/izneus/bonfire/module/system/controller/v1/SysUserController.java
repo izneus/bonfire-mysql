@@ -10,7 +10,9 @@ import com.izneus.bonfire.module.system.controller.v1.query.ListUserQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.ExportVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.ListUserVO;
+import com.izneus.bonfire.module.system.entity.DsCityEntity;
 import com.izneus.bonfire.module.system.entity.SysUserEntity;
+import com.izneus.bonfire.module.system.service.DsCityService;
 import com.izneus.bonfire.module.system.service.SysUserService;
 import com.izneus.bonfire.module.system.service.dto.GetUserDTO;
 import com.izneus.bonfire.module.system.service.dto.UserDTO;
@@ -23,6 +25,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,6 +44,7 @@ public class SysUserController {
 
     private final SysUserService userService;
     private final JwtUtil jwtUtil;
+    private final DsCityService cityService;
 
     @AccessLog("用户列表")
     @ApiOperation("用户列表")
@@ -159,6 +163,12 @@ public class SysUserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void unlockUser() {
 //        userService.resetPassword(query.getId());
+    }
+
+    @GetMapping("/ds")
+    @ApiOperation("测试多数据源")
+    public List<DsCityEntity> testDs() {
+        return cityService.list();
     }
 
 }

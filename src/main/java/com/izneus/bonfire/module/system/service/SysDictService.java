@@ -13,4 +13,6 @@ import com.izneus.bonfire.module.system.entity.SysDictEntity;
  */
 public interface SysDictService extends IService<SysDictEntity> {
 
+    String cacheDicts();
+
 }
