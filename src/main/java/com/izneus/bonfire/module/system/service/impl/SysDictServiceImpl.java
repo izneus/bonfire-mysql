@@ -8,6 +8,8 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 系统_字典 服务实现类
@@ -23,6 +25,10 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDictEntity
     @Override
     @Cacheable(key = "'all'")
     public String cacheDicts() {
+        List<SysDictEntity> dictEntities = list();
+
+
+
         return "999xxx";
     }
 }
