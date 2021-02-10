@@ -1,7 +1,10 @@
 package com.izneus.bonfire.module.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.izneus.bonfire.module.system.controller.v1.vo.CacheDictVO;
 import com.izneus.bonfire.module.system.entity.SysDictEntity;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,6 +16,6 @@ import com.izneus.bonfire.module.system.entity.SysDictEntity;
  */
 public interface SysDictService extends IService<SysDictEntity> {
 
-    String cacheDicts();
+    List<CacheDictVO> cacheDicts();
 
 }

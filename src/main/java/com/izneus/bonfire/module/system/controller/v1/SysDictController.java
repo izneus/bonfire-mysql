@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.module.system.controller.v1.query.ListDictQuery;
+import com.izneus.bonfire.module.system.controller.v1.vo.CacheDictVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.GetDictVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.ListDictVO;
@@ -22,6 +23,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 /**
  * <p>
@@ -104,7 +106,8 @@ public class SysDictController {
     @ApiOperation("缓存字典")
     @PostMapping("/dicts:cache")
 //    @PreAuthorize("hasAuthority('sys:dicts:cache')")
-    public String cacheDicts() {
+    public List<CacheDictVO> cacheDicts() {
+        // todo 更新和删除字典
         return dictService.cacheDicts();
     }
 

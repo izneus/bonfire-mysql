@@ -10,7 +10,7 @@ spring:
 # jwt
 jwt:
   # 密钥
-  secret: WxXMCpCTTs2zp15riS1OkiyTtytYi2aQ6BpJKA56VlsZUX0Vt19YKe2AsldVSEN
+  secret: 1Q8oTpiVuQeoV7N6ktMmOkMvpJPqNwm+zaVxzeskREE=
   # token有效时长，7天，单位秒
   expire: 604800
   # 请求头

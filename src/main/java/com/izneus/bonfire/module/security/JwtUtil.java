@@ -3,6 +3,7 @@ package com.izneus.bonfire.module.security;
 import com.izneus.bonfire.common.util.RedisUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -11,7 +12,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -31,8 +31,10 @@ public class JwtUtil {
     public JwtUtil(JwtProperties jwtProperties, RedisUtil redisUtil) {
         this.jwtProperties = jwtProperties;
         this.redisUtil = redisUtil;
-        // todo 如果要给其他系统解析jwt，最好明确指定key
-        this.key = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8));
+        /// 可以通过下面的代码随机生成secret字符串
+        // SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+        // String secretString = Encoders.BASE64.encode(key.getEncoded());
+        this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtProperties.getSecret()));
     }
 
     public String createToken(String userId) {
@@ -60,7 +62,7 @@ public class JwtUtil {
                 .compact();
     }
 
-    public Authentication getAuthentication(String token) {
+    Authentication getAuthentication(String token) {
         // 获得claims
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
