@@ -1,5 +1,6 @@
 package com.izneus.bonfire.module.system.controller.v1;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
@@ -8,6 +9,7 @@ import com.izneus.bonfire.module.security.JwtUtil;
 import com.izneus.bonfire.module.system.controller.v1.query.IdQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.ListUserQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.ExportVO;
+import com.izneus.bonfire.module.system.controller.v1.vo.GetAuthUserVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.ListUserVO;
 import com.izneus.bonfire.module.system.entity.DsCityEntity;
@@ -136,7 +138,7 @@ public class SysUserController {
     /**
      * 重置用户密码，一般是用户管理员使用
      *
-     * @param query 取用户id
+     * @param query 用户id
      */
     @AccessLog("重置用户密码")
     @ApiOperation("重置用户密码")
@@ -169,6 +171,16 @@ public class SysUserController {
     @ApiOperation("测试多数据源")
     public List<DsCityEntity> testDs() {
         return cityService.list();
+    }
+
+
+    @AccessLog("当前认证用户信息")
+    @ApiOperation("当前认证用户信息")
+    @GetMapping("/user")
+    public GetAuthUserVO getAuthUser() {
+        String userId = CurrentUserUtil.getUserId();
+        GetUserDTO userDTO = userService.getUserById(userId);
+        return BeanUtil.copyProperties(userDTO, GetAuthUserVO.class);
     }
 
 }
