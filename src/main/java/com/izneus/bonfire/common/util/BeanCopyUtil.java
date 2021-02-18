@@ -14,6 +14,12 @@ public class BeanCopyUtil {
 
     @FunctionalInterface
     public interface OnCopyProperties<S, T> {
+        /**
+         * 回调函数，用来设置字段对应
+         *
+         * @param s source class
+         * @param t target class
+         */
         void onCopyProperties(S s, T t);
     }
 
