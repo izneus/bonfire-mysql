@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "bonfire")
 @Data
-public class BonfireProperties {
+public class BonfireConfig {
 
     @SuppressWarnings("WeakerAccess")
     @Data

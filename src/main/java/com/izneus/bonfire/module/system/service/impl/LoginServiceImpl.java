@@ -5,7 +5,7 @@ import com.izneus.bonfire.common.constant.Dict;
 import com.izneus.bonfire.common.constant.ErrorCode;
 import com.izneus.bonfire.common.exception.BadRequestException;
 import com.izneus.bonfire.common.util.RedisUtil;
-import com.izneus.bonfire.config.BonfireProperties;
+import com.izneus.bonfire.config.BonfireConfig;
 import com.izneus.bonfire.module.security.JwtUtil;
 import com.izneus.bonfire.module.system.controller.v1.query.LoginQuery;
 import com.izneus.bonfire.module.system.entity.SysUserEntity;
@@ -38,7 +38,7 @@ public class LoginServiceImpl implements LoginService {
     private final JwtUtil jwtUtil;
     private final RedisUtil redisUtil;
     private final SysUserMapper sysUserMapper;
-    private final BonfireProperties bonfireProperties;
+    private final BonfireConfig bonfireConfig;
 
     @Value("${jwt.expire}")
     private Long jwtExpire;
@@ -53,7 +53,7 @@ public class LoginServiceImpl implements LoginService {
                     "因连续密码输入错误，该用户已被锁定，请30分钟之后重试");
         }
 
-        if (bonfireProperties.getCaptchaEnabled()) {
+        if (bonfireConfig.getCaptchaEnabled()) {
             /// 查询验证码
             String key = REDIS_KEY_TYPE_CAPTCHA + loginQuery.getCaptchaId();
             String captcha = (String) redisUtil.get(key);

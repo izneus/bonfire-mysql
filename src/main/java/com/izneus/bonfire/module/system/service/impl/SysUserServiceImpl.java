@@ -7,10 +7,8 @@ import cn.hutool.poi.excel.ExcelUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.util.RedisUtil;
-import com.izneus.bonfire.config.BonfireProperties;
-import com.izneus.bonfire.module.security.CurrentUserUtil;
+import com.izneus.bonfire.config.BonfireConfig;
 import com.izneus.bonfire.module.system.controller.v1.query.ListUserQuery;
-import com.izneus.bonfire.module.system.controller.v1.vo.GetAuthUserVO;
 import com.izneus.bonfire.module.system.entity.SysFileEntity;
 import com.izneus.bonfire.module.system.service.SysFileService;
 import com.izneus.bonfire.module.system.service.dto.GetUserDTO;
@@ -24,7 +22,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,7 +46,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity> implements SysUserService {
 
-    private final BonfireProperties bonfireProperties;
+    private final BonfireConfig bonfireConfig;
     private final SysUserRoleService userRoleService;
     private final SysFileService fileService;
     private final RedisUtil redisUtil;
@@ -70,7 +67,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         // 新增用户
         SysUserEntity userEntity = new SysUserEntity();
         BeanUtils.copyProperties(userDTO, userEntity);
-        userEntity.setPassword(new BCryptPasswordEncoder().encode(bonfireProperties.getDefaultPassword()));
+        userEntity.setPassword(new BCryptPasswordEncoder().encode(bonfireConfig.getDefaultPassword()));
         String userId = save(userEntity) ? userEntity.getId() : null;
         // 新增用户角色关联
         saveUserRoles(userId, userDTO.getRoleIds());
@@ -123,7 +120,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     @Override
     public String exportUsers(ListUserQuery query) {
         String filename = IdUtil.fastSimpleUUID() + ".xlsx";
-        String filePath = bonfireProperties.getPath().getTempPath() + File.separator + filename;
+        String filePath = bonfireConfig.getPath().getTempPath() + File.separator + filename;
         // 创建excel writer
         BigExcelWriter writer = ExcelUtil.getBigWriter(filePath);
         List<Map<String, Object>> exportData = new ArrayList<>();
@@ -155,7 +152,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     public boolean resetPassword(String userId) {
         SysUserEntity userEntity = new SysUserEntity();
         userEntity.setId(userId);
-        userEntity.setPassword(new BCryptPasswordEncoder().encode(bonfireProperties.getDefaultPassword()));
+        userEntity.setPassword(new BCryptPasswordEncoder().encode(bonfireConfig.getDefaultPassword()));
         return updateById(userEntity);
     }
 
@@ -163,7 +160,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     public void importUsers(String fileId) {
         // 获得提前上传的导入文件
         SysFileEntity fileEntity = fileService.getById(fileId);
-        String filePath = bonfireProperties.getPath().getUploadPath() + File.separator + fileEntity.getUniqueFilename();
+        String filePath = bonfireConfig.getPath().getUploadPath() + File.separator + fileEntity.getUniqueFilename();
         // 解析excel写用户表
         ExcelReader reader = ExcelUtil.getReader(filePath);
         List<Map<String, Object>> users = reader.readAll();

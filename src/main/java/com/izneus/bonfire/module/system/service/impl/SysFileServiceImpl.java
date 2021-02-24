@@ -6,13 +6,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.izneus.bonfire.common.constant.ErrorCode;
 import com.izneus.bonfire.common.exception.BadRequestException;
 import com.izneus.bonfire.common.util.CommonUtil;
-import com.izneus.bonfire.config.BonfireProperties;
+import com.izneus.bonfire.config.BonfireConfig;
 import com.izneus.bonfire.module.system.entity.SysFileEntity;
 import com.izneus.bonfire.module.system.mapper.SysFileMapper;
 import com.izneus.bonfire.module.system.service.SysFileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,7 +31,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFileEntity> implements SysFileService {
 
-    private final BonfireProperties bonfireProperties;
+    private final BonfireConfig bonfireConfig;
 
     @Override
     public String uploadFile(MultipartFile multipartFile) {
@@ -50,7 +49,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFileEntity
         String suffix = FileUtil.getSuffix(filename);
         String uniqueFilename = IdUtil.fastSimpleUUID() + "." + suffix;
         // 创建文件
-        File file = FileUtil.touch(bonfireProperties.getPath().getUploadPath() + File.separator
+        File file = FileUtil.touch(bonfireConfig.getPath().getUploadPath() + File.separator
                 + uniqueFilename);
         // 转储文件
         try {

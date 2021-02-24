@@ -23,23 +23,23 @@ import java.util.stream.Collectors;
 @Component
 public class JwtUtil {
 
-    private final JwtProperties jwtProperties;
+    private final JwtConfig jwtConfig;
     private final RedisUtil redisUtil;
 
     private Key key;
 
-    public JwtUtil(JwtProperties jwtProperties, RedisUtil redisUtil) {
-        this.jwtProperties = jwtProperties;
+    public JwtUtil(JwtConfig jwtConfig, RedisUtil redisUtil) {
+        this.jwtConfig = jwtConfig;
         this.redisUtil = redisUtil;
         /// 可以通过下面的代码随机生成secret字符串
         // SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
         // String secretString = Encoders.BASE64.encode(key.getEncoded());
-        this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtProperties.getSecret()));
+        this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtConfig.getSecret()));
     }
 
     public String createToken(String userId) {
         Date nowDate = new Date();
-        Date expireDate = new Date(nowDate.getTime() + jwtProperties.getExpire() * 1000);
+        Date expireDate = new Date(nowDate.getTime() + jwtConfig.getExpire() * 1000);
         return Jwts.builder()
                 .setSubject(userId)
                 .setId(UUID.randomUUID().toString())

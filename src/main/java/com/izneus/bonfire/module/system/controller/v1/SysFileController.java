@@ -6,7 +6,7 @@ import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.common.constant.ErrorCode;
 import com.izneus.bonfire.common.exception.BadRequestException;
 import com.izneus.bonfire.common.util.CommonUtil;
-import com.izneus.bonfire.config.BonfireProperties;
+import com.izneus.bonfire.config.BonfireConfig;
 import com.izneus.bonfire.module.security.JwtUtil;
 import com.izneus.bonfire.module.system.controller.v1.query.DownloadFileQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.ExportFileQuery;
@@ -22,7 +22,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -57,7 +56,7 @@ public class SysFileController {
 
     private final SysFileService fileService;
     private final JwtUtil jwtUtil;
-    private final BonfireProperties bonfireProperties;
+    private final BonfireConfig bonfireConfig;
 
     @AccessLog("文件列表")
     @ApiOperation("文件列表")
@@ -158,7 +157,7 @@ public class SysFileController {
             throw new BadRequestException(ErrorCode.INVALID_ARGUMENT, "非法文件名");
         }
         // todo 可以考虑增加允许下载的文件后缀白名单
-        String filePath = bonfireProperties.getPath().getTempPath() + File.separator + query.getFilename();
+        String filePath = bonfireConfig.getPath().getTempPath() + File.separator + query.getFilename();
         Path path = Paths.get(filePath);
         try {
             Resource resource = new UrlResource(path.toUri());

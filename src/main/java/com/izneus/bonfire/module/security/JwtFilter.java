@@ -23,7 +23,7 @@ import java.io.IOException;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final JwtProperties jwtProperties;
+    private final JwtConfig jwtConfig;
     private final JwtUtil jwtUtil;
 
     @Override
@@ -43,11 +43,11 @@ public class JwtFilter extends OncePerRequestFilter {
      * 初步校验Token类型
      */
     private String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader(jwtProperties.getHeader());
+        String bearerToken = request.getHeader(jwtConfig.getHeader());
         // 判断token类型
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(jwtProperties.getType())) {
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(jwtConfig.getType())) {
             // 去掉令牌前缀，注意type后面的空格
-            return bearerToken.replace(jwtProperties.getType(), "").trim();
+            return bearerToken.replace(jwtConfig.getType(), "").trim();
         } else {
             log.debug("非法Token：{}", bearerToken);
         }
