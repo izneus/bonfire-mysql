@@ -14,7 +14,7 @@ import com.izneus.bonfire.module.system.service.LoginService;
 import com.izneus.bonfire.module.system.service.dto.CaptchaDTO;
 import com.izneus.bonfire.module.system.service.dto.ListAuthDTO;
 import com.izneus.bonfire.module.system.service.dto.LoginDTO;
-import com.wf.captcha.SpecCaptcha;
+import com.wf.captcha.ArithmeticCaptcha;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -133,13 +133,18 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public CaptchaDTO getCaptcha() {
-        // 生成验证码
-        SpecCaptcha specCaptcha = new SpecCaptcha(130, 48, 5);
-        String value = specCaptcha.text().toLowerCase();
+        /// 图片验证码
+        /*SpecCaptcha specCaptcha = new SpecCaptcha(130, 48, 5);
+        String value = specCaptcha.text().toLowerCase();*/
+
+        // 算术验证码
+        ArithmeticCaptcha captcha = new ArithmeticCaptcha(130, 48);
+        String value = captcha.text();
+
         String uuid = UUID.randomUUID().toString();
         String key = REDIS_KEY_TYPE_CAPTCHA + uuid;
         // 保存验证码到redis缓存，2分钟后过期
         redisUtil.set(key, value, 2L, TimeUnit.MINUTES);
-        return new CaptchaDTO(uuid, specCaptcha.toBase64());
+        return new CaptchaDTO(uuid, captcha.toBase64());
     }
 }
