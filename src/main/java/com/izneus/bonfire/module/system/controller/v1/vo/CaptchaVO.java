@@ -1,4 +1,4 @@
-package com.izneus.bonfire.module.system.service.dto;
+package com.izneus.bonfire.module.system.controller.v1.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -10,9 +10,10 @@ import lombok.Data;
  */
 @ApiModel("验证码")
 @Data
-public class CaptchaDTO {
+public class CaptchaVO {
     @ApiModelProperty("验证码id")
     private final String id;
+
     @ApiModelProperty("验证码图片，base64")
     private final String captcha;
 }

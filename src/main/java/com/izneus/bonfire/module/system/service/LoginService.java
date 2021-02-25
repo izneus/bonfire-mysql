@@ -1,8 +1,8 @@
 package com.izneus.bonfire.module.system.service;
 
 import com.izneus.bonfire.module.system.controller.v1.query.LoginQuery;
-import com.izneus.bonfire.module.system.service.dto.CaptchaDTO;
-import com.izneus.bonfire.module.system.service.dto.LoginDTO;
+import com.izneus.bonfire.module.system.controller.v1.vo.CaptchaVO;
+import com.izneus.bonfire.module.system.controller.v1.vo.LoginVO;
 
 /**
  * @author Izneus
@@ -13,14 +13,14 @@ public interface LoginService {
      * 登录
      *
      * @param loginQuery login表单
-     * @return LoginDTO
+     * @return LoginVO
      */
-    LoginDTO login(LoginQuery loginQuery);
+    LoginVO login(LoginQuery loginQuery);
 
     /**
      * 生成登录用的验证码，缓存在redis里等待校验
      *
-     * @return CaptchaDTO
+     * @return CaptchaVO
      */
-    CaptchaDTO getCaptcha();
+    CaptchaVO getCaptcha();
 }

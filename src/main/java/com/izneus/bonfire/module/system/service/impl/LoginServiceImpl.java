@@ -1,5 +1,6 @@
 package com.izneus.bonfire.module.system.service.impl;
 
+import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.izneus.bonfire.common.constant.Dict;
 import com.izneus.bonfire.common.constant.ErrorCode;
@@ -11,9 +12,9 @@ import com.izneus.bonfire.module.system.controller.v1.query.LoginQuery;
 import com.izneus.bonfire.module.system.entity.SysUserEntity;
 import com.izneus.bonfire.module.system.mapper.SysUserMapper;
 import com.izneus.bonfire.module.system.service.LoginService;
-import com.izneus.bonfire.module.system.service.dto.CaptchaDTO;
+import com.izneus.bonfire.module.system.controller.v1.vo.CaptchaVO;
 import com.izneus.bonfire.module.system.service.dto.ListAuthDTO;
-import com.izneus.bonfire.module.system.service.dto.LoginDTO;
+import com.izneus.bonfire.module.system.controller.v1.vo.LoginVO;
 import com.wf.captcha.ArithmeticCaptcha;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,8 +25,7 @@ import org.springframework.util.StringUtils;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-import static com.izneus.bonfire.common.constant.Constant.MAX_PASSWORD_RETRY_COUNT;
-import static com.izneus.bonfire.common.constant.Constant.REDIS_KEY_TYPE_CAPTCHA;
+import static com.izneus.bonfire.common.constant.Constant.*;
 
 /**
  * @author Izneus
@@ -44,18 +44,18 @@ public class LoginServiceImpl implements LoginService {
     private Long jwtExpire;
 
     @Override
-    public LoginDTO login(LoginQuery loginQuery) {
-        // 检查连续密码输入错误次数
-        String retryKey = "user:" + loginQuery.getUsername() + ":password-retry-count";
-        int passwordRetryCount = (int) Optional.ofNullable(redisUtil.get(retryKey)).orElse(0);
-        if (passwordRetryCount >= MAX_PASSWORD_RETRY_COUNT) {
+    public LoginVO login(LoginQuery loginQuery) {
+        // 登陆密码重试锁定功能, 检查连续密码输入错误次数
+        String retryKey = REDIS_KEY_LOGIN_RETRY + loginQuery.getUsername();
+        int retryCount = (int) Optional.ofNullable(redisUtil.get(retryKey)).orElse(0);
+        if (retryCount >= MAX_RETRY_COUNT) {
             throw new BadRequestException(ErrorCode.PERMISSION_DENIED,
                     "因连续密码输入错误，该用户已被锁定，请30分钟之后重试");
         }
 
         if (bonfireConfig.getCaptchaEnabled()) {
-            /// 查询验证码
-            String key = REDIS_KEY_TYPE_CAPTCHA + loginQuery.getCaptchaId();
+            // 查询验证码
+            String key = REDIS_KEY_CAPTCHA + loginQuery.getCaptchaId();
             String captcha = (String) redisUtil.get(key);
             // 查询过的验证码及时清除
             redisUtil.del(key);
@@ -88,19 +88,15 @@ public class LoginServiceImpl implements LoginService {
         // 校验密码
         if (!new BCryptPasswordEncoder().matches(loginQuery.getPassword(), user.getPassword())) {
             // 密码错误，累计错误次数
-            Long retryCount = redisUtil.incr(retryKey);
-//            passwordRetryCount++;
-            if (retryCount >= MAX_PASSWORD_RETRY_COUNT) {
+            Long totalRetryCount = redisUtil.incr(retryKey);
+            if (totalRetryCount >= MAX_RETRY_COUNT) {
                 // 5分钟内连续输错5次密码，锁定账号30分钟
-                /// redisUtil.set(retryKey, passwordRetryCount, 30, TimeUnit.MINUTES);
                 redisUtil.expire(retryKey, 30, TimeUnit.MINUTES);
             } else {
-                /// redisUtil.set(retryKey, passwordRetryCount, 5, TimeUnit.MINUTES);
                 redisUtil.expire(retryKey, 5, TimeUnit.MINUTES);
-
             }
             throw new BadRequestException(ErrorCode.UNAUTHENTICATED,
-                    "用户名不存在或密码错误，密码错误次数：" + passwordRetryCount);
+                    "用户名不存在或密码错误，密码错误次数：" + totalRetryCount);
         }
 
         /// 暂时停用，生成spring-security认证信息
@@ -128,11 +124,11 @@ public class LoginServiceImpl implements LoginService {
 
         // todo single login
 
-        return new LoginDTO(user.getUsername(), token);
+        return new LoginVO(user.getUsername(), token);
     }
 
     @Override
-    public CaptchaDTO getCaptcha() {
+    public CaptchaVO getCaptcha() {
         /// 图片验证码
         /*SpecCaptcha specCaptcha = new SpecCaptcha(130, 48, 5);
         String value = specCaptcha.text().toLowerCase();*/
@@ -141,10 +137,10 @@ public class LoginServiceImpl implements LoginService {
         ArithmeticCaptcha captcha = new ArithmeticCaptcha(130, 48);
         String value = captcha.text();
 
-        String uuid = UUID.randomUUID().toString();
-        String key = REDIS_KEY_TYPE_CAPTCHA + uuid;
+        String uuid = IdUtil.fastSimpleUUID();
+        String key = REDIS_KEY_CAPTCHA + uuid;
         // 保存验证码到redis缓存，2分钟后过期
         redisUtil.set(key, value, 2L, TimeUnit.MINUTES);
-        return new CaptchaDTO(uuid, captcha.toBase64());
+        return new CaptchaVO(uuid, captcha.toBase64());
     }
 }

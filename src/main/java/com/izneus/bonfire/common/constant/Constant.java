@@ -7,10 +7,23 @@ package com.izneus.bonfire.common.constant;
  * @date 2020/07/06
  */
 public class Constant {
-    public static final String REDIS_KEY_TYPE_CAPTCHA = "captcha:";
-    public static final String REDIS_KEY_TYPE_AUTHORITIES = "captcha:";
 
-    public static final int MAX_PASSWORD_RETRY_COUNT = 5;
+    /**
+     * 验证码的redis key前缀
+     */
+    public static final String REDIS_KEY_CAPTCHA = "captcha:";
+
+    /**
+     * 登陆重试的redis key前缀，重试一般指的是密码错误
+     */
+    public static final String REDIS_KEY_LOGIN_RETRY = "login-retry:user:";
+
+    public static final String REDIS_KEY_AUTHORITIES = "captcha:";
+
+    /**
+     * 最大密码错误重试次数
+     */
+    public static final int MAX_RETRY_COUNT = 5;
 
     public static final String JOB_KEY = "job";
 

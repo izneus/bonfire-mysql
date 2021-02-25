@@ -3,8 +3,8 @@ package com.izneus.bonfire.module.system.controller.v1;
 import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.module.system.controller.v1.query.LoginQuery;
 import com.izneus.bonfire.module.system.service.LoginService;
-import com.izneus.bonfire.module.system.service.dto.CaptchaDTO;
-import com.izneus.bonfire.module.system.service.dto.LoginDTO;
+import com.izneus.bonfire.module.system.controller.v1.vo.CaptchaVO;
+import com.izneus.bonfire.module.system.controller.v1.vo.LoginVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -25,16 +25,17 @@ public class LoginController {
 
     private final LoginService loginService;
 
+    @AccessLog("获得验证码")
     @ApiOperation("获得验证码")
     @GetMapping("/captcha")
-    public CaptchaDTO getCaptcha() {
+    public CaptchaVO getCaptcha() {
         return loginService.getCaptcha();
     }
 
-    @ApiOperation("用户登录")
     @AccessLog("用户登录")
+    @ApiOperation("用户登录")
     @PostMapping("/login")
-    public LoginDTO login(@Validated @RequestBody LoginQuery loginQuery) {
+    public LoginVO login(@Validated @RequestBody LoginQuery loginQuery) {
         return loginService.login(loginQuery);
     }
 
