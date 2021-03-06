@@ -16,5 +16,11 @@ import java.util.List;
  * @since 2020-06-28
  */
 public interface SysUserMapper extends BaseMapper<SysUserEntity> {
+    /**
+     * 查询用户角色和权限
+     *
+     * @param userId userId
+     * @return 用户的角色和权限
+     */
     List<ListAuthDTO> listAuthsByUserId(@Param("userId") String userId);
 }

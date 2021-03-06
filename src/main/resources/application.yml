@@ -13,7 +13,7 @@ jwt:
   secret: 1Q8oTpiVuQeoV7N6ktMmOkMvpJPqNwm+zaVxzeskREE=
   # token有效时长，7天，单位秒
   expire: 604800
-  # 请求头
+  # 请求头，注意LoginController里的logout方法硬编码了该值
   header: Authorization
   # token类型
   type: Bearer

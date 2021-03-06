@@ -8,6 +8,7 @@ import com.izneus.bonfire.module.system.controller.v1.vo.LoginVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,9 +40,11 @@ public class LoginController {
         return loginService.login(loginQuery);
     }
 
+    @AccessLog("登出")
     @ApiOperation("登出")
     @PostMapping("/logout")
-    public String logout() {
-        return null;
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void logout(@RequestHeader("Authorization") String token) {
+        loginService.logout(token);
     }
 }

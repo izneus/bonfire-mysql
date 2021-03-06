@@ -60,7 +60,7 @@ public class LoginServiceImpl implements LoginService {
 
         if (bonfireConfig.getCaptchaEnabled()) {
             // 查询验证码
-            String key = REDIS_KEY_CAPTCHA + loginQuery.getCaptchaId();
+            String key = StrUtil.format(REDIS_KEY_CAPTCHA, loginQuery.getCaptchaId());
             String captcha = (String) redisUtil.get(key);
             // 查询过的验证码及时清除
             redisUtil.del(key);
@@ -145,12 +145,18 @@ public class LoginServiceImpl implements LoginService {
         String value = captcha.text();
 
         String uuid = IdUtil.fastSimpleUUID();
-        String key = REDIS_KEY_CAPTCHA + uuid;
+        String key = StrUtil.format(REDIS_KEY_CAPTCHA, uuid);
         // 保存验证码到redis缓存，2分钟后过期
         redisUtil.set(key, value, 2L, TimeUnit.MINUTES);
         return CaptchaVO.builder()
                 .id(uuid)
                 .captcha(captcha.toBase64())
                 .build();
+    }
+
+    @Override
+    public void logout(String token) {
+        String key = StrUtil.format(REDIS_KEY_BLACKLIST, token);
+        redisUtil.set(key, null, jwtExpire, TimeUnit.SECONDS);
     }
 }
