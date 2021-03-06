@@ -1,5 +1,6 @@
 package com.izneus.bonfire.module.security;
 
+import cn.hutool.core.util.IdUtil;
 import com.izneus.bonfire.common.util.RedisUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -37,24 +38,38 @@ public class JwtUtil {
         this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtConfig.getSecret()));
     }
 
+    /**
+     * 默认的创建jwt方法，一般是给login过程生成token
+     *
+     * @param userId 用户id
+     * @return jwt
+     */
     public String createToken(String userId) {
         Date nowDate = new Date();
         Date expireDate = new Date(nowDate.getTime() + jwtConfig.getExpire() * 1000);
         return Jwts.builder()
                 .setSubject(userId)
-                .setId(UUID.randomUUID().toString())
+                .setId(IdUtil.fastSimpleUUID())
                 .setExpiration(expireDate)
                 .setIssuedAt(nowDate)
                 .signWith(key)
                 .compact();
     }
 
+    /**
+     * 生成自定义claim的jwt，一般是生成临时token
+     *
+     * @param userId        用户id
+     * @param expireSeconds 过期时长，单位秒
+     * @param claims        自定义claim
+     * @return jwt
+     */
     public String createToken(String userId, Long expireSeconds, Map<String, Object> claims) {
         Date nowDate = new Date();
         Date expireDate = new Date(nowDate.getTime() + expireSeconds * 1000);
         return Jwts.builder()
                 .setSubject(userId)
-                .setId(UUID.randomUUID().toString())
+                .setId(IdUtil.fastSimpleUUID())
                 .setExpiration(expireDate)
                 .setIssuedAt(nowDate)
                 .addClaims(claims)

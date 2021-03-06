@@ -2,6 +2,7 @@ package com.izneus.bonfire.module.system.controller.v1.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -10,6 +11,7 @@ import lombok.Data;
  */
 @ApiModel("验证码")
 @Data
+@Builder
 public class CaptchaVO {
     @ApiModelProperty("验证码id")
     private final String id;

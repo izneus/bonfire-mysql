@@ -14,11 +14,14 @@ public class Constant {
     public static final String REDIS_KEY_CAPTCHA = "captcha:";
 
     /**
-     * 登陆重试的redis key前缀，重试一般指的是密码错误
+     * 登陆重试的redis key前缀，重试一般指的是密码错误，{}为用户名，实际存储的key形如 username:userName:retry
      */
-    public static final String REDIS_KEY_LOGIN_RETRY = "login-retry:user:";
+    public static final String REDIS_KEY_LOGIN_RETRY = "username:{}:retry";
 
-    public static final String REDIS_KEY_AUTHORITIES = "captcha:";
+    /**
+     * 用户权限的redis key前缀，{}为userId，实际存储的key形如 user:userId:auths
+     */
+    public static final String REDIS_KEY_AUTHS = "user:{}:auths";
 
     /**
      * 最大密码错误重试次数

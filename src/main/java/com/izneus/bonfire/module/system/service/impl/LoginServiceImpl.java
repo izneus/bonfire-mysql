@@ -1,6 +1,7 @@
 package com.izneus.bonfire.module.system.service.impl;
 
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.izneus.bonfire.common.constant.Dict;
 import com.izneus.bonfire.common.constant.ErrorCode;
@@ -9,12 +10,14 @@ import com.izneus.bonfire.common.util.RedisUtil;
 import com.izneus.bonfire.config.BonfireConfig;
 import com.izneus.bonfire.module.security.JwtUtil;
 import com.izneus.bonfire.module.system.controller.v1.query.LoginQuery;
+import com.izneus.bonfire.module.system.controller.v1.vo.CacheDictVO;
+import com.izneus.bonfire.module.system.controller.v1.vo.CaptchaVO;
+import com.izneus.bonfire.module.system.controller.v1.vo.LoginVO;
 import com.izneus.bonfire.module.system.entity.SysUserEntity;
 import com.izneus.bonfire.module.system.mapper.SysUserMapper;
 import com.izneus.bonfire.module.system.service.LoginService;
-import com.izneus.bonfire.module.system.controller.v1.vo.CaptchaVO;
+import com.izneus.bonfire.module.system.service.SysUserService;
 import com.izneus.bonfire.module.system.service.dto.ListAuthDTO;
-import com.izneus.bonfire.module.system.controller.v1.vo.LoginVO;
 import com.wf.captcha.ArithmeticCaptcha;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,8 +25,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static com.izneus.bonfire.common.constant.Constant.*;
 
@@ -35,10 +40,10 @@ import static com.izneus.bonfire.common.constant.Constant.*;
 @RequiredArgsConstructor
 public class LoginServiceImpl implements LoginService {
 
+    private final BonfireConfig bonfireConfig;
     private final JwtUtil jwtUtil;
     private final RedisUtil redisUtil;
-    private final SysUserMapper sysUserMapper;
-    private final BonfireConfig bonfireConfig;
+    private final SysUserService userService;
 
     @Value("${jwt.expire}")
     private Long jwtExpire;
@@ -46,7 +51,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public LoginVO login(LoginQuery loginQuery) {
         // 登陆密码重试锁定功能, 检查连续密码输入错误次数
-        String retryKey = REDIS_KEY_LOGIN_RETRY + loginQuery.getUsername();
+        String retryKey = StrUtil.format(REDIS_KEY_LOGIN_RETRY, loginQuery.getUsername());
         int retryCount = (int) Optional.ofNullable(redisUtil.get(retryKey)).orElse(0);
         if (retryCount >= MAX_RETRY_COUNT) {
             throw new BadRequestException(ErrorCode.PERMISSION_DENIED,
@@ -75,7 +80,7 @@ public class LoginServiceImpl implements LoginService {
 
         // 暂时这里自己处理账号密码校验逻辑，方便以后添加手机号短信验证码登录等其他登录方式
         // 通过用户名查询用户信息
-        SysUserEntity user = sysUserMapper.selectOne(new LambdaQueryWrapper<SysUserEntity>()
+        SysUserEntity user = userService.getOne(new LambdaQueryWrapper<SysUserEntity>()
                 .eq(SysUserEntity::getUsername, loginQuery.getUsername()));
         // 找不到用户
         if (user == null) {
@@ -87,13 +92,15 @@ public class LoginServiceImpl implements LoginService {
         }
         // 校验密码
         if (!new BCryptPasswordEncoder().matches(loginQuery.getPassword(), user.getPassword())) {
+            if (0 == retryCount) {
+                // 首次输错密码，开始计时5分钟
+                redisUtil.set(retryKey, 0, 5, TimeUnit.MINUTES);
+            }
             // 密码错误，累计错误次数
             Long totalRetryCount = redisUtil.incr(retryKey);
             if (totalRetryCount >= MAX_RETRY_COUNT) {
                 // 5分钟内连续输错5次密码，锁定账号30分钟
                 redisUtil.expire(retryKey, 30, TimeUnit.MINUTES);
-            } else {
-                redisUtil.expire(retryKey, 5, TimeUnit.MINUTES);
             }
             throw new BadRequestException(ErrorCode.UNAUTHENTICATED,
                     "用户名不存在或密码错误，密码错误次数：" + totalRetryCount);
@@ -110,21 +117,21 @@ public class LoginServiceImpl implements LoginService {
         String token = jwtUtil.createToken(user.getId());
 
         // 保存权限到redis
-        List<ListAuthDTO> authorityList = sysUserMapper.listAuthoritiesByUserId(user.getId());
+        List<ListAuthDTO> authorityList = ((SysUserMapper) userService.getBaseMapper()).listAuthsByUserId(user.getId());
         if (authorityList != null && authorityList.size() > 0) {
-            Set<String> authoritySet = new HashSet<>();
-            for (ListAuthDTO authority : authorityList) {
-                authoritySet.add("ROLE_" + authority.getRoleName());
-                authoritySet.add(authority.getAuthority());
-            }
-            String authorities = StringUtils.arrayToCommaDelimitedString(authoritySet.toArray());
-            redisUtil.set("user:" + user.getId() + ":authorities",
-                    authorities, jwtExpire, TimeUnit.SECONDS);
+            // 取角色和权限，拼接成一个字符串，用半角逗号分隔
+            String roles = authorityList.stream().map(i -> "ROLE_" + i.getRoleName()).distinct()
+                    .collect(Collectors.joining(","));
+            String auths = authorityList.stream().map(ListAuthDTO::getAuthority).distinct()
+                    .collect(Collectors.joining(","));
+            String key = StrUtil.format(REDIS_KEY_AUTHS, user.getId());
+            redisUtil.set(key, roles + "," + auths, jwtExpire, TimeUnit.SECONDS);
         }
-
         // todo single login
-
-        return new LoginVO(user.getUsername(), token);
+        return LoginVO.builder()
+                .username(user.getUsername())
+                .token(token)
+                .build();
     }
 
     @Override
@@ -141,6 +148,9 @@ public class LoginServiceImpl implements LoginService {
         String key = REDIS_KEY_CAPTCHA + uuid;
         // 保存验证码到redis缓存，2分钟后过期
         redisUtil.set(key, value, 2L, TimeUnit.MINUTES);
-        return new CaptchaVO(uuid, captcha.toBase64());
+        return CaptchaVO.builder()
+                .id(uuid)
+                .captcha(captcha.toBase64())
+                .build();
     }
 }

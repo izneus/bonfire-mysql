@@ -16,5 +16,5 @@ import java.util.List;
  * @since 2020-06-28
  */
 public interface SysUserMapper extends BaseMapper<SysUserEntity> {
-    List<ListAuthDTO> listAuthoritiesByUserId(@Param("userId") String userId);
+    List<ListAuthDTO> listAuthsByUserId(@Param("userId") String userId);
 }
