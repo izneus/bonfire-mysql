@@ -4,21 +4,26 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @author Izneus
- * @date 2020/07/29
+ * @date 2020/08/27
  */
-@ApiModel("用户列表vo")
+@ApiModel("用户详情vo")
 @Data
-public class ListUserVO {
+public class UserVO {
     @ApiModelProperty("用户id")
     private String id;
 
-    @ApiModelProperty("用户名")
+    @ApiModelProperty(value = "用户名", required = true)
     private String username;
 
     @ApiModelProperty("昵称")
     private String nickname;
+
+    @ApiModelProperty("全名")
+    private String fullname;
 
     @ApiModelProperty("邮件")
     private String email;
@@ -31,4 +36,7 @@ public class ListUserVO {
 
     @ApiModelProperty("账号状态")
     private String state;
+
+    @ApiModelProperty("角色id列表")
+    private List<String> roleIds;
 }

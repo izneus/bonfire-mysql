@@ -3,9 +3,10 @@ package com.izneus.bonfire.common.base;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.experimental.Accessors;
-import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 /**
  * 这是分页返回的基类，比请求的基类多了一个totalSize属性以及分页参数的构造函数
@@ -15,9 +16,8 @@ import lombok.experimental.SuperBuilder;
  */
 @ApiModel("分页查询返回数据基类")
 @Data
-@SuperBuilder
-public class BasePageVO {
-
+@AllArgsConstructor
+public class BasePageVO<T> {
     @ApiModelProperty("总数据条数")
     private Long totalSize;
 
@@ -27,9 +27,13 @@ public class BasePageVO {
     @ApiModelProperty("一页的数据条数")
     private Long pageSize;
 
-    public BasePageVO(Page page) {
-        totalSize = page.getTotal();
-        pageNum = page.getCurrent();
-        pageSize = page.getSize();
+    @ApiModelProperty("分页数据行")
+    private List<T> rows;
+
+    public BasePageVO(Page page, List<T> rows) {
+        this.totalSize = page.getTotal();
+        this.pageNum = page.getCurrent();
+        this.pageSize = page.getSize();
+        this.rows = rows;
     }
 }

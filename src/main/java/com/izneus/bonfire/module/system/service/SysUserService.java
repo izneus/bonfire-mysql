@@ -3,9 +3,8 @@ package com.izneus.bonfire.module.system.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.izneus.bonfire.module.system.controller.v1.query.ListUserQuery;
-import com.izneus.bonfire.module.system.controller.v1.vo.GetAuthUserVO;
-import com.izneus.bonfire.module.system.service.dto.GetUserDTO;
-import com.izneus.bonfire.module.system.service.dto.UserDTO;
+import com.izneus.bonfire.module.system.controller.v1.vo.UserVO;
+import com.izneus.bonfire.module.system.controller.v1.query.UserQuery;
 import com.izneus.bonfire.module.system.entity.SysUserEntity;
 
 /**
@@ -17,32 +16,37 @@ import com.izneus.bonfire.module.system.entity.SysUserEntity;
  * @since 2020-06-28
  */
 public interface SysUserService extends IService<SysUserEntity> {
-
+    /**
+     * 用户列表
+     *
+     * @param query ListUserQuery
+     * @return Page<SysUserEntity>
+     */
     Page<SysUserEntity> listUsers(ListUserQuery query);
 
     /**
      * 新增用户
      *
-     * @param userDTO 用户
+     * @param userQuery 用户
      * @return 新建成功返回用户id，失败返回null
      */
-    String createUser(UserDTO userDTO);
+    String createUser(UserQuery userQuery);
 
     /**
      * 通过id获取用户详情
      *
      * @param userId userId
-     * @return GetUserDTO
+     * @return UserVO
      */
-    GetUserDTO getUserById(String userId);
+    UserVO getUserById(String userId);
 
     /**
      * 通过id更新用户信息
      *
-     * @param userId  userID
-     * @param userDTO userDTO
+     * @param userId    userID
+     * @param userQuery userQuery
      */
-    void updateUserById(String userId, UserDTO userDTO);
+    void updateUserById(String userId, UserQuery userQuery);
 
     /**
      * 通过id删除用户信息
@@ -51,13 +55,41 @@ public interface SysUserService extends IService<SysUserEntity> {
      */
     void removeUserById(String userId);
 
+    /**
+     * 导出用户，根据查询条件生成临时文件，返回文件名
+     *
+     * @param query 查询条件
+     * @return 临时文件名
+     */
     String exportUsers(ListUserQuery query);
 
+    /**
+     * 重置密码为默认密码
+     *
+     * @param userId userId
+     * @return boolean
+     */
+    @SuppressWarnings("UnusedReturnValue")
     boolean resetPassword(String userId);
 
+    /**
+     * 导入用户，预上传文件获得文件id
+     *
+     * @param fileId 文件id
+     */
     void importUsers(String fileId);
 
-    void unlockUser(String userId);
+    /**
+     * 删除redis的密码重试k-v来解除登陆时候的密码重试过多的账号锁定
+     *
+     * @param username 用户名
+     */
+    void unlockUser(String username);
 
+    /**
+     * 主动将用户踢下线
+     *
+     * @param userId 用户id
+     */
     void kickOut(String userId);
 }

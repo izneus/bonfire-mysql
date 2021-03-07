@@ -1,5 +1,6 @@
 package com.izneus.bonfire.module.system.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.poi.excel.BigExcelWriter;
@@ -12,8 +13,8 @@ import com.izneus.bonfire.config.BonfireConfig;
 import com.izneus.bonfire.module.system.controller.v1.query.ListUserQuery;
 import com.izneus.bonfire.module.system.entity.SysFileEntity;
 import com.izneus.bonfire.module.system.service.SysFileService;
-import com.izneus.bonfire.module.system.service.dto.GetUserDTO;
-import com.izneus.bonfire.module.system.service.dto.UserDTO;
+import com.izneus.bonfire.module.system.controller.v1.vo.UserVO;
+import com.izneus.bonfire.module.system.controller.v1.query.UserQuery;
 import com.izneus.bonfire.module.system.entity.SysUserEntity;
 import com.izneus.bonfire.module.system.entity.SysUserRoleEntity;
 import com.izneus.bonfire.module.system.mapper.SysUserMapper;
@@ -26,7 +27,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -36,6 +36,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.izneus.bonfire.common.constant.Constant.REDIS_KEY_AUTHS;
+import static com.izneus.bonfire.common.constant.Constant.REDIS_KEY_LOGIN_RETRY;
 
 /**
  * <p>
@@ -59,56 +60,50 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         return page(
                 new Page<>(query.getPageNum(), query.getPageSize()),
                 new LambdaQueryWrapper<SysUserEntity>()
-                        .like(StringUtils.hasText(query.getUsername()),
-                                SysUserEntity::getUsername, query.getUsername())
+                        .like(StrUtil.isNotBlank(query.getUsername()), SysUserEntity::getUsername, query.getUsername())
+                        .orderByDesc(SysUserEntity::getCreateTime)
         );
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public String createUser(UserDTO userDTO) {
+    public String createUser(UserQuery userQuery) {
         // 新增用户
-        SysUserEntity userEntity = new SysUserEntity();
-        BeanUtils.copyProperties(userDTO, userEntity);
+        SysUserEntity userEntity = BeanUtil.copyProperties(userQuery, SysUserEntity.class);
         userEntity.setPassword(new BCryptPasswordEncoder().encode(bonfireConfig.getDefaultPassword()));
         String userId = save(userEntity) ? userEntity.getId() : null;
         // 新增用户角色关联
-        saveUserRoles(userId, userDTO.getRoleIds());
+        saveUserRoles(userId, userQuery.getRoleIds());
         return userId;
     }
 
     @Override
-    public GetUserDTO getUserById(String userId) {
+    public UserVO getUserById(String userId) {
         // 查询用户表
         SysUserEntity userEntity = getById(userId);
         if (userEntity == null) {
             return null;
         }
-        GetUserDTO userDTO = new GetUserDTO();
-        BeanUtils.copyProperties(userEntity, userDTO);
+        UserVO userVO = BeanUtil.copyProperties(userEntity, UserVO.class);
         // 查询用户角色
-        List<SysUserRoleEntity> userRoles = userRoleService.list(
+        List<SysUserRoleEntity> roles = userRoleService.list(
                 new LambdaQueryWrapper<SysUserRoleEntity>().eq(SysUserRoleEntity::getUserId, userId)
         );
-        List<String> roleIds = new ArrayList<>();
-        for (SysUserRoleEntity userRole : userRoles) {
-            roleIds.add(userRole.getRoleId());
-        }
-        userDTO.setRoleIds(roleIds);
-        return userDTO;
+        List<String> roleIds = roles.stream().map(SysUserRoleEntity::getRoleId).collect(Collectors.toList());
+        userVO.setRoleIds(roleIds);
+        return userVO;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateUserById(String userId, UserDTO userDTO) {
+    public void updateUserById(String userId, UserQuery userQuery) {
         // 更新用户表
-        SysUserEntity userEntity = new SysUserEntity();
-        BeanUtils.copyProperties(userDTO, userEntity);
+        SysUserEntity userEntity = BeanUtil.copyProperties(userQuery, SysUserEntity.class);
         userEntity.setId(userId);
         updateById(userEntity);
         // 更新用户角色表，先删除现有角色信息，再重新插入新角色
         userRoleService.remove(new LambdaQueryWrapper<SysUserRoleEntity>().eq(SysUserRoleEntity::getUserId, userId));
-        saveUserRoles(userId, userDTO.getRoleIds());
+        saveUserRoles(userId, userQuery.getRoleIds());
     }
 
     @Override
@@ -182,7 +177,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
 
     @Override
     public void unlockUser(String username) {
-        String retryKey = "user:" + username + ":password-retry-count";
+        String retryKey = StrUtil.format(REDIS_KEY_LOGIN_RETRY, username);
         redisUtil.del(retryKey);
     }
 

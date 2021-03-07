@@ -1,4 +1,4 @@
-package com.izneus.bonfire.module.system.service.dto;
+package com.izneus.bonfire.module.system.controller.v1.query;
 
 import com.izneus.bonfire.common.constant.RegExp;
 import io.swagger.annotations.ApiModel;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 @ApiModel("新增用户Query")
 @Data
-public class UserDTO {
+public class UserQuery {
     @ApiModelProperty(value = "用户名", required = true)
     @Pattern(regexp = RegExp.USERNAME, message = "用户名必须为6-20位字母或者数字")
     private String username;

@@ -17,11 +17,11 @@ import javax.validation.constraints.Min;
 @Data
 public class BasePageDTO {
 
-    @ApiModelProperty("页码")
-    @Min(value = 1)
+    @ApiModelProperty(value = "页码", required = true)
+    @Min(value = 1, message = "页码为大于0的整数")
     private Long pageNum;
 
-    @ApiModelProperty("一页的数据条数")
-    @Range(min = 1, max = 500)
+    @ApiModelProperty(value = "一页的数据条数", required = true)
+    @Range(min = 1, max = 500, message = "一页数据条数为1～500条")
     private Long pageSize;
 }

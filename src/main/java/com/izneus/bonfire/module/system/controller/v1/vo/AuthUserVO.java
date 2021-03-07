@@ -2,17 +2,18 @@ package com.izneus.bonfire.module.system.controller.v1.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
  * @author Izneus
- * @date 2020/08/14
+ * @date 2021/02/18
  */
-@AllArgsConstructor
-@ApiModel("通用IdVO")
 @Data
-public class IdVO {
+@ApiModel("认证用户信息vo")
+public class AuthUserVO {
     @ApiModelProperty("id")
     private String id;
+
+    @ApiModelProperty("用户名")
+    private String username;
 }
