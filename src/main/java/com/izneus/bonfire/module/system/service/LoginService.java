@@ -28,6 +28,4 @@ public interface LoginService {
      * 用户登出，黑名单实现
      */
     void logout();
-
-
 }

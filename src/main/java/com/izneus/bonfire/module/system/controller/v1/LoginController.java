@@ -44,9 +44,7 @@ public class LoginController {
     @ApiOperation("登出")
     @PostMapping("/logout")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void logout(@RequestHeader("Authorization") String token) {
+    public void logout() {
         loginService.logout();
     }
-
-
 }
