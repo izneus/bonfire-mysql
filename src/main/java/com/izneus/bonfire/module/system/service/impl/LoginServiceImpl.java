@@ -8,6 +8,7 @@ import com.izneus.bonfire.common.constant.ErrorCode;
 import com.izneus.bonfire.common.exception.BadRequestException;
 import com.izneus.bonfire.common.util.RedisUtil;
 import com.izneus.bonfire.config.BonfireConfig;
+import com.izneus.bonfire.module.security.CurrentUserUtil;
 import com.izneus.bonfire.module.security.JwtUtil;
 import com.izneus.bonfire.module.system.controller.v1.query.LoginQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.CacheDictVO;
@@ -20,6 +21,7 @@ import com.izneus.bonfire.module.system.service.SysUserService;
 import com.izneus.bonfire.module.system.service.dto.ListAuthDTO;
 import com.wf.captcha.ArithmeticCaptcha;
 import lombok.RequiredArgsConstructor;
+import org.omg.CORBA.Current;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -155,8 +157,13 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public void logout(String token) {
-        String key = StrUtil.format(REDIS_KEY_BLACKLIST, token);
-        redisUtil.set(key, null, jwtExpire, TimeUnit.SECONDS);
+    public void logout() {
+        // 删除白名单
+        String key = StrUtil.format(REDIS_KEY_AUTHS, CurrentUserUtil.getUserId());
+        redisUtil.del(key);
+
+        /// 黑名单机制
+        /*String key = StrUtil.format(REDIS_KEY_BLACKLIST, token);
+        redisUtil.set(key, null, jwtExpire, TimeUnit.SECONDS);*/
     }
 }

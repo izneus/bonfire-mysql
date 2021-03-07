@@ -26,8 +26,8 @@ public interface LoginService {
 
     /**
      * 用户登出，黑名单实现
-     *
-     * @param token token
      */
-    void logout(String token);
+    void logout();
+
+
 }

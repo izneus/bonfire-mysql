@@ -58,4 +58,6 @@ public interface SysUserService extends IService<SysUserEntity> {
     void importUsers(String fileId);
 
     void unlockUser(String userId);
+
+    void kickOut(String userId);
 }

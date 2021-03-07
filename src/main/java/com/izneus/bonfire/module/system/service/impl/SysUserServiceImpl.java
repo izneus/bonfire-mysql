@@ -1,6 +1,7 @@
 package com.izneus.bonfire.module.system.service.impl;
 
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.poi.excel.BigExcelWriter;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
@@ -33,6 +34,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static com.izneus.bonfire.common.constant.Constant.REDIS_KEY_AUTHS;
 
 /**
  * <p>
@@ -181,6 +184,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     public void unlockUser(String username) {
         String retryKey = "user:" + username + ":password-retry-count";
         redisUtil.del(retryKey);
+    }
+
+    @Override
+    public void kickOut(String userId) {
+        // 删除白名单
+        String key = StrUtil.format(REDIS_KEY_AUTHS, userId);
+        redisUtil.del(key);
     }
 
     private void saveUserRoles(String userId, List<String> roleIds) {

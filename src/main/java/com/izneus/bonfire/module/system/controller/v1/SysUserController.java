@@ -167,6 +167,15 @@ public class SysUserController {
 //        userService.resetPassword(query.getId());
     }
 
+    @AccessLog("下线用户")
+    @ApiOperation("下线用户")
+    @PostMapping("/users:kickOut")
+    @PreAuthorize("hasAuthority('sys:users:kickOut')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void kickOutUser(@Validated IdQuery query) {
+        userService.kickOut(query.getId());
+    }
+
     @GetMapping("/ds")
     @ApiOperation("测试多数据源")
     public List<DsCityEntity> testDs() {

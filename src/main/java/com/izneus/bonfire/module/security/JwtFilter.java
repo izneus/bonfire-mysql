@@ -31,9 +31,11 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         String token = resolveToken(httpServletRequest);
         if (StringUtils.hasText(token)) {
-            // todo jwt保存在redis，扩展实现黑名单等功能
             Authentication authentication = jwtUtil.getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            // 临时性的白名单措施
+            if (authentication != null) {
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
             // todo jwt续期
         }
         filterChain.doFilter(httpServletRequest, httpServletResponse);
