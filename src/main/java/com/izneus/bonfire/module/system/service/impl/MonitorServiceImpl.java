@@ -4,7 +4,7 @@ import cn.hutool.system.SystemUtil;
 import cn.hutool.system.oshi.CpuInfo;
 import cn.hutool.system.oshi.OshiUtil;
 import com.izneus.bonfire.module.system.service.MonitorService;
-import com.izneus.bonfire.module.system.service.dto.MonitorDTO;
+import com.izneus.bonfire.module.system.controller.v1.vo.MonitorVO;
 import org.springframework.stereotype.Service;
 import oshi.util.FormatUtil;
 
@@ -16,7 +16,7 @@ import oshi.util.FormatUtil;
 public class MonitorServiceImpl implements MonitorService {
 
     @Override
-    public MonitorDTO listMonitors() {
+    public MonitorVO listMonitors() {
         // 主机名，系统，ip，系统架构等
         String hostAddress = SystemUtil.getHostInfo().getAddress();
         String hostName = SystemUtil.getHostInfo().getName();
@@ -43,35 +43,35 @@ public class MonitorServiceImpl implements MonitorService {
         String jreVersion = SystemUtil.getJavaRuntimeInfo().getVersion();
 
         // 开始各种set填充返回
-        MonitorDTO monitorDTO = new MonitorDTO();
+        MonitorVO monitorVO = new MonitorVO();
 
-        monitorDTO.setHostAddress(hostAddress);
-        monitorDTO.setHostName(hostName);
+        monitorVO.setHostAddress(hostAddress);
+        monitorVO.setHostName(hostName);
 
-        monitorDTO.setOsArch(osArch);
-        monitorDTO.setOsName(osName);
-        monitorDTO.setOsVersion(osVersion);
+        monitorVO.setOsArch(osArch);
+        monitorVO.setOsName(osName);
+        monitorVO.setOsVersion(osVersion);
 
-        monitorDTO.setCpuModel(cpuInfo.getCpuModel());
-        monitorDTO.setCpuNum(cpuInfo.getCpuNum());
-        monitorDTO.setCpuTotal(cpuInfo.getToTal());
-        monitorDTO.setCpuFree(cpuInfo.getFree());
-        monitorDTO.setCpuSys(cpuInfo.getSys());
-        monitorDTO.setCpuUsed(cpuInfo.getUsed());
-        monitorDTO.setCpuWait(cpuInfo.getWait());
+        monitorVO.setCpuModel(cpuInfo.getCpuModel());
+        monitorVO.setCpuNum(cpuInfo.getCpuNum());
+        monitorVO.setCpuTotal(cpuInfo.getToTal());
+        monitorVO.setCpuFree(cpuInfo.getFree());
+        monitorVO.setCpuSys(cpuInfo.getSys());
+        monitorVO.setCpuUsed(cpuInfo.getUsed());
+        monitorVO.setCpuWait(cpuInfo.getWait());
 
-        monitorDTO.setTotalMemory(FormatUtil.formatBytes(totalMemory));
-        monitorDTO.setFreeMemory(FormatUtil.formatBytes(freeMemory));
-        monitorDTO.setUsedMemory(FormatUtil.formatBytes(usedMemory));
+        monitorVO.setTotalMemory(FormatUtil.formatBytes(totalMemory));
+        monitorVO.setFreeMemory(FormatUtil.formatBytes(freeMemory));
+        monitorVO.setUsedMemory(FormatUtil.formatBytes(usedMemory));
 
-        monitorDTO.setJvmTotalMemory(FormatUtil.formatBytes(jvmTotalMemory));
-        monitorDTO.setJvmFreeMemory(FormatUtil.formatBytes(jvmFreeMemory));
-        monitorDTO.setJvmName(jvmName);
-        monitorDTO.setJvmVersion(jvmVersion);
+        monitorVO.setJvmTotalMemory(FormatUtil.formatBytes(jvmTotalMemory));
+        monitorVO.setJvmFreeMemory(FormatUtil.formatBytes(jvmFreeMemory));
+        monitorVO.setJvmName(jvmName);
+        monitorVO.setJvmVersion(jvmVersion);
 
-        monitorDTO.setJreName(jreName);
-        monitorDTO.setJreVersion(jreVersion);
+        monitorVO.setJreName(jreName);
+        monitorVO.setJreVersion(jreVersion);
 
-        return monitorDTO;
+        return monitorVO;
     }
 }

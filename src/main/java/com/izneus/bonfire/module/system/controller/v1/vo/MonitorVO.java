@@ -1,4 +1,4 @@
-package com.izneus.bonfire.module.system.service.dto;
+package com.izneus.bonfire.module.system.controller.v1.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,7 +12,7 @@ import lombok.Data;
  */
 @ApiModel("监控详情")
 @Data
-public class MonitorDTO {
+public class MonitorVO {
     @ApiModelProperty("主机名")
     private String hostName;
 
