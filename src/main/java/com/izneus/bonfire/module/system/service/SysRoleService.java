@@ -24,7 +24,18 @@ public interface SysRoleService extends IService<SysRoleEntity> {
      */
     Page<SysRoleEntity> listRoles(ListRoleQuery query);
 
+    /**
+     * 删除角色
+     *
+     * @param id roleId
+     */
     void deleteRoleById(String id);
 
+    /**
+     * 给角色设置权限
+     *
+     * @param roleId  roleId
+     * @param authIds authId列表
+     */
     void setRoleAuthById(String roleId, List<String> authIds);
 }

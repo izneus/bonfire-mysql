@@ -1,23 +1,26 @@
 package com.izneus.bonfire.module.system.controller.v1;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
-import com.izneus.bonfire.module.system.service.dto.AuthDTO;
+import com.izneus.bonfire.common.base.BasePageVO;
+import com.izneus.bonfire.module.system.controller.v1.query.AuthQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.ListAuthQuery;
-import com.izneus.bonfire.module.system.controller.v1.vo.GetAuthVO;
+import com.izneus.bonfire.module.system.controller.v1.vo.AuthVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.ListAuthVO;
 import com.izneus.bonfire.module.system.entity.SysAuthorityEntity;
 import com.izneus.bonfire.module.system.service.SysAuthorityService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.NotBlank;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -32,36 +35,27 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class SysAuthorityController {
 
-    private final SysAuthorityService sysAuthorityService;
+    private final SysAuthorityService authService;
 
     @AccessLog("权限列表")
     @ApiOperation("权限列表")
     @GetMapping("/authorities")
     @PreAuthorize("hasAuthority('sys:authorities:list')")
-    public ListAuthVO listAuthorities(@Validated ListAuthQuery query) {
-        Page<SysAuthorityEntity> page = sysAuthorityService.page(
-                new Page<>(query.getPageNum(), query.getPageSize()),
-                new LambdaQueryWrapper<SysAuthorityEntity>()
-                        .eq(StringUtils.hasText(query.getType()), SysAuthorityEntity::getType, query.getType())
-                        .and(i -> i
-                                .like(StringUtils.hasText(query.getQuery()),
-                                        SysAuthorityEntity::getAuthority, query.getQuery())
-                                .or()
-                                .like(StringUtils.hasText(query.getQuery()),
-                                        SysAuthorityEntity::getRemark, query.getQuery()))
-
-        );
-        return new ListAuthVO(page);
+    public BasePageVO<ListAuthVO> listAuthorities(@Validated ListAuthQuery query) {
+        Page<SysAuthorityEntity> page = authService.listAuthorities(query);
+        // 组装vo
+        List<ListAuthVO> rows = page.getRecords().stream().map(auth -> BeanUtil.copyProperties(auth, ListAuthVO.class))
+                .collect(Collectors.toList());
+        return new BasePageVO<>(page, rows);
     }
 
     @AccessLog("新增权限")
     @ApiOperation("新增权限")
     @PostMapping("/authorities")
     @PreAuthorize("hasAuthority('sys:authorities:create')")
-    public IdVO createAuthority(@Validated AuthDTO authDTO) {
-        SysAuthorityEntity authorityEntity = new SysAuthorityEntity();
-        BeanUtils.copyProperties(authDTO, authorityEntity);
-        String id = sysAuthorityService.save(authorityEntity) ? authorityEntity.getId() : null;
+    public IdVO createAuthority(@Validated @RequestBody AuthQuery authQuery) {
+        SysAuthorityEntity authorityEntity = BeanUtil.copyProperties(authQuery, SysAuthorityEntity.class);
+        String id = authService.save(authorityEntity) ? authorityEntity.getId() : null;
         return new IdVO(id);
     }
 
@@ -69,14 +63,12 @@ public class SysAuthorityController {
     @ApiOperation("权限详情")
     @GetMapping("/authorities/{id}")
     @PreAuthorize("hasAuthority('sys:authorities:get')")
-    public GetAuthVO getAuthorityById(@PathVariable String id) {
-        SysAuthorityEntity authorityEntity = sysAuthorityService.getById(id);
+    public AuthVO getAuthorityById(@NotBlank @PathVariable String id) {
+        SysAuthorityEntity authorityEntity = authService.getById(id);
         if (authorityEntity == null) {
             return null;
         }
-        GetAuthVO authVO = new GetAuthVO();
-        BeanUtils.copyProperties(authorityEntity, authVO);
-        return authVO;
+        return BeanUtil.copyProperties(authorityEntity, AuthVO.class);
     }
 
     @AccessLog("更新权限")
@@ -84,11 +76,10 @@ public class SysAuthorityController {
     @PutMapping("/authorities/{id}")
     @PreAuthorize("hasAuthority('sys:authorities:update')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateAuthorityById(@PathVariable String id, @Validated @RequestBody AuthDTO authDTO) {
-        SysAuthorityEntity authorityEntity = new SysAuthorityEntity();
-        BeanUtils.copyProperties(authDTO, authorityEntity);
+    public void updateAuthorityById(@NotBlank @PathVariable String id, @Validated @RequestBody AuthQuery authQuery) {
+        SysAuthorityEntity authorityEntity = BeanUtil.copyProperties(authQuery, SysAuthorityEntity.class);
         authorityEntity.setId(id);
-        sysAuthorityService.updateById(authorityEntity);
+        authService.updateById(authorityEntity);
     }
 
     @AccessLog("删除权限")
@@ -96,7 +87,7 @@ public class SysAuthorityController {
     @DeleteMapping("/authorities/{id}")
     @PreAuthorize("hasAuthority('sys:authorities:delete')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAuthorityById(@PathVariable String id) {
-        sysAuthorityService.removeById(id);
+    public void deleteAuthorityById(@NotBlank @PathVariable String id) {
+        authService.removeById(id);
     }
 }

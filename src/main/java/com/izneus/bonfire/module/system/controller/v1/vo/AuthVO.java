@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @ApiModel("权限详情vo")
 @Data
-public class GetAuthVO {
+public class AuthVO {
     @ApiModelProperty("id")
     private String id;
 

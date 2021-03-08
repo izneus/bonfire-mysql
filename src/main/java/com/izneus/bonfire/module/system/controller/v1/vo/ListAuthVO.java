@@ -1,27 +1,22 @@
 package com.izneus.bonfire.module.system.controller.v1.vo;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.izneus.bonfire.common.base.BasePageVO;
-import com.izneus.bonfire.common.util.BeanCopyUtil;
-import com.izneus.bonfire.module.system.entity.SysAuthorityEntity;
-import com.izneus.bonfire.module.system.service.dto.ListAuthDTO;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-
-import java.util.List;
 
 /**
  * @author Izneus
  * @date 2020/08/17
  */
-@EqualsAndHashCode(callSuper = true)
+@ApiModel("权限列表VO")
 @Data
-public class ListAuthVO extends BasePageVO {
+public class ListAuthVO {
+    @ApiModelProperty("用户id")
+    private String userId;
 
-    private List<ListAuthDTO> authorities;
+    @ApiModelProperty("角色名")
+    private String roleName;
 
-    public ListAuthVO(Page<SysAuthorityEntity> page) {
-        super(page);
-        authorities = BeanCopyUtil.copyListProperties(page.getRecords(), ListAuthDTO::new);
-    }
+    @ApiModelProperty("权限")
+    private String authority;
 }

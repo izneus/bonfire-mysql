@@ -1,17 +1,20 @@
-package com.izneus.bonfire.module.system.service.dto;
+package com.izneus.bonfire.module.system.controller.v1.query;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * @author Izneus
  * @date 2020/08/14
  */
-@ApiModel("权限dto")
+@ApiModel("权限Query")
 @Data
-public class AuthDTO {
+public class AuthQuery {
     @ApiModelProperty("权限名称")
+    @NotBlank(message = "权限名不能为空")
     private String authority;
 
     @ApiModelProperty("备注")
