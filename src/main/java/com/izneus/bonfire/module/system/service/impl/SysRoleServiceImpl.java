@@ -1,7 +1,10 @@
 package com.izneus.bonfire.module.system.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.izneus.bonfire.module.system.controller.v1.query.ListRoleQuery;
 import com.izneus.bonfire.module.system.entity.SysRoleAuthorityEntity;
 import com.izneus.bonfire.module.system.entity.SysRoleEntity;
 import com.izneus.bonfire.module.system.mapper.SysRoleMapper;
@@ -11,8 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -27,6 +30,18 @@ import java.util.List;
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity> implements SysRoleService {
 
     private final SysRoleAuthorityService roleAuthorityService;
+
+    @Override
+    public Page<SysRoleEntity> listRoles(ListRoleQuery query) {
+        return page(
+                new Page<>(query.getPageNum(), query.getPageSize()),
+                new LambdaQueryWrapper<SysRoleEntity>()
+                        .like(StrUtil.isNotBlank(query.getQuery()), SysRoleEntity::getRoleName, query.getQuery())
+                        .or()
+                        .like(StrUtil.isNotBlank(query.getQuery()), SysRoleEntity::getRemark, query.getQuery())
+                        .orderByDesc(SysRoleEntity::getCreateTime)
+        );
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -46,13 +61,12 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
                 .eq(SysRoleAuthorityEntity::getRoleId, roleId));
         // 插入权限
         if (authIds != null && authIds.size() > 0) {
-            List<SysRoleAuthorityEntity> roleAuths = new ArrayList<>();
-            for (String authId : authIds) {
+            List<SysRoleAuthorityEntity> roleAuths = authIds.stream().map(authId -> {
                 SysRoleAuthorityEntity roleAuthorityEntity = new SysRoleAuthorityEntity();
                 roleAuthorityEntity.setRoleId(roleId);
                 roleAuthorityEntity.setAuthorityId(authId);
-                roleAuths.add(roleAuthorityEntity);
-            }
+                return roleAuthorityEntity;
+            }).collect(Collectors.toList());
             roleAuthorityService.saveBatch(roleAuths);
         }
     }

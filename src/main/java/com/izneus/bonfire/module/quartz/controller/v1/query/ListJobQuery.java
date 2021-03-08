@@ -1,6 +1,6 @@
 package com.izneus.bonfire.module.quartz.controller.v1.query;
 
-import com.izneus.bonfire.common.base.BasePageDTO;
+import com.izneus.bonfire.common.base.BasePageQuery;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -15,7 +15,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ListJobQuery extends BasePageDTO {
+public class ListJobQuery extends BasePageQuery {
     @ApiModelProperty("任务名")
     private String jobName;
 

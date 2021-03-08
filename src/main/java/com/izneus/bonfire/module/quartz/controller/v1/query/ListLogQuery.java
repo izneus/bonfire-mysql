@@ -1,6 +1,6 @@
 package com.izneus.bonfire.module.quartz.controller.v1.query;
 
-import com.izneus.bonfire.common.base.BasePageDTO;
+import com.izneus.bonfire.common.base.BasePageQuery;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,5 +14,5 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ListLogQuery extends BasePageDTO {
+public class ListLogQuery extends BasePageQuery {
 }

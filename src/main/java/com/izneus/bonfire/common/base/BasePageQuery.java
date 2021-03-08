@@ -15,7 +15,7 @@ import javax.validation.constraints.Min;
  */
 @ApiModel("分页查询请求参数基类")
 @Data
-public class BasePageDTO {
+public class BasePageQuery {
 
     @ApiModelProperty(value = "页码", required = true)
     @Min(value = 1, message = "页码为大于0的整数")

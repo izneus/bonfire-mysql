@@ -1,6 +1,6 @@
 package com.izneus.bonfire.module.system.controller.v1.query;
 
-import com.izneus.bonfire.common.base.BasePageDTO;
+import com.izneus.bonfire.common.base.BasePageQuery;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -15,7 +15,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ListAuthQuery extends BasePageDTO {
+public class ListAuthQuery extends BasePageQuery {
     @ApiModelProperty("查询参数，模糊匹配权限名称或备注")
     private String query;
 

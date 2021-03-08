@@ -1,8 +1,10 @@
-package com.izneus.bonfire.module.system.service.dto;
+package com.izneus.bonfire.module.system.controller.v1.query;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+
+import javax.validation.constraints.NotBlank;
 
 /**
  * @author Izneus
@@ -10,9 +12,9 @@ import lombok.Data;
  */
 @ApiModel("新增角色query")
 @Data
-public class RoleDTO {
-
+public class RoleQuery {
     @ApiModelProperty("角色名称")
+    @NotBlank(message = "角色名不能为空")
     private String roleName;
 
     @ApiModelProperty("备注")

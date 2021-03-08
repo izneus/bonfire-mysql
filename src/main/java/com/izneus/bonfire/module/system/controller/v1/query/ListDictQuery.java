@@ -1,6 +1,6 @@
 package com.izneus.bonfire.module.system.controller.v1.query;
 
-import com.izneus.bonfire.common.base.BasePageDTO;
+import com.izneus.bonfire.common.base.BasePageQuery;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -15,7 +15,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @ApiModel("字典列表query")
 @Data
-public class ListDictQuery extends BasePageDTO {
+public class ListDictQuery extends BasePageQuery {
     @ApiModelProperty("字典类型")
     private String dictType;
 

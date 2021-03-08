@@ -12,7 +12,7 @@ import java.util.List;
  */
 @ApiModel("设置角色权限query")
 @Data
-public class SetRoleAuthQuery {
+public class RoleAuthQuery {
     @ApiModelProperty("权限id列表")
     private List<String> authIds;
 }

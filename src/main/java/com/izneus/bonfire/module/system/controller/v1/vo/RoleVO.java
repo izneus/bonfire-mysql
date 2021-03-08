@@ -1,4 +1,4 @@
-package com.izneus.bonfire.module.system.service.dto;
+package com.izneus.bonfire.module.system.controller.v1.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -6,17 +6,17 @@ import lombok.Data;
 
 /**
  * @author Izneus
- * @date 2020/08/14
+ * @date 2020/08/18
  */
-@ApiModel("角色列表dto")
+@ApiModel("角色vo")
 @Data
-public class ListRoleDTO {
+public class RoleVO {
+
+    @ApiModelProperty("角色id")
+    private String id;
 
     @ApiModelProperty("角色名称")
     private String roleName;
-
-    @ApiModelProperty("创建时间")
-    private String createTime;
 
     @ApiModelProperty("备注")
     private String remark;
