@@ -2,28 +2,27 @@ package com.izneus.bonfire.module.system.controller.v1;
 
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
+import com.izneus.bonfire.common.base.BasePageVO;
 import com.izneus.bonfire.module.system.controller.v1.query.ListDictQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.CacheDictVO;
-import com.izneus.bonfire.module.system.controller.v1.vo.GetDictVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.ListDictVO;
 import com.izneus.bonfire.module.system.entity.SysDictEntity;
 import com.izneus.bonfire.module.system.service.SysDictService;
-import com.izneus.bonfire.module.system.service.dto.DictDTO;
+import com.izneus.bonfire.module.system.controller.v1.query.DictQuery;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -45,30 +44,21 @@ public class SysDictController {
     @ApiOperation("字典列表")
     @GetMapping("/dicts")
     @PreAuthorize("hasAuthority('sys:dicts:list')")
-    public ListDictVO listDicts(ListDictQuery query) {
-        Page<SysDictEntity> page = dictService.page(
-                new Page<>(query.getPageNum(), query.getPageSize()),
-                new LambdaQueryWrapper<SysDictEntity>()
-                        .like(StringUtils.hasText(query.getDictType()),
-                                SysDictEntity::getDictType, query.getDictType())
-                        .like(StringUtils.hasText(query.getDictValue()),
-                                SysDictEntity::getDictValue, query.getDictValue())
-                        .like(StringUtils.hasText(query.getStatus()),
-                                SysDictEntity::getStatus, query.getStatus())
-        );
-        return new ListDictVO(page);
+    public BasePageVO<ListDictVO> listDicts(@Validated ListDictQuery query) {
+        Page<SysDictEntity> page = dictService.listDicts(query);
+        List<ListDictVO> rows = page.getRecords().stream()
+                .map(dict -> BeanUtil.copyProperties(dict, ListDictVO.class))
+                .collect(Collectors.toList());
+        return new BasePageVO<>(page, rows);
     }
 
-    @AccessLog("新增字段")
+    @AccessLog("新增字典")
     @ApiOperation("新增字典")
     @PostMapping("/dicts")
     @PreAuthorize("hasAuthority('sys:dicts:create')")
     @ResponseStatus(HttpStatus.CREATED)
-    public IdVO createDict(@Validated @RequestBody DictDTO dictDTO) {
-        SysDictEntity dictEntity = new SysDictEntity();
-        BeanUtil.copyProperties(dictDTO, dictEntity);
-        dictService.save(dictEntity);
-        return new IdVO(dictEntity.getId());
+    public IdVO createDict(@Validated @RequestBody DictQuery dictQuery) {
+        return new IdVO(dictService.createDict(dictQuery));
     }
 
     /// 字典一般没什么详情好看的
@@ -86,11 +76,8 @@ public class SysDictController {
     @PutMapping("/dicts/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateDictById(@NotBlank @PathVariable String id,
-                               @Validated @RequestBody DictDTO dictDTO) {
-        SysDictEntity dictEntity = new SysDictEntity();
-        BeanUtil.copyProperties(dictDTO, dictEntity);
-        dictEntity.setId(id);
-        dictService.updateById(dictEntity);
+                               @Validated @RequestBody DictQuery dictQuery) {
+        dictService.updateDictById(id, dictQuery);
     }
 
     @AccessLog("删除字典")
@@ -99,13 +86,13 @@ public class SysDictController {
     @PreAuthorize("hasAuthority('sys:dicts:delete')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteDictById(@NotBlank @PathVariable String id) {
-        dictService.removeById(id);
+        dictService.deleteDictById(id);
     }
 
     @AccessLog("缓存字典")
     @ApiOperation("缓存字典")
     @PostMapping("/dicts:cache")
-//    @PreAuthorize("hasAuthority('sys:dicts:cache')")
+    @PreAuthorize("hasAuthority('sys:dicts:cache')")
     public List<CacheDictVO> cacheDicts() {
         // todo 更新和删除字典
         return dictService.cacheDicts();

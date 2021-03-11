@@ -29,6 +29,7 @@ public class SysAccessLogServiceImpl extends ServiceImpl<SysAccessLogMapper, Sys
                         .ge(SysAccessLogEntity::getCreateTime, query.getStartTime())
                         .le(SysAccessLogEntity::getCreateTime, query.getEndTime())
                         .eq(SysAccessLogEntity::getClientIp, query.getClientIp())
+                        .orderByDesc(SysAccessLogEntity::getCreateTime)
         );
 
     }

@@ -1,4 +1,4 @@
-package com.izneus.bonfire.module.system.service.dto;
+package com.izneus.bonfire.module.system.controller.v1.query;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
  */
 @ApiModel("字典列表dto")
 @Data
-public class DictDTO {
+public class DictQuery {
     @ApiModelProperty("字典类型")
     @NotBlank(message = "字典类型不能为空")
     private String dictType;

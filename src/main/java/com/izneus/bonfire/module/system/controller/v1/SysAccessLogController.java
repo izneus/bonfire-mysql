@@ -43,6 +43,7 @@ public class SysAccessLogController {
     @GetMapping("/accessLogs")
     @PreAuthorize("hasAuthority('sys:accessLogs:list')")
     public BasePageVO<ListAccessLogVO> listUsers(@Validated ListAccessLogQuery query) {
+        // todo 测试时间字段
         Page<SysAccessLogEntity> page = logService.listAccessLogs(query);
         // 组装vo
         List<ListAccessLogVO> rows = page.getRecords().stream()
