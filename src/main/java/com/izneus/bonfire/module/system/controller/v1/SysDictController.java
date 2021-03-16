@@ -94,7 +94,6 @@ public class SysDictController {
     @PostMapping("/dicts:cache")
     @PreAuthorize("hasAuthority('sys:dicts:cache')")
     public List<CacheDictVO> cacheDicts() {
-        // todo 更新和删除字典
         return dictService.cacheDicts();
     }
 

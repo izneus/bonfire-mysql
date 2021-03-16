@@ -1,7 +1,6 @@
 package com.izneus.bonfire.module.system.controller.v1;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.common.base.BasePageVO;
@@ -10,16 +9,12 @@ import com.izneus.bonfire.module.security.JwtUtil;
 import com.izneus.bonfire.module.system.controller.v1.query.IdQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.ListUserQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.UnlockQuery;
-import com.izneus.bonfire.module.system.controller.v1.vo.ExportVO;
-import com.izneus.bonfire.module.system.controller.v1.vo.AuthUserVO;
-import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
-import com.izneus.bonfire.module.system.controller.v1.vo.ListUserVO;
+import com.izneus.bonfire.module.system.controller.v1.query.UserQuery;
+import com.izneus.bonfire.module.system.controller.v1.vo.*;
 import com.izneus.bonfire.module.system.entity.DsCityEntity;
 import com.izneus.bonfire.module.system.entity.SysUserEntity;
 import com.izneus.bonfire.module.system.service.DsCityService;
 import com.izneus.bonfire.module.system.service.SysUserService;
-import com.izneus.bonfire.module.system.controller.v1.vo.UserVO;
-import com.izneus.bonfire.module.system.controller.v1.query.UserQuery;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +24,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -125,7 +121,9 @@ public class SysUserController {
     @PreAuthorize("hasAuthority('sys:users:export')")
     public ExportVO exportUsers(@Validated @RequestBody ListUserQuery query) {
         String filename = userService.exportUsers(query);
-        Map<String, Object> claims = MapUtil.of("filename", filename);
+        Map<String, Object> claims = new HashMap<>(2);
+        claims.put("filename", filename);
+        claims.put("fileType", "1");
         // 生成文件下载的临时token
         String token = jwtUtil.createToken(CurrentUserUtil.getUserId(), 5L, claims);
         return ExportVO.builder()

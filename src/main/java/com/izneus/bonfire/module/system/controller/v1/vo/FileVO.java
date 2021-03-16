@@ -12,7 +12,7 @@ import java.util.Date;
  */
 @ApiModel("文件详情vo")
 @Data
-public class GetFileVO {
+public class FileVO {
     @ApiModelProperty("文件id")
     private String id;
 

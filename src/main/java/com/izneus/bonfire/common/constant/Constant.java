@@ -36,6 +36,17 @@ public class Constant {
     public static final String JOB_KEY = "job";
 
     /**
+     * 临时文件
+     */
+    public static final String TEMP_FILE = "0";
+
+    /**
+     * 已经上传的文件
+     */
+    public static final String UPLOAD_FILE = "1";
+
+
+    /**
      * 所有状态的成功、失败常量
      */
     public static final String SUCCESS = "0";
