@@ -45,6 +45,8 @@ public class Constant {
      */
     public static final String UPLOAD_FILE = "1";
 
+    public static final String READ = "0";
+    public static final String UNREAD = "1";
 
     /**
      * 所有状态的成功、失败常量

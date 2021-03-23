@@ -195,13 +195,13 @@ public class SysUserController {
         return cityService.list();
     }
 
-    @AccessLog("当前认证用户信息")
+    /*@AccessLog("当前认证用户信息")
     @ApiOperation("当前认证用户信息")
     @GetMapping("/user")
     public AuthUserVO getAuthUser() {
         String userId = CurrentUserUtil.getUserId();
         UserVO userVO = userService.getUserById(userId);
         return BeanUtil.copyProperties(userVO, AuthUserVO.class);
-    }
+    }*/
 
 }

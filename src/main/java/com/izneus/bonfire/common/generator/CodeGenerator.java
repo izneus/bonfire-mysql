@@ -34,16 +34,19 @@ public class CodeGenerator {
      */
     private static String scanner() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("请输入" + "表名，多个英文逗号分割，注意区分大小写" + "：");
+        System.out.println("请输入表名，多个英文逗号分割，注意区分大小写：");
         if (scanner.hasNext()) {
             String ipt = scanner.next();
             if (StringUtils.isNotBlank(ipt)) {
                 return ipt;
             }
         }
-        throw new MybatisPlusException("请输入正确的" + "表名，多个英文逗号分割" + "！");
+        throw new MybatisPlusException("请输入正确的表名，多个英文逗号分割！");
     }
 
+    /**
+     * 运行这个main方法生成代码
+     */
     public static void main(String[] args) {
         // 设置代码生成器运行用参数
         // 数据库连接
@@ -114,7 +117,7 @@ public class CodeGenerator {
         InjectionConfig cfg = new InjectionConfig() {
             @Override
             public void initMap() {
-                // to do nothing
+                // do nothing
             }
         };
 

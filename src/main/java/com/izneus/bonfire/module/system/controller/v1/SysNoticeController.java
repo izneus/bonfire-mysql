@@ -1,16 +1,14 @@
 package com.izneus.bonfire.module.system.controller.v1;
 
 
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
-import com.izneus.bonfire.common.util.BeanCopyUtil;
+import com.izneus.bonfire.common.base.BasePageVO;
 import com.izneus.bonfire.module.system.controller.v1.query.ListNoticeQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.NoticeQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.ListNoticeVO;
-import com.izneus.bonfire.module.system.controller.v1.vo.NoticeItemVO;
 import com.izneus.bonfire.module.system.entity.SysNoticeEntity;
 import com.izneus.bonfire.module.system.service.SysNoticeService;
 import io.swagger.annotations.Api;
@@ -23,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -44,22 +43,13 @@ public class SysNoticeController {
     @ApiOperation("通知列表")
     @GetMapping("/notices")
     @PreAuthorize("hasAuthority('sys:notices:list')")
-    public ListNoticeVO listNotices(ListNoticeQuery query) {
-        Page<SysNoticeEntity> page = noticeService.page(
-                new Page<>(query.getPageNum(), query.getPageSize()),
-                new LambdaQueryWrapper<SysNoticeEntity>()
-                        .like(StrUtil.isNotBlank(query.getQuery()), SysNoticeEntity::getTitle, query.getQuery())
-                        .or()
-                        .like(StrUtil.isNotBlank(query.getQuery()), SysNoticeEntity::getNotice, query.getQuery())
-        );
+    public BasePageVO<ListNoticeVO> listNotices(@Validated ListNoticeQuery query) {
+        Page<SysNoticeEntity> page = noticeService.listNotices(query);
         // 组装vo
-        List<NoticeItemVO> notices = BeanCopyUtil.copyListProperties(page.getRecords(), NoticeItemVO::new);
-        return ListNoticeVO.builder()
-                .notices(notices)
-                .pageNum(page.getCurrent())
-                .pageSize(page.getSize())
-                .totalSize(page.getTotal())
-                .build();
+        List<ListNoticeVO> rows = page.getRecords().stream()
+                .map(notice -> BeanUtil.copyProperties(notice, ListNoticeVO.class))
+                .collect(Collectors.toList());
+        return new BasePageVO<>(page, rows);
     }
 
     @AccessLog("新增通知")

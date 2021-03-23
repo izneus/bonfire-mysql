@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.izneus.bonfire.module.system.mapper.SysNoticeMapper">
-
+    <select id="listNewGlobalNoticesByUserId" resultType="com.izneus.bonfire.module.system.entity.SysNoticeEntity">
+        select t1.*
+        from SYS_NOTICE t1
+        where t1.NOTICE_TYPE = '0'
+          and not exists(
+                select t2.id
+                from SYS_USER_NOTICE t2
+                where t1.id = t2.NOTICE_ID
+                  and t2.USER_ID = #{userId}
+                )
+    </select>
+    
+    <select id="listNoticesByUserId" resultType="com.izneus.bonfire.module.system.entity.SysNoticeEntity">
+        select t1.*
+        from SYS_NOTICE t1,
+        SYS_USER_NOTICE t2
+        where t1.id = t2.NOTICE_ID
+        and t2.USER_ID = #{userId}
+        <choose>
+            <when test="status == '0'">
+                and t2.STATUS = '0'
+            </when>
+            <otherwise>
+                and t2.STATUS != '2'
+            </otherwise>
+        </choose>
+        order by t1.CREATE_TIME desc
+    </select>
 </mapper>

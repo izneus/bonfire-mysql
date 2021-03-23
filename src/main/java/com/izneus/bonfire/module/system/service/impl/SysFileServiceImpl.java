@@ -65,6 +65,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFileEntity
                                 .or()
                                 .like(StrUtil.isNotBlank(query.getQuery()),
                                         SysFileEntity::getRemark, query.getQuery()))
+                        .orderByDesc(SysFileEntity::getCreateTime)
         );
     }
 

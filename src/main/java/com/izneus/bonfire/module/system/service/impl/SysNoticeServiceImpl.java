@@ -1,10 +1,15 @@
 package com.izneus.bonfire.module.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.izneus.bonfire.common.constant.Dict;
 import com.izneus.bonfire.common.util.CommonUtil;
+import com.izneus.bonfire.module.security.CurrentUserUtil;
+import com.izneus.bonfire.module.system.controller.v1.query.ListNoticeQuery;
+import com.izneus.bonfire.module.system.controller.v1.query.ListUserNoticeQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.NoticeQuery;
 import com.izneus.bonfire.module.system.entity.SysNoticeEntity;
 import com.izneus.bonfire.module.system.entity.SysUserNoticeEntity;
@@ -17,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -31,6 +37,18 @@ import java.util.List;
 public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNoticeEntity> implements SysNoticeService {
 
     private final SysUserNoticeService userNoticeService;
+
+    @Override
+    public Page<SysNoticeEntity> listNotices(ListNoticeQuery query) {
+        return page(
+                new Page<>(query.getPageNum(), query.getPageSize()),
+                new LambdaQueryWrapper<SysNoticeEntity>()
+                        .like(StrUtil.isNotBlank(query.getQuery()), SysNoticeEntity::getTitle, query.getQuery())
+                        .or()
+                        .like(StrUtil.isNotBlank(query.getQuery()), SysNoticeEntity::getNotice, query.getQuery())
+                        .orderByDesc(SysNoticeEntity::getCreateTime)
+        );
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -78,5 +96,22 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
         removeById(id);
         userNoticeService.remove(new LambdaQueryWrapper<SysUserNoticeEntity>()
                 .eq(SysUserNoticeEntity::getNoticeId, id));
+    }
+
+    @Override
+    public Page<SysNoticeEntity> listNoticesByUserId(ListUserNoticeQuery query) {
+        // 先获取新的全局信息，插入到用户消息表
+        List<SysNoticeEntity> globalNotices = baseMapper.listNewGlobalNoticesByUserId(CurrentUserUtil.getUserId());
+        List<SysUserNoticeEntity> userNotices = globalNotices.stream().map(notice -> {
+            SysUserNoticeEntity userNotice = new SysUserNoticeEntity();
+            userNotice.setUserId(CurrentUserUtil.getUserId());
+            userNotice.setNoticeId(notice.getId());
+            userNotice.setStatus(Dict.UserNoticeStatus.UNREAD.getValue());
+            return userNotice;
+        }).collect(Collectors.toList());
+        userNoticeService.saveBatch(userNotices);
+        // 返回当前用户的信息
+        return baseMapper.listNoticesByUserId(
+                new Page(query.getPageNum(), query.getPageSize()), CurrentUserUtil.getUserId(), query.getStatus());
     }
 }
