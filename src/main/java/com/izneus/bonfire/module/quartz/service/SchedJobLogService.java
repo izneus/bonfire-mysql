@@ -1,5 +1,7 @@
 package com.izneus.bonfire.module.quartz.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.izneus.bonfire.module.quartz.controller.v1.query.ListLogQuery;
 import com.izneus.bonfire.module.quartz.entity.SchedJobLogEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -12,5 +14,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2020-11-05
  */
 public interface SchedJobLogService extends IService<SchedJobLogEntity> {
+    Page<SchedJobLogEntity> listLogsByJobId(String jobId, ListLogQuery query);
 
 }

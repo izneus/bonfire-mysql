@@ -30,7 +30,8 @@ public interface SysTicketService extends IService<SysTicketEntity> {
     /**
      * 用户工单列表
      *
-     * @param query 查询条件
+     * @param query  查询条件
+     * @param userId 用户id
      * @return 分页工单信息
      */
     Page<SysTicketEntity> listTicketsByUserId(ListUserTicketQuery query, String userId);

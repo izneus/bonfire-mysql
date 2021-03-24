@@ -1,17 +1,17 @@
 package com.izneus.bonfire.module.quartz.controller.v1;
 
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
-import com.izneus.bonfire.common.util.BeanCopyUtil;
+import com.izneus.bonfire.common.base.BasePageVO;
 import com.izneus.bonfire.module.quartz.controller.v1.query.JobQuery;
 import com.izneus.bonfire.module.quartz.controller.v1.query.ListJobQuery;
 import com.izneus.bonfire.module.quartz.controller.v1.query.ListLogQuery;
 import com.izneus.bonfire.module.quartz.controller.v1.vo.ListJobVO;
 import com.izneus.bonfire.module.quartz.controller.v1.vo.ListLogVO;
-import com.izneus.bonfire.module.quartz.controller.v1.vo.LogItemVO;
 import com.izneus.bonfire.module.quartz.entity.SchedJobEntity;
 import com.izneus.bonfire.module.quartz.entity.SchedJobLogEntity;
 import com.izneus.bonfire.module.quartz.service.SchedJobLogService;
@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -49,14 +50,12 @@ public class SchedJobController {
     @ApiOperation("任务列表")
     @GetMapping("/jobs")
     @PreAuthorize("hasAuthority('sched:jobs:list')")
-    public ListJobVO listJobs(@Validated ListJobQuery query) {
-        Page<SchedJobEntity> page = jobService.page(
-                new Page<>(query.getPageNum(), query.getPageSize()),
-                new LambdaQueryWrapper<SchedJobEntity>()
-                        .like(StrUtil.isNotBlank(query.getJobName()), SchedJobEntity::getJobName, query.getJobName())
-                        .eq(StrUtil.isNotBlank(query.getStatus()), SchedJobEntity::getStatus, query.getStatus())
-        );
-        return new ListJobVO(page);
+    public BasePageVO<ListJobVO> listJobs(@Validated ListJobQuery query) {
+        Page<SchedJobEntity> page = jobService.listJobs(query);
+        List<ListJobVO> rows = page.getRecords().stream()
+                .map(job -> BeanUtil.copyProperties(job, ListJobVO.class))
+                .collect(Collectors.toList());
+        return new BasePageVO<>(page, rows);
     }
 
     @AccessLog("新增任务")
@@ -126,20 +125,13 @@ public class SchedJobController {
     @ApiOperation("任务日志列表")
     @GetMapping("/jobs/{jobId}/logs")
     @PreAuthorize("hasAuthority('sched:logs:list')")
-    public ListLogVO listLogs(@NotBlank @PathVariable String jobId, ListLogQuery query) {
-        Page<SchedJobLogEntity> page = jobLogService.page(
-                new Page<>(query.getPageNum(), query.getPageSize()),
-                new LambdaQueryWrapper<SchedJobLogEntity>()
-                        .eq(SchedJobLogEntity::getJobId, jobId)
-                        .orderByDesc(SchedJobLogEntity::getCreateTime)
-        );
+    public BasePageVO<ListLogVO> listLogs(@NotBlank @PathVariable String jobId, @Validated ListLogQuery query) {
+        Page<SchedJobLogEntity> page = jobLogService.listLogsByJobId(jobId, query);
         // 查询结果转换成vo
-        List<LogItemVO> logs = BeanCopyUtil.copyListProperties(page.getRecords(), LogItemVO::new);
-        return ListLogVO.builder()
-                .logs(logs)
-                .pageNum(page.getCurrent())
-                .pageSize(page.getSize())
-                .build();
+        List<ListLogVO> rows = page.getRecords().stream()
+                .map(log -> BeanUtil.copyProperties(log, ListLogVO.class))
+                .collect(Collectors.toList());
+        return new BasePageVO<>(page, rows);
     }
 
 

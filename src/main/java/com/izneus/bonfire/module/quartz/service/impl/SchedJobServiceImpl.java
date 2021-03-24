@@ -1,10 +1,14 @@
 package com.izneus.bonfire.module.quartz.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.izneus.bonfire.common.constant.Dict;
 import com.izneus.bonfire.module.quartz.controller.v1.query.JobQuery;
+import com.izneus.bonfire.module.quartz.controller.v1.query.ListJobQuery;
 import com.izneus.bonfire.module.quartz.entity.SchedJobEntity;
 import com.izneus.bonfire.module.quartz.mapper.SchedJobMapper;
 import com.izneus.bonfire.module.quartz.service.SchedJobService;
@@ -30,6 +34,17 @@ import java.util.List;
 public class SchedJobServiceImpl extends ServiceImpl<SchedJobMapper, SchedJobEntity> implements SchedJobService {
 
     private final Scheduler scheduler;
+
+    @Override
+    public Page<SchedJobEntity> listJobs(ListJobQuery query) {
+        return page(
+                new Page<>(query.getPageNum(), query.getPageSize()),
+                new LambdaQueryWrapper<SchedJobEntity>()
+                        .like(StrUtil.isNotBlank(query.getJobName()), SchedJobEntity::getJobName, query.getJobName())
+                        .eq(StrUtil.isNotBlank(query.getStatus()), SchedJobEntity::getStatus, query.getStatus())
+                        .orderByDesc(SchedJobEntity::getCreateTime)
+        );
+    }
 
     @Override
     public String createJob(JobQuery query) {

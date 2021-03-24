@@ -1,5 +1,8 @@
 package com.izneus.bonfire.module.quartz.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.izneus.bonfire.module.quartz.controller.v1.query.ListLogQuery;
 import com.izneus.bonfire.module.quartz.entity.SchedJobLogEntity;
 import com.izneus.bonfire.module.quartz.mapper.SchedJobLogMapper;
 import com.izneus.bonfire.module.quartz.service.SchedJobLogService;
@@ -17,4 +20,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class SchedJobLogServiceImpl extends ServiceImpl<SchedJobLogMapper, SchedJobLogEntity> implements SchedJobLogService {
 
+    @Override
+    public Page<SchedJobLogEntity> listLogsByJobId(String jobId, ListLogQuery query) {
+        return page(
+                new Page<>(query.getPageNum(), query.getPageSize()),
+                new LambdaQueryWrapper<SchedJobLogEntity>()
+                        .eq(SchedJobLogEntity::getJobId, jobId)
+                        .orderByDesc(SchedJobLogEntity::getCreateTime)
+        );
+    }
 }
