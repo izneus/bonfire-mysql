@@ -1,5 +1,8 @@
 package com.izneus.bonfire.module.system.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.izneus.bonfire.module.system.controller.v1.query.ListTicketQuery;
+import com.izneus.bonfire.module.system.controller.v1.query.ListUserTicketQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.ReplyTicketQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.TicketQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.TicketVO;
@@ -15,6 +18,22 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2020-12-31
  */
 public interface SysTicketService extends IService<SysTicketEntity> {
+
+    /**
+     * 工单列表
+     *
+     * @param query 查询条件
+     * @return 分页工单信息
+     */
+    Page<SysTicketEntity> listTickets(ListTicketQuery query);
+
+    /**
+     * 用户工单列表
+     *
+     * @param query 查询条件
+     * @return 分页工单信息
+     */
+    Page<SysTicketEntity> listTicketsByUserId(ListUserTicketQuery query, String userId);
 
     /**
      * 获取工单详情

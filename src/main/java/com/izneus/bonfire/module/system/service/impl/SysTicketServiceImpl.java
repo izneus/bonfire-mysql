@@ -1,10 +1,16 @@
 package com.izneus.bonfire.module.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.constant.Dict;
 import com.izneus.bonfire.common.constant.ErrorCode;
 import com.izneus.bonfire.common.exception.BadRequestException;
 import com.izneus.bonfire.module.security.CurrentUserUtil;
+import com.izneus.bonfire.module.system.controller.v1.query.ListTicketQuery;
+import com.izneus.bonfire.module.system.controller.v1.query.ListUserTicketQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.ReplyTicketQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.TicketQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.TicketVO;
@@ -35,6 +41,32 @@ public class SysTicketServiceImpl extends ServiceImpl<SysTicketMapper, SysTicket
 
     private final SysTicketFlowMapper flowMapper;
     private final SysTicketFlowService flowService;
+
+    @Override
+    public Page<SysTicketEntity> listTickets(ListTicketQuery query) {
+        // 默认创建时间倒序查询
+        if (StrUtil.isBlank(query.getOrderBy())) {
+            query.setOrderBy("create_time desc");
+        }
+        return page(
+                new Page<>(query.getPageNum(), query.getPageSize()),
+                new LambdaQueryWrapper<SysTicketEntity>()
+                        .eq(StrUtil.isNotBlank(query.getQuery()), SysTicketEntity::getTitle, query.getQuery())
+                        .or()
+                        .eq(StrUtil.isNotBlank(query.getQuery()), SysTicketEntity::getTicket, query.getQuery())
+                        .apply("order by {0}", query.getOrderBy())
+        );
+    }
+
+    @Override
+    public Page<SysTicketEntity> listTicketsByUserId(ListUserTicketQuery query, String userId) {
+        return page(
+                new Page<>(query.getPageNum(), query.getPageSize()),
+                new LambdaQueryWrapper<SysTicketEntity>()
+                        .eq(SysTicketEntity::getCreateUser, userId)
+                        .orderByDesc(SysTicketEntity::getCreateTime)
+        );
+    }
 
     @Override
     public TicketVO getTicketById(String id) {

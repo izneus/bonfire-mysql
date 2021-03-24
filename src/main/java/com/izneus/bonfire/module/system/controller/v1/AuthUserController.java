@@ -4,10 +4,15 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.common.base.BasePageVO;
+import com.izneus.bonfire.module.security.CurrentUserUtil;
 import com.izneus.bonfire.module.system.controller.v1.query.ListUserNoticeQuery;
+import com.izneus.bonfire.module.system.controller.v1.query.ListUserTicketQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.ListNoticeVO;
+import com.izneus.bonfire.module.system.controller.v1.vo.ListTicketVO;
 import com.izneus.bonfire.module.system.entity.SysNoticeEntity;
+import com.izneus.bonfire.module.system.entity.SysTicketEntity;
 import com.izneus.bonfire.module.system.service.SysNoticeService;
+import com.izneus.bonfire.module.system.service.SysTicketService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +37,7 @@ import java.util.stream.Collectors;
 public class AuthUserController {
 
     private final SysNoticeService noticeService;
+    private final SysTicketService ticketService;
 
     @AccessLog("我的通知列表")
     @ApiOperation("我的通知列表")
@@ -41,6 +47,18 @@ public class AuthUserController {
         // 组装vo
         List<ListNoticeVO> rows = page.getRecords().stream()
                 .map(notice -> BeanUtil.copyProperties(notice, ListNoticeVO.class))
+                .collect(Collectors.toList());
+        return new BasePageVO<>(page, rows);
+    }
+
+    @AccessLog("我的工单")
+    @ApiOperation("我的工单")
+    @GetMapping("/user/tickets")
+    public BasePageVO<ListTicketVO> listTicketsByUserId(@Validated ListUserTicketQuery query) {
+        Page<SysTicketEntity> page = ticketService.listTicketsByUserId(query, CurrentUserUtil.getUserId());
+        // 组装vo
+        List<ListTicketVO> rows = page.getRecords().stream()
+                .map(notice -> BeanUtil.copyProperties(notice, ListTicketVO.class))
                 .collect(Collectors.toList());
         return new BasePageVO<>(page, rows);
     }

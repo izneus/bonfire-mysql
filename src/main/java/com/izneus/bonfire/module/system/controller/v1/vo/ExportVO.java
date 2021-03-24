@@ -13,9 +13,11 @@ import lombok.Data;
 @ApiModel("导出文件vo")
 @Builder
 public class ExportVO {
+
     @ApiModelProperty("文件名")
     private String filename;
 
     @ApiModelProperty("token")
     private String token;
+
 }

@@ -16,9 +16,11 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class ListTicketQuery extends BasePageQuery {
+
     @ApiModelProperty("工单内容")
     private String query;
 
     @ApiModelProperty("排序，默认为create_time desc")
     private String orderBy;
+
 }

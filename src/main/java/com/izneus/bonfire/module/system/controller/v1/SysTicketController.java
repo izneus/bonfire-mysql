@@ -1,19 +1,17 @@
 package com.izneus.bonfire.module.system.controller.v1;
 
 
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
+import com.izneus.bonfire.common.base.BasePageVO;
 import com.izneus.bonfire.common.constant.Dict;
-import com.izneus.bonfire.common.util.BeanCopyUtil;
 import com.izneus.bonfire.module.system.controller.v1.query.IdQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.ListTicketQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.ReplyTicketQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.TicketQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.ListTicketVO;
-import com.izneus.bonfire.module.system.controller.v1.vo.TicketItemVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.TicketVO;
 import com.izneus.bonfire.module.system.entity.SysTicketEntity;
 import com.izneus.bonfire.module.system.service.SysTicketService;
@@ -27,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -48,27 +47,13 @@ public class SysTicketController {
     @ApiOperation("工单列表")
     @GetMapping("/tickets")
     @PreAuthorize("hasAuthority('sys:tickets:list')")
-    public ListTicketVO listTickets(@Validated ListTicketQuery query) {
-        // 默认创建时间倒序查询
-        if (StrUtil.isBlank(query.getOrderBy())) {
-            query.setOrderBy("create_time desc");
-        }
-        Page<SysTicketEntity> page = ticketService.page(
-                new Page<>(query.getPageNum(), query.getPageSize()),
-                new LambdaQueryWrapper<SysTicketEntity>()
-                        .eq(StrUtil.isNotBlank(query.getQuery()), SysTicketEntity::getTitle, query.getQuery())
-                        .or()
-                        .eq(StrUtil.isNotBlank(query.getQuery()), SysTicketEntity::getTicket, query.getQuery())
-                        .apply("order by {0}", query.getOrderBy())
-        );
+    public BasePageVO<ListTicketVO> listTickets(@Validated ListTicketQuery query) {
+        Page<SysTicketEntity> page = ticketService.listTickets(query);
         // 组装vo
-        List<TicketItemVO> tickets = BeanCopyUtil.copyListProperties(page.getRecords(), TicketItemVO::new);
-        return ListTicketVO.builder()
-                .tickets(tickets)
-                .pageNum(page.getCurrent())
-                .pageSize(page.getSize())
-                .totalSize(page.getTotal())
-                .build();
+        List<ListTicketVO> rows = page.getRecords().stream()
+                .map(ticket -> BeanUtil.copyProperties(ticket, ListTicketVO.class))
+                .collect(Collectors.toList());
+        return new BasePageVO<>(page, rows);
     }
 
     @AccessLog("新增工单")
