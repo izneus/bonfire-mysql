@@ -19,7 +19,7 @@ import java.util.List;
 public interface SchedJobService extends IService<SchedJobEntity> {
 
     /**
-     * 调度任务列表
+     * 调度任务列表，测试
      *
      * @param query 查询条件
      * @return 分页调度任务信息
