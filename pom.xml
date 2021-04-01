@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.izneus</groupId>
     <artifactId>bonfire</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.2.11-SNAPSHOT</version>
     <name>bonfire</name>
     <description>Demo project for Spring Boot</description>
 
