@@ -15,6 +15,7 @@ import javax.validation.constraints.Pattern;
 @ApiModel("登录表单")
 @Data
 public class LoginQuery {
+
     @ApiModelProperty(value = "用户名", required = true)
     @Pattern(regexp = RegExp.USERNAME, message = "用户名必须为6-20位字母或者数字")
     private String username;
@@ -30,4 +31,5 @@ public class LoginQuery {
     @ApiModelProperty(value = "验证码id", required = true)
     @NotBlank(message = "验证码id不能为空")
     private String captchaId;
+
 }
