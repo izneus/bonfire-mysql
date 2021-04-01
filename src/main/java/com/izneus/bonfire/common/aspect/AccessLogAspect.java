@@ -65,7 +65,7 @@ public class AccessLogAspect {
         JSONArray argJson = JSONUtil.parseArray(argValues);
         String param = null;
         // 注意数据脱敏，特别是用户密码
-        if (argJson != null && argJson.size() > 0) {
+        if (argJson.size() > 0) {
             String loginMethod = "com.izneus.bonfire.module.system.controller.v1.LoginController.login()";
             if (loginMethod.equals(methodName)) {
                 ((JSONObject) argJson.get(0)).set("password", "*");

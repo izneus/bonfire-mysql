@@ -1,4 +1,4 @@
-package com.izneus.bonfire.common.generator;
+package com.izneus.bonfire.common.util;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;

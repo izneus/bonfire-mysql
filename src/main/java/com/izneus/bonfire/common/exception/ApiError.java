@@ -25,4 +25,5 @@ public class ApiError {
         this.status = errorCode.getReason();
         this.exception = exception;
     }
+
 }
