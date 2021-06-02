@@ -50,4 +50,21 @@ public class CurrentUserUtil {
         return getUser().getId();
     }
 
+    /**
+     * 获取当前用户的id，不抛错，是给mybatis plus自动填充字段用的
+     *
+     * @return userId
+     */
+    public static String getFillUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return null;
+        }
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            return ((SecurityUser) authentication.getPrincipal()).getId();
+        } else {
+            return null;
+        }
+    }
+
 }
