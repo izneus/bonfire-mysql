@@ -18,6 +18,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class BasePageVO<T> {
+
     @ApiModelProperty("总数据条数")
     private Long totalSize;
 
@@ -36,4 +37,12 @@ public class BasePageVO<T> {
         this.pageSize = page.getSize();
         this.rows = rows;
     }
+
+    public BasePageVO(Page<T> page) {
+        this.totalSize = page.getTotal();
+        this.pageNum = page.getCurrent();
+        this.pageSize = page.getSize();
+        this.rows = page.getRecords();
+    }
+
 }
