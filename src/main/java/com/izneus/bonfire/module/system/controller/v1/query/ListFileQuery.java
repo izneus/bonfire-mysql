@@ -1,12 +1,12 @@
 package com.izneus.bonfire.module.system.controller.v1.query;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.izneus.bonfire.common.base.BasePageQuery;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.List;
@@ -25,6 +25,6 @@ public class ListFileQuery extends BasePageQuery {
     private String query;
 
     @ApiModelProperty("创建起止时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private List<Date> createTimes;
 }
