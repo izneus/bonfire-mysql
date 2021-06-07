@@ -91,9 +91,9 @@ public class JwtUtil {
         String userId = claims.getSubject();
         String authString = (String) redisUtil.get(StrUtil.format(REDIS_KEY_AUTHS, userId));
         // 没有该key，即白名单
-        if (null == authString) {
+        /*if (null == authString) {
             return null;
-        }
+        }*/
         // 构造Authority
         Collection<? extends GrantedAuthority> authorities = StringUtils.hasText(authString)
                 ? Arrays.stream(authString.split(",")).map(SimpleGrantedAuthority::new)
