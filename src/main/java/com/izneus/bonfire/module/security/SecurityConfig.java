@@ -58,13 +58,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 // swagger 文档
-                .antMatchers("/swagger-ui.html").permitAll()
-                .antMatchers("/swagger-resources/**").permitAll()
-                .antMatchers("/webjars/**").permitAll()
-                .antMatchers("/*/api-docs").permitAll()
+                .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/webjars/**",
+                        "/*/api-docs").permitAll()
                 // 登录允许匿名访问
-                .antMatchers("/api/*/login").permitAll()
-                .antMatchers("/api/*/captcha").permitAll()
+                .antMatchers("/api/*/login", "/api/*/captcha").permitAll()
                 // 下载文件路径
                 .antMatchers("/api/*/files:export").permitAll()
                 .anyRequest().authenticated();
