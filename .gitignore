@@ -32,3 +32,4 @@ build/
 .vscode/
 /src/main/resources/application-dev.yml
 /src/main/resources/application-prod.yml
+/src/main/java/com/izneus/bonfire/common/util/CodeGenerator.java
