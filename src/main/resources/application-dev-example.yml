@@ -6,18 +6,18 @@ spring:
       strict: false
       datasource:
         bonfire:
-          driver-class-name: oracle.jdbc.OracleDriver
-          url: jdbc:oracle:thin:@144.52.16.141:1521:orcl
-          username: BONFIRE
-          password: BONFIRE
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://127.0.0.1:3306/bonfire?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF-8
+          username: r**t
+          password: 1****6
         lamp:
           driver-class-name: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://144.52.16.141:3306/lamp?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF-8
-          username: root
-          password: 123456
+          url: jdbc:mysql://127.0.0.1:3306/lamp?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF-8
+          username: r**t
+          password: 1****6
   redis:
-    host: 144.52.16.143
-    password: foobared
+    host: 127.0.0.1
+    password: f******d
     # 启用连接池
     lettuce:
       pool:
