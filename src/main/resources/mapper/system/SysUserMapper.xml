@@ -2,16 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.izneus.bonfire.module.system.mapper.SysUserMapper">
     <select id="listAuthsByUserId" resultType="com.izneus.bonfire.module.system.service.dto.ListAuthDTO">
-        select t1.ID as USER_ID, t3.ROLE_NAME, t5.AUTHORITY
-        from SYS_USER t1,
-             SYS_USER_ROLE t2,
-             SYS_ROLE t3,
-             SYS_ROLE_AUTHORITY t4,
-             SYS_AUTHORITY t5
-        where t1.ID = t2.USER_ID
-          and t2.ROLE_ID = t3.ID
-          and t3.ID = t4.AUTHORITY_ID
-          and t4.AUTHORITY_ID = t5.ID
-          and t1.ID = #{userId}
+        select t1.id as user_id, t3.role_name, t5.authority
+        from sys_user t1,
+             sys_user_role t2,
+             sys_role t3,
+             sys_role_authority t4,
+             sys_authority t5
+        where t1.id = t2.user_id
+          and t2.role_id = t3.id
+          and t3.id = t4.authority_id
+          and t4.authority_id = t5.id
+          and t1.id = #{userId}
     </select>
 </mapper>
