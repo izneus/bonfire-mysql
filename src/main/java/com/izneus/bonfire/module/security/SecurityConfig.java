@@ -44,6 +44,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
+                // spring security配置cors
+                .cors().and()
                 // 关闭csrf，跨站请求伪造具体不解释了
                 .csrf().disable()
                 // 添加jwt过滤器
