@@ -13,8 +13,9 @@ import lombok.Data;
 @Data
 @Builder
 public class LoginVO {
-    @ApiModelProperty("用户名")
-    private final String username;
+    /// 用户名现在由登录后的/user/info获得
+    /*@ApiModelProperty("用户名")
+    private final String username;*/
 
     @ApiModelProperty("jwt")
     private final String token;

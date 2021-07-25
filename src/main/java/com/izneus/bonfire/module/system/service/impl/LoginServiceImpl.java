@@ -129,7 +129,7 @@ public class LoginServiceImpl implements LoginService {
         }
         // todo single login
         return LoginVO.builder()
-                .username(user.getUsername())
+                // .username(user.getUsername())
                 .token(token)
                 .build();
     }

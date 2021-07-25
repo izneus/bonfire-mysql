@@ -16,7 +16,7 @@ public class UserVO {
     @ApiModelProperty("用户id")
     private String id;
 
-    @ApiModelProperty(value = "用户名", required = true)
+    @ApiModelProperty("用户名")
     private String username;
 
     @ApiModelProperty("昵称")

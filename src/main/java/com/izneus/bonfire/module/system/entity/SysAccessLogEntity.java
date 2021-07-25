@@ -1,8 +1,9 @@
 package com.izneus.bonfire.module.system.entity;
 
+import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import lombok.Data;
@@ -14,11 +15,11 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author Izneus
- * @since 2020-08-08
+ * @since 2021-07-21
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("SYS_ACCESS_LOG")
+@TableName("sys_access_log")
 public class SysAccessLogEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -26,74 +27,81 @@ public class SysAccessLogEntity implements Serializable {
     /**
      * id
      */
-    @TableId("ID")
     private String id;
 
     /**
      * http method
      */
-    @TableField("METHOD")
     private String method;
 
     /**
      * 用户代理
      */
-    @TableField("USER_AGENT")
     private String userAgent;
 
     /**
      * 创建时间
      */
-    @TableField("CREATE_TIME")
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
     /**
      * 客户端ip
      */
-    @TableField("CLIENT_IP")
     private String clientIp;
 
     /**
      * 注解描述
      */
-    @TableField("DESCRIPTION")
     private String description;
 
     /**
      * 发起请求的用户名
      */
-    @TableField("USERNAME")
     private String username;
 
     /**
      * 浏览器
      */
-    @TableField("BROWSER")
     private String browser;
 
     /**
      * 系统
      */
-    @TableField("OS")
     private String os;
 
     /**
      * 发起请求的用户id
      */
-    @TableField("USER_ID")
-    private String userId;
+    @TableField(fill = FieldFill.INSERT)
+    private String createUser;
 
     /**
      * 访问经过的时间
      */
-    @TableField("ELAPSED_TIME")
-    private Long elapsedTime;
+    private BigDecimal elapsedTime;
 
     /**
      * 请求参数
      */
-    @TableField("PARAM")
     private String param;
+
+    /**
+     * 更新时间
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private Date updateTime;
+
+    /**
+     * 更新人
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private String updateUser;
+
+    /**
+     * 备注
+     */
+    private String remark;
 
 
 }
