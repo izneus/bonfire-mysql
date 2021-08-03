@@ -7,6 +7,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,6 +26,7 @@ import static com.izneus.bonfire.common.constant.Constant.REDIS_KEY_AUTHS;
  * @date 2020/06/20
  */
 @Component
+@Slf4j
 public class JwtUtil {
 
     private final JwtConfig jwtConfig;

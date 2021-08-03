@@ -2,16 +2,21 @@ package com.izneus.bonfire.module.system.controller.v1;
 
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.common.base.BasePageVO;
+import com.izneus.bonfire.common.constant.Dict;
+import com.izneus.bonfire.module.system.controller.v1.query.DictTypeQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.ListDictQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.CacheDictVO;
+import com.izneus.bonfire.module.system.controller.v1.vo.DictDetailVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.ListDictVO;
 import com.izneus.bonfire.module.system.entity.SysDictEntity;
 import com.izneus.bonfire.module.system.service.SysDictService;
 import com.izneus.bonfire.module.system.controller.v1.query.DictQuery;
+import com.izneus.bonfire.module.system.service.dto.DictDetailDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -95,6 +100,23 @@ public class SysDictController {
     @PreAuthorize("hasAuthority('sys:dicts:cache')")
     public List<CacheDictVO> cacheDicts() {
         return dictService.cacheDicts();
+    }
+
+    @AccessLog("通过dictType获得字典详情")
+    @ApiOperation("通过dictType获得字典详情")
+    @GetMapping("/dictDetails")
+    @PreAuthorize("hasAuthority('sys:dicts:list')")
+    public DictDetailVO listDictDetails(@Validated DictTypeQuery query) {
+        List<SysDictEntity> dicts = dictService.list(new LambdaQueryWrapper<SysDictEntity>()
+                .eq(SysDictEntity::getDictType, query.getDictType())
+                .eq(SysDictEntity::getStatus, Dict.DictStatus.OK.getCode())
+                .orderByAsc(SysDictEntity::getDictSort));
+        List<DictDetailDTO> details = dicts.stream()
+                .map(dict -> BeanUtil.copyProperties(dict, DictDetailDTO.class))
+                .collect(Collectors.toList());
+        return DictDetailVO.builder()
+                .details(details)
+                .build();
     }
 
 

@@ -10,7 +10,7 @@
              sys_authority t5
         where t1.id = t2.user_id
           and t2.role_id = t3.id
-          and t3.id = t4.authority_id
+          and t3.id = t4.role_id
           and t4.authority_id = t5.id
           and t1.id = #{userId}
     </select>
