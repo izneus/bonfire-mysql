@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -64,6 +65,7 @@ public class GlobalExceptionHandler {
     /**
      * 处理所有接口数据验证异常
      */
+    @SuppressWarnings("Duplicates")
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
@@ -74,6 +76,27 @@ public class GlobalExceptionHandler {
         List<ObjectError> errors = e.getBindingResult().getAllErrors();
         for (ObjectError error : errors) {
             message.append(error.getDefaultMessage()).append("。");
+        }
+        return new ApiError(ErrorCode.INVALID_ARGUMENT, message.toString(), e.toString());
+    }
+
+    /**
+     * 处理父类参数校验异常，同上
+     */
+    @SuppressWarnings("Duplicates")
+    @ExceptionHandler(BindException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleBindException(BindException e) {
+        // 打印堆栈信息
+        log.error("BindException", e);
+        // 拼装错误返回信息
+        StringBuilder message = new StringBuilder();
+        List<ObjectError> errors = e.getBindingResult().getAllErrors();
+        for (ObjectError error : errors) {
+            String[] codes = error.getCodes();
+            message.append(codes != null ? codes[0] : null)
+                    .append(error.getDefaultMessage())
+                    .append("。");
         }
         return new ApiError(ErrorCode.INVALID_ARGUMENT, message.toString(), e.toString());
     }

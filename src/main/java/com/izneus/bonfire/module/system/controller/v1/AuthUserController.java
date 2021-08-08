@@ -50,7 +50,7 @@ public class AuthUserController {
 
     @AccessLog("我的通知列表")
     @ApiOperation("我的通知列表")
-    @GetMapping("/user/notices")
+    @GetMapping("/me/notices")
     public BasePageVO<ListNoticeVO> listNoticesByUserId(@Validated ListUserNoticeQuery query) {
         Page<SysNoticeEntity> page = noticeService.listNoticesByUserId(query);
         // 组装vo
@@ -62,7 +62,7 @@ public class AuthUserController {
 
     @AccessLog("我的工单")
     @ApiOperation("我的工单")
-    @GetMapping("/user/tickets")
+    @GetMapping("/me/tickets")
     public BasePageVO<ListTicketVO> listTicketsByUserId(@Validated ListUserTicketQuery query) {
         Page<SysTicketEntity> page = ticketService.listTicketsByUserId(query, CurrentUserUtil.getUserId());
         // 组装vo
@@ -74,7 +74,7 @@ public class AuthUserController {
 
     @AccessLog("我的信息")
     @ApiOperation("我的信息")
-    @GetMapping("/user/info")
+    @GetMapping("/me/info")
     public UserInfoVO getUserInfo() {
         // 获得redis里登录时组装好的角色+权限字符串
         String userId = CurrentUserUtil.getUserId();

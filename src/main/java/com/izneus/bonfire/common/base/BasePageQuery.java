@@ -6,6 +6,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 /**
  * 分页参数使用的基类
@@ -18,10 +19,12 @@ import javax.validation.constraints.Min;
 public class BasePageQuery {
 
     @ApiModelProperty(value = "页码", required = true)
+    @NotNull
     @Min(value = 1, message = "页码为大于0的整数")
     private Long pageNum;
 
     @ApiModelProperty(value = "一页的数据条数", required = true)
+    @NotNull
     @Range(min = 1, max = 500, message = "一页数据条数为1～500条")
     private Long pageSize;
 }
