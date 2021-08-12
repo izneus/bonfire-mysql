@@ -32,6 +32,5 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         log.info("start update fill ....");
         this.strictUpdateFill(metaObject, "updateTime", Date.class, new Date());
         this.strictUpdateFill(metaObject, "updateUser", String.class, CurrentUserUtil.getFillUserId());
-
     }
 }
