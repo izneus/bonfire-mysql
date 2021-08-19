@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  * @since 2020-06-28
  */
 @Api(tags = "系统:用户")
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 @RestController
 public class SysUserController {
@@ -49,12 +49,12 @@ public class SysUserController {
 
     @AccessLog("用户列表")
     @ApiOperation("用户列表")
-    @GetMapping("/users")
-    @PreAuthorize("hasAuthority('sys:users:list')")
-    public BasePageVO<ListUserVO> listUsers(@Validated ListUserQuery query) {
-        // GET /users 一般用来返回简单的用户列表，比如单表查询，
-        // 实际开发中可能会涉及复杂到丧心病狂的动态查询条件以及连表查询其他关联信息
-        // 这种情况下可以考虑使用自定义动词，比如 POST /users:search 来解决
+    @PostMapping("/list")
+    @PreAuthorize("hasAuthority('sys:user:list')")
+    public BasePageVO<ListUserVO> listUsers(@Validated @RequestBody ListUserQuery query) {
+        // 新版本api请求说明：因为五花八门的原因，系统的所有请求，禁止使用PUT/DELETE/OPTION等不常用方法
+        // 除了少数幂等的请求采用GET，其他请求，特别是业务请求，全部采用POST
+        // 而所有之前采用的复数请求命名，全部统一为单数，函数命名的单复数不做规定
         Page<SysUserEntity> page = userService.listUsers(query);
         // 查询结果转vo
         List<ListUserVO> rows = page.getRecords().stream()

@@ -59,7 +59,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         return page(
                 new Page<>(query.getPageNum(), query.getPageSize()),
                 new LambdaQueryWrapper<SysUserEntity>()
-                        .like(StrUtil.isNotBlank(query.getUsername()), SysUserEntity::getUsername, query.getUsername())
+                        .like(StrUtil.isNotBlank(query.getUsername()),
+                                SysUserEntity::getUsername, query.getUsername())
                         .orderByDesc(SysUserEntity::getCreateTime)
         );
     }
