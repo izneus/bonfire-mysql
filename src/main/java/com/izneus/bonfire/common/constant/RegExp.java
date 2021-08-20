@@ -20,5 +20,5 @@ public class RegExp {
     /**
      * 用户名，必须为6～20位字母
      */
-    public static final String USERNAME = "^[a-zA-Z0-9]{6,20}$";
+    public static final String USERNAME = "^[a-zA-Z0-9]{5,20}$";
 }

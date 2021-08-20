@@ -50,7 +50,7 @@ public class SysUserController {
     @AccessLog("用户列表")
     @ApiOperation("用户列表")
     @PostMapping("/list")
-    @PreAuthorize("hasAuthority('sys:user:list')")
+    @PreAuthorize("hasAuthority('sys:user:list') or hasAuthority('admin')")
     public BasePageVO<ListUserVO> listUsers(@Validated @RequestBody ListUserQuery query) {
         // 新版本api请求说明：因为五花八门的原因，系统的所有请求，禁止使用PUT/DELETE/OPTION等不常用方法
         // 除了少数幂等的请求采用GET，其他请求，特别是业务请求，全部采用POST

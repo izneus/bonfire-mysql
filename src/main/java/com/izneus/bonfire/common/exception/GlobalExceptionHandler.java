@@ -4,6 +4,7 @@ import com.izneus.bonfire.common.constant.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.validation.BindException;
@@ -99,6 +100,17 @@ public class GlobalExceptionHandler {
                     .append("。");
         }
         return new ApiError(ErrorCode.INVALID_ARGUMENT, message.toString(), e.toString());
+    }
+
+    /**
+     * 处理SpringSecurity无权限错误
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleAccessDeniedException(AccessDeniedException e) {
+        // 打印堆栈信息
+        log.error("AccessDeniedException", e);
+        return new ApiError(ErrorCode.PERMISSION_DENIED, e.getMessage(), e.toString());
     }
 
     /**

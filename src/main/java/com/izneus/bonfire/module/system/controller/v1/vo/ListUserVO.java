@@ -20,6 +20,9 @@ public class ListUserVO {
     @ApiModelProperty("昵称")
     private String nickname;
 
+    @ApiModelProperty("姓名")
+    private String fullname;
+
     @ApiModelProperty("邮件")
     private String email;
 
@@ -30,5 +33,5 @@ public class ListUserVO {
     private String remark;
 
     @ApiModelProperty("账号状态")
-    private String state;
+    private String status;
 }
