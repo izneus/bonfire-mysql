@@ -116,6 +116,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     }
 
     @Override
+    public void deleteUserBatch(List<String> userIds) {
+        removeByIds(userIds);
+        // todo 潜在的in查询，可能超过1000
+        userRoleService.remove(new LambdaQueryWrapper<SysUserRoleEntity>().in(SysUserRoleEntity::getUserId, userIds));
+    }
+
+    @Override
     public String exportUsers(ListUserQuery query) {
         String filename = IdUtil.fastSimpleUUID() + ".xlsx";
         String filePath = bonfireConfig.getPath().getTempPath() + File.separator + filename;

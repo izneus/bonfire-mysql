@@ -6,10 +6,7 @@ import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.common.base.BasePageVO;
 import com.izneus.bonfire.module.security.CurrentUserUtil;
 import com.izneus.bonfire.module.security.JwtUtil;
-import com.izneus.bonfire.module.system.controller.v1.query.IdQuery;
-import com.izneus.bonfire.module.system.controller.v1.query.ListUserQuery;
-import com.izneus.bonfire.module.system.controller.v1.query.UnlockQuery;
-import com.izneus.bonfire.module.system.controller.v1.query.UserQuery;
+import com.izneus.bonfire.module.system.controller.v1.query.*;
 import com.izneus.bonfire.module.system.controller.v1.vo.*;
 import com.izneus.bonfire.module.system.entity.DsCityEntity;
 import com.izneus.bonfire.module.system.entity.SysUserEntity;
@@ -73,8 +70,8 @@ public class SysUserController {
 
     @AccessLog("新增用户")
     @ApiOperation("新增用户")
-    @PostMapping("/users")
-    @PreAuthorize("hasAuthority('sys:users:create')")
+    @PostMapping("/create")
+    @PreAuthorize("hasAuthority('sys:user:create') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.CREATED)
     public IdVO createUser(@Validated @RequestBody UserQuery userQuery) {
         String id = userService.createUser(userQuery);
@@ -106,6 +103,15 @@ public class SysUserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUserById(@NotBlank @PathVariable String userId) {
         userService.removeUserById(userId);
+    }
+
+    @AccessLog("批量删除用户")
+    @ApiOperation("批量删除用户")
+    @DeleteMapping("/deleteBatch")
+    @PreAuthorize("hasAuthority('sys:user:delete') or hasAuthority('admin')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteBatch(@Validated DeleteUserBatchQuery query) {
+        userService.deleteUserBatch(query.getIds());
     }
 
     /// 暂时注释

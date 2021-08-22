@@ -7,6 +7,8 @@ import com.izneus.bonfire.module.system.controller.v1.vo.UserVO;
 import com.izneus.bonfire.module.system.controller.v1.query.UserQuery;
 import com.izneus.bonfire.module.system.entity.SysUserEntity;
 
+import java.util.List;
+
 /**
  * <p>
  * 系统_用户 服务类
@@ -54,6 +56,8 @@ public interface SysUserService extends IService<SysUserEntity> {
      * @param userId userId
      */
     void removeUserById(String userId);
+
+    void deleteUserBatch(List<String> userIds);
 
     /**
      * 导出用户，根据查询条件生成临时文件，返回文件名
