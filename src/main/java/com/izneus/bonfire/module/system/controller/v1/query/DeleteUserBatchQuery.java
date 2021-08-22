@@ -17,6 +17,6 @@ import java.util.List;
 public class DeleteUserBatchQuery {
     @ApiModelProperty("用户id列表")
     @NotNull
-    @Size(max = 1, message = "id列表最大长度为1000")
+    @Size(min = 1, max = 500, message = "id列表最小长度为1，最大长度为500")
     private List<String> ids;
 }
