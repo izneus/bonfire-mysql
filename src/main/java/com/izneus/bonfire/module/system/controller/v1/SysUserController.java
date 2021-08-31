@@ -151,15 +151,15 @@ public class SysUserController {
     /**
      * 重置用户密码，一般是用户管理员使用
      *
-     * @param query 用户id
+     * @param query 用户id列表
      */
     @AccessLog("重置用户密码")
     @ApiOperation("重置用户密码")
-    @PostMapping("/users:resetPassword")
-    @PreAuthorize("hasAuthority('sys:users:resetPassword')")
+    @PostMapping("/resetPasswordBatch")
+    @PreAuthorize("hasAuthority('sys:user:resetPassword') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void resetPassword(@Validated @RequestBody IdQuery query) {
-        userService.resetPassword(query.getId());
+    public void resetPasswordBatch(@Validated @RequestBody IdsQuery query) {
+        userService.resetPasswordBatch(query.getIds());
     }
 
     /// redis里的锁定用户信息可以不做列表

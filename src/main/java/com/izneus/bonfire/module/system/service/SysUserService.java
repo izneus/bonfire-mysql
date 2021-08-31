@@ -70,11 +70,11 @@ public interface SysUserService extends IService<SysUserEntity> {
     /**
      * 重置密码为默认密码
      *
-     * @param userId userId
+     * @param userIds id列表
      * @return boolean
      */
     @SuppressWarnings("UnusedReturnValue")
-    boolean resetPassword(String userId);
+    boolean resetPasswordBatch(List<String> userIds);
 
     /**
      * 导入用户，预上传文件获得文件id

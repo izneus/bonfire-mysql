@@ -154,11 +154,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     }
 
     @Override
-    public boolean resetPassword(String userId) {
-        SysUserEntity userEntity = new SysUserEntity();
-        userEntity.setId(userId);
-        userEntity.setPassword(new BCryptPasswordEncoder().encode(bonfireConfig.getDefaultPassword()));
-        return updateById(userEntity);
+    public boolean resetPasswordBatch(List<String> userIds) {
+        String password = new BCryptPasswordEncoder().encode(bonfireConfig.getDefaultPassword());
+        List<SysUserEntity> list = userIds.stream().map(id -> {
+            SysUserEntity userEntity = new SysUserEntity();
+            userEntity.setId(id);
+            userEntity.setPassword(password);
+            return userEntity;
+        }).collect(Collectors.toList());
+        return updateBatchById(list);
     }
 
     @Override
