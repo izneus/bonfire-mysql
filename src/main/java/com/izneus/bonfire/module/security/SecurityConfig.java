@@ -64,7 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 登录允许匿名访问
                 .antMatchers("/api/*/login", "/api/*/captcha").permitAll()
                 // 下载文件路径
-                .antMatchers("/api/*/files:export").permitAll()
+                .antMatchers("/api/*/file/download").permitAll()
                 .anyRequest().authenticated();
     }
 }

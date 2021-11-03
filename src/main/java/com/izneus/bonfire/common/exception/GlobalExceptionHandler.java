@@ -1,6 +1,7 @@
 package com.izneus.bonfire.common.exception;
 
 import com.izneus.bonfire.common.constant.ErrorCode;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -111,6 +112,17 @@ public class GlobalExceptionHandler {
         // 打印堆栈信息
         log.error("AccessDeniedException", e);
         return new ApiError(ErrorCode.PERMISSION_DENIED, e.getMessage(), e.toString());
+    }
+
+    /**
+     * 处理ExpiredJwtException无权限错误
+     */
+    @ExceptionHandler(ExpiredJwtException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ApiError handleAccessDeniedException(ExpiredJwtException e) {
+        // 打印堆栈信息
+        log.error("ExpiredJwtException", e);
+        return new ApiError(ErrorCode.PERMISSION_DENIED, "token已过期", e.toString());
     }
 
     /**

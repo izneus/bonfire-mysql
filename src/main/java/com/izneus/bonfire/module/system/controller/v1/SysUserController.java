@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.izneus.bonfire.common.constant.Constant.TEMP_FILE;
+
 /**
  * <p>
  * 系统_用户 前端控制器
@@ -132,7 +134,7 @@ public class SysUserController {
         String filename = userService.exportUsers(query);
         Map<String, Object> claims = new HashMap<>(2);
         claims.put("filename", filename);
-        claims.put("fileType", "1");
+        claims.put("fileType", TEMP_FILE);
         // 生成文件下载的临时token
         String token = jwtUtil.createToken(CurrentUserUtil.getUserId(), 120L, claims);
         return ExportVO.builder()
