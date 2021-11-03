@@ -7,7 +7,10 @@ import com.izneus.bonfire.common.base.BasePageVO;
 import com.izneus.bonfire.module.security.CurrentUserUtil;
 import com.izneus.bonfire.module.security.JwtUtil;
 import com.izneus.bonfire.module.system.controller.v1.query.*;
-import com.izneus.bonfire.module.system.controller.v1.vo.*;
+import com.izneus.bonfire.module.system.controller.v1.vo.ExportVO;
+import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
+import com.izneus.bonfire.module.system.controller.v1.vo.ListUserVO;
+import com.izneus.bonfire.module.system.controller.v1.vo.UserVO;
 import com.izneus.bonfire.module.system.entity.DsCityEntity;
 import com.izneus.bonfire.module.system.entity.SysUserEntity;
 import com.izneus.bonfire.module.system.service.DsCityService;
@@ -60,13 +63,14 @@ public class SysUserController {
         return new BasePageVO<>(page, rows);
     }
 
-    @AccessLog("查询用户")
+    /// 已经修改api规范，下面风格先注释
+    /*@AccessLog("查询用户")
     @ApiOperation("查询用户")
     @PostMapping("/users:search")
     @PreAuthorize("hasAuthority('sys:users:search')")
     public String searchUsers() {
         return "users:search";
-    }
+    }*/
 
     @AccessLog("新增用户")
     @ApiOperation("新增用户")
@@ -80,29 +84,28 @@ public class SysUserController {
 
     @AccessLog("用户详情")
     @ApiOperation("用户详情")
-    @GetMapping("/users/{userId}")
-    @PreAuthorize("hasAuthority('sys:users:get')")
-    public UserVO getUserById(@NotBlank @PathVariable String userId) {
-        return userService.getUserById(userId);
+    @PostMapping("/get")
+    @PreAuthorize("hasAuthority('sys:user:get') or hasAuthority('admin')")
+    public UserVO getUserById(@Validated @RequestBody IdQuery query) {
+        return userService.getUserById(query.getId());
     }
 
     @AccessLog("更新用户")
     @ApiOperation("更新用户")
-    @PreAuthorize("hasAuthority('sys:users:update')")
-    @PutMapping("/users/{userId}")
+    @PreAuthorize("hasAuthority('sys:user:update') or hasAuthority('admin')")
+    @PostMapping("/update")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateUserById(@NotBlank @PathVariable String userId,
-                               @Validated @RequestBody UserQuery userQuery) {
-        userService.updateUserById(userId, userQuery);
+    public void updateUserById(@Validated @RequestBody UpdateUserQuery query) {
+        userService.updateUserById(query);
     }
 
     @AccessLog("删除用户")
     @ApiOperation("删除用户")
-    @DeleteMapping("/users/{userId}")
-    @PreAuthorize("hasAuthority('sys:users:delete')")
+    @PostMapping("/delete")
+    @PreAuthorize("hasAuthority('sys:user:delete') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUserById(@NotBlank @PathVariable String userId) {
-        userService.removeUserById(userId);
+    public void deleteUserById(@Validated @RequestBody IdQuery query) {
+        userService.removeUserById(query.getId());
     }
 
     @AccessLog("批量删除用户")
@@ -110,7 +113,7 @@ public class SysUserController {
     @PostMapping("/deleteBatch")
     @PreAuthorize("hasAuthority('sys:user:delete') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteBatch(@Validated @RequestBody DeleteUserBatchQuery query) {
+    public void deleteBatch(@Validated @RequestBody IdsQuery query) {
         userService.deleteUserBatch(query.getIds());
     }
 
@@ -123,15 +126,15 @@ public class SysUserController {
 
     @AccessLog("导出用户")
     @ApiOperation("导出用户")
-    @PostMapping("/users:export")
-    @PreAuthorize("hasAuthority('sys:users:export')")
+    @PostMapping("/export")
+    @PreAuthorize("hasAuthority('sys:user:export') or hasAuthority('admin')")
     public ExportVO exportUsers(@Validated @RequestBody ListUserQuery query) {
         String filename = userService.exportUsers(query);
         Map<String, Object> claims = new HashMap<>(2);
         claims.put("filename", filename);
         claims.put("fileType", "1");
         // 生成文件下载的临时token
-        String token = jwtUtil.createToken(CurrentUserUtil.getUserId(), 5L, claims);
+        String token = jwtUtil.createToken(CurrentUserUtil.getUserId(), 120L, claims);
         return ExportVO.builder()
                 .filename(filename)
                 .token(token)

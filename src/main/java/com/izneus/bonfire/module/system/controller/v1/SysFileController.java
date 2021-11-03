@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 @Api(tags = "系统:文件")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/file")
 public class SysFileController {
 
     private final SysFileService fileService;
@@ -103,7 +103,7 @@ public class SysFileController {
      */
     @AccessLog("下载文件")
     @ApiOperation("下载文件")
-    @GetMapping("/files:download")
+    @GetMapping("/download")
     public ResponseEntity<Resource> downloadFile(@NotBlank String token) {
         return fileService.downloadFile(token);
     }

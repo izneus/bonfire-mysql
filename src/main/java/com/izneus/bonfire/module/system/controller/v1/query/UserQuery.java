@@ -37,7 +37,7 @@ public class UserQuery {
     private String remark;
 
     @ApiModelProperty("账号状态")
-    private String state;
+    private String status;
 
     @ApiModelProperty("角色id列表")
     private List<String> roleIds;

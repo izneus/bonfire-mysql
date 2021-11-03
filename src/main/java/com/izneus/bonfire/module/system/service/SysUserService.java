@@ -3,6 +3,7 @@ package com.izneus.bonfire.module.system.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.izneus.bonfire.module.system.controller.v1.query.ListUserQuery;
+import com.izneus.bonfire.module.system.controller.v1.query.UpdateUserQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.UserVO;
 import com.izneus.bonfire.module.system.controller.v1.query.UserQuery;
 import com.izneus.bonfire.module.system.entity.SysUserEntity;
@@ -45,10 +46,9 @@ public interface SysUserService extends IService<SysUserEntity> {
     /**
      * 通过id更新用户信息
      *
-     * @param userId    userID
-     * @param userQuery userQuery
+     * @param query 用户信息
      */
-    void updateUserById(String userId, UserQuery userQuery);
+    void updateUserById(UpdateUserQuery query);
 
     /**
      * 通过id删除用户信息

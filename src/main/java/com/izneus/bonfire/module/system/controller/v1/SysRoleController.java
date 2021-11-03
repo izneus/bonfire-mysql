@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
  */
 @Api(tags = "系统:角色")
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/role")
 @RequiredArgsConstructor
 public class SysRoleController {
 
@@ -42,8 +42,8 @@ public class SysRoleController {
 
     @AccessLog("角色列表")
     @ApiOperation("角色列表")
-    @GetMapping("/roles")
-    @PreAuthorize("hasAuthority('sys:roles:list')")
+    @GetMapping("/list")
+    @PreAuthorize("hasAuthority('sys:role:list') or hasAuthority('admin')")
     public BasePageVO<ListRoleVO> listRoles(@Validated ListRoleQuery query) {
         Page<SysRoleEntity> page = roleService.listRoles(query);
         // 组装vo

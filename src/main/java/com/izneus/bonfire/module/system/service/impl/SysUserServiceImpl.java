@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.izneus.bonfire.common.util.RedisUtil;
 import com.izneus.bonfire.config.BonfireConfig;
 import com.izneus.bonfire.module.system.controller.v1.query.ListUserQuery;
+import com.izneus.bonfire.module.system.controller.v1.query.UpdateUserQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.UserQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.UserVO;
 import com.izneus.bonfire.module.system.entity.SysFileEntity;
@@ -96,14 +97,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateUserById(String userId, UserQuery userQuery) {
+    public void updateUserById(UpdateUserQuery query) {
         // 更新用户表
-        SysUserEntity userEntity = BeanUtil.copyProperties(userQuery, SysUserEntity.class);
-        userEntity.setId(userId);
+        SysUserEntity userEntity = BeanUtil.copyProperties(query, SysUserEntity.class);
         updateById(userEntity);
-        // 更新用户角色表，先删除现有角色信息，再重新插入新角色
-        userRoleService.remove(new LambdaQueryWrapper<SysUserRoleEntity>().eq(SysUserRoleEntity::getUserId, userId));
-        saveUserRoles(userId, userQuery.getRoleIds());
+        /// 更新用户角色表，先删除现有角色信息，再重新插入新角色
+        /*userRoleService.remove(new LambdaQueryWrapper<SysUserRoleEntity>()
+                .eq(SysUserRoleEntity::getUserId, query.getId()));
+        saveUserRoles(query.getId(), query.getRoleIds());*/
     }
 
     @Override
