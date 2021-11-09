@@ -145,8 +145,8 @@ public class SysUserController {
 
     @AccessLog("导入用户")
     @ApiOperation("导入用户")
-    @PostMapping("/users:import")
-    @PreAuthorize("hasAuthority('sys:users:import')")
+    @PostMapping("/import")
+    @PreAuthorize("hasAuthority('sys:user:import') or hasAuthority('admin')")
     public void importUsers(@Validated @RequestBody IdQuery query) {
         // todo 谨慎开启导入功能
         // todo 太大的导入文件或是太复杂的导入逻辑，建议调度任务完成，否则会有长时间的执行时间，直观表现就是页面timeout等

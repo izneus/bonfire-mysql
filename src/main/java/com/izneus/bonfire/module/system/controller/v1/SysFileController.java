@@ -91,8 +91,8 @@ public class SysFileController {
 
     @AccessLog("上传文件")
     @ApiOperation("上传文件")
-    @PostMapping("/files:upload")
-    @PreAuthorize("hasAuthority('sys:files:upload')")
+    @PostMapping("/upload")
+    @PreAuthorize("hasAuthority('sys:file:upload') or hasAuthority('admin')")
     public IdVO uploadFile(@RequestParam("file") MultipartFile multipartFile) {
         String fileId = fileService.uploadFile(multipartFile);
         return new IdVO(fileId);
