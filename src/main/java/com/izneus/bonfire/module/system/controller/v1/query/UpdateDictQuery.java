@@ -12,12 +12,12 @@ import javax.validation.constraints.NotBlank;
  * @author Izneus
  * @date 2021/10/28
  */
-@ApiModel("更新用户query")
+@ApiModel("更新字典query")
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class UpdateUserQuery extends UserQuery {
-    @ApiModelProperty("用户id")
+public class UpdateDictQuery extends DictQuery {
+    @ApiModelProperty("字典id")
     @NotBlank
     private String id;
 }

@@ -8,6 +8,7 @@ import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.common.base.BasePageVO;
 import com.izneus.bonfire.common.constant.Dict;
 import com.izneus.bonfire.module.system.controller.v1.query.DictTypeQuery;
+import com.izneus.bonfire.module.system.controller.v1.query.IdQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.ListDictQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.CacheDictVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.DictDetailVO;
@@ -40,16 +41,16 @@ import java.util.stream.Collectors;
 @Api(tags = "系统:字典")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/dict")
 public class SysDictController {
 
     private final SysDictService dictService;
 
     @AccessLog("字典列表")
     @ApiOperation("字典列表")
-    @GetMapping("/dicts")
-    @PreAuthorize("hasAuthority('sys:dicts:list')")
-    public BasePageVO<ListDictVO> listDicts(@Validated ListDictQuery query) {
+    @PostMapping("/list")
+    @PreAuthorize("hasAuthority('sys:dict:list') or hasAuthority('admin')")
+    public BasePageVO<ListDictVO> listDicts(@Validated @RequestBody ListDictQuery query) {
         Page<SysDictEntity> page = dictService.listDicts(query);
         List<ListDictVO> rows = page.getRecords().stream()
                 .map(dict -> BeanUtil.copyProperties(dict, ListDictVO.class))
@@ -59,8 +60,8 @@ public class SysDictController {
 
     @AccessLog("新增字典")
     @ApiOperation("新增字典")
-    @PostMapping("/dicts")
-    @PreAuthorize("hasAuthority('sys:dicts:create')")
+    @PostMapping("/create")
+    @PreAuthorize("hasAuthority('sys:dict:create') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.CREATED)
     public IdVO createDict(@Validated @RequestBody DictQuery dictQuery) {
         return new IdVO(dictService.createDict(dictQuery));
@@ -75,23 +76,22 @@ public class SysDictController {
 
     }*/
 
-    @AccessLog("更新字典")
+    /*@AccessLog("更新字典")
     @ApiOperation("更新字典")
-    @PreAuthorize("hasAuthority('sys:dicts:update')")
-    @PutMapping("/dicts/{id}")
+    @PreAuthorize("hasAuthority('sys:dict:update') or hasAuthority('admin')")
+    @PostMapping("/update")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateDictById(@NotBlank @PathVariable String id,
-                               @Validated @RequestBody DictQuery dictQuery) {
+    public void updateDictById(@Validated @RequestBody DictQuery dictQuery) {
         dictService.updateDictById(id, dictQuery);
-    }
+    }*/
 
     @AccessLog("删除字典")
     @ApiOperation("删除字典")
-    @DeleteMapping("/dicts/{id}")
-    @PreAuthorize("hasAuthority('sys:dicts:delete')")
+    @PostMapping("/delete")
+    @PreAuthorize("hasAuthority('sys:dict:delete')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteDictById(@NotBlank @PathVariable String id) {
-        dictService.deleteDictById(id);
+    public void deleteDictById(@Validated @RequestBody IdQuery query) {
+        dictService.deleteDictById(query.getId());
     }
 
     @AccessLog("缓存字典")
@@ -104,9 +104,9 @@ public class SysDictController {
 
     @AccessLog("通过dictType获得字典详情")
     @ApiOperation("通过dictType获得字典详情")
-    @GetMapping("/dictDetails")
-    @PreAuthorize("hasAuthority('sys:dicts:list')")
-    public DictDetailVO listDictDetails(@Validated DictTypeQuery query) {
+    @PostMapping("/listByDictType")
+    @PreAuthorize("hasAuthority('sys:dict:list') or hasAuthority('admin')")
+    public DictDetailVO listDictDetails(@Validated @RequestBody DictTypeQuery query) {
         List<SysDictEntity> dicts = dictService.list(new LambdaQueryWrapper<SysDictEntity>()
                 .eq(SysDictEntity::getDictType, query.getDictType())
                 .eq(SysDictEntity::getStatus, Dict.DictStatus.OK.getCode())

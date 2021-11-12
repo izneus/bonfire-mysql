@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author Izneus
- * @since 2021-07-25
+ * @since 2021-11-10
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -75,7 +75,7 @@ public class SysDictEntity implements Serializable {
     /**
      * 排序号
      */
-    private String dictSort;
+    private Integer dictSort;
 
     /**
      * 备注
