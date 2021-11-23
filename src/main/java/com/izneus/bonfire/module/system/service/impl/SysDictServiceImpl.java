@@ -38,8 +38,8 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDictEntity
                 new LambdaQueryWrapper<SysDictEntity>()
                         .like(StringUtils.hasText(query.getDictType()),
                                 SysDictEntity::getDictType, query.getDictType())
-                        .like(StringUtils.hasText(query.getDictValue()),
-                                SysDictEntity::getDictValue, query.getDictValue())
+                        .like(StringUtils.hasText(query.getDictLabel()),
+                                SysDictEntity::getDictLabel, query.getDictLabel())
                         .like(StringUtils.hasText(query.getStatus()),
                                 SysDictEntity::getStatus, query.getStatus())
                         .orderByDesc(SysDictEntity::getCreateTime)

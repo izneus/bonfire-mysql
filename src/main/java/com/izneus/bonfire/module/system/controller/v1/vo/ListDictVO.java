@@ -17,8 +17,8 @@ public class ListDictVO {
     @ApiModelProperty("字典类型")
     private String dictType;
 
-    @ApiModelProperty("字典编码")
-    private String dictCode;
+    @ApiModelProperty("字典标签")
+    private String dictLabel;
 
     @ApiModelProperty("字典值")
     private String dictValue;

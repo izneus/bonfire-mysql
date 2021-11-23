@@ -17,9 +17,9 @@ public class DictQuery {
     @NotBlank(message = "字典类型不能为空")
     private String dictType;
 
-    @ApiModelProperty("字典编码")
-    @NotBlank(message = "字典编码不能为空")
-    private String dictCode;
+    @ApiModelProperty("字典标签")
+    @NotBlank(message = "字典标签不能为空")
+    private String dictLabel;
 
     @ApiModelProperty("字典值")
     @NotBlank(message = "字典值不能为空")
