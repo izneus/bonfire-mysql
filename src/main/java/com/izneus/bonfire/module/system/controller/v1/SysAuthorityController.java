@@ -11,6 +11,7 @@ import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.ListAuthVO;
 import com.izneus.bonfire.module.system.entity.SysAuthorityEntity;
 import com.izneus.bonfire.module.system.service.SysAuthorityService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,8 +31,9 @@ import java.util.stream.Collectors;
  * @author Izneus
  * @since 2020-08-10
  */
+@Api(tags = "系统:权限")
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class SysAuthorityController {
 
@@ -39,9 +41,9 @@ public class SysAuthorityController {
 
     @AccessLog("权限列表")
     @ApiOperation("权限列表")
-    @GetMapping("/authorities")
-    @PreAuthorize("hasAuthority('sys:authorities:list')")
-    public BasePageVO<ListAuthVO> listAuthorities(@Validated ListAuthQuery query) {
+    @PostMapping("/list")
+    @PreAuthorize("hasAuthority('sys:auth:list') or hasAuthority('admin')")
+    public BasePageVO<ListAuthVO> listAuthorities(@Validated @RequestBody ListAuthQuery query) {
         Page<SysAuthorityEntity> page = authService.listAuthorities(query);
         // 组装vo
         List<ListAuthVO> rows = page.getRecords().stream().map(auth -> BeanUtil.copyProperties(auth, ListAuthVO.class))

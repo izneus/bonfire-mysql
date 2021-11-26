@@ -11,12 +11,15 @@ import lombok.Data;
 @ApiModel("权限列表VO")
 @Data
 public class ListAuthVO {
-    @ApiModelProperty("用户id")
-    private String userId;
-
-    @ApiModelProperty("角色名")
-    private String roleName;
+    @ApiModelProperty("权限id")
+    private String id;
 
     @ApiModelProperty("权限")
     private String authority;
+
+    @ApiModelProperty("备注")
+    private String remark;
+
+    @ApiModelProperty("权限类型")
+    private String type;
 }

@@ -28,13 +28,13 @@ public class SysAuthorityServiceImpl extends ServiceImpl<SysAuthorityMapper, Sys
                 new Page<>(query.getPageNum(), query.getPageSize()),
                 new LambdaQueryWrapper<SysAuthorityEntity>()
                         .eq(StrUtil.isNotBlank(query.getType()), SysAuthorityEntity::getType, query.getType())
-                        .and(lambdaQueryWrapper -> lambdaQueryWrapper
-                                .like(StrUtil.isNotBlank(query.getQuery()),
-                                        SysAuthorityEntity::getAuthority, query.getQuery())
-                                .or()
-                                .like(StrUtil.isNotBlank(query.getQuery()),
-                                        SysAuthorityEntity::getRemark, query.getQuery()))
-
+                        .and(StrUtil.isNotBlank(query.getQuery()),
+                                lambdaQueryWrapper -> lambdaQueryWrapper
+                                        .like(StrUtil.isNotBlank(query.getQuery()),
+                                                SysAuthorityEntity::getAuthority, query.getQuery())
+                                        .or()
+                                        .like(StrUtil.isNotBlank(query.getQuery()),
+                                                SysAuthorityEntity::getRemark, query.getQuery()))
         );
     }
 }
