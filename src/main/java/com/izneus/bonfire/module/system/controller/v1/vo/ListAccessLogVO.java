@@ -11,8 +11,11 @@ import lombok.Data;
 @ApiModel("访问日志列表VO")
 @Data
 public class ListAccessLogVO {
-    @ApiModelProperty("用户名")
+    @ApiModelProperty("请求者用户名")
     private String username;
+
+    @ApiModelProperty("请求者id")
+    private String createUser;
 
     @ApiModelProperty("客户端ip")
     private String clientIp;
@@ -23,6 +26,6 @@ public class ListAccessLogVO {
     @ApiModelProperty("系统")
     private String os;
 
-    @ApiModelProperty("请求耗时")
+    @ApiModelProperty("请求耗时,单位毫秒")
     private Long elapsedTime;
 }

@@ -1,6 +1,5 @@
 package com.izneus.bonfire.module.system.entity;
 
-import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.FieldFill;
@@ -15,7 +14,7 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author Izneus
- * @since 2021-07-21
+ * @since 2021-11-27
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -79,7 +78,7 @@ public class SysAccessLogEntity implements Serializable {
     /**
      * 访问经过的时间
      */
-    private BigDecimal elapsedTime;
+    private Long elapsedTime;
 
     /**
      * 请求参数

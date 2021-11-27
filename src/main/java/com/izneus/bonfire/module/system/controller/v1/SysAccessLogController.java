@@ -14,10 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,8 +27,8 @@ import java.util.stream.Collectors;
  * @author Izneus
  * @since 2020-08-08
  */
-@Api(tags = "访问日志")
-@RequestMapping("/api/v1")
+@Api(tags = "系统:访问日志")
+@RequestMapping("/api/v1/accessLog")
 @RestController
 @RequiredArgsConstructor
 public class SysAccessLogController {
@@ -40,10 +37,9 @@ public class SysAccessLogController {
 
     @AccessLog("访问日志列表")
     @ApiOperation("访问日志列表")
-    @GetMapping("/accessLogs")
-    @PreAuthorize("hasAuthority('sys:accessLogs:list')")
-    public BasePageVO<ListAccessLogVO> listUsers(@Validated ListAccessLogQuery query) {
-        // todo 测试时间字段
+    @PostMapping("/list")
+    @PreAuthorize("hasAuthority('sys:accessLog:list') or hasAuthority('admin')")
+    public BasePageVO<ListAccessLogVO> listUsers(@Validated @RequestBody ListAccessLogQuery query) {
         Page<SysAccessLogEntity> page = logService.listAccessLogs(query);
         // 组装vo
         List<ListAccessLogVO> rows = page.getRecords().stream()

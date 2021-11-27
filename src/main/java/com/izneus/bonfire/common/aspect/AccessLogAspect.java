@@ -8,8 +8,11 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.common.util.HttpContextUtil;
+import com.izneus.bonfire.module.security.CurrentUserUtil;
 import com.izneus.bonfire.module.system.entity.SysAccessLogEntity;
+import com.izneus.bonfire.module.system.entity.SysUserEntity;
 import com.izneus.bonfire.module.system.service.SysAccessLogService;
+import com.izneus.bonfire.module.system.service.SysUserService;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -32,9 +35,10 @@ import java.lang.reflect.Method;
 @RequiredArgsConstructor
 public class AccessLogAspect {
 
-    private final SysAccessLogService sysAccessLogService;
+    private final SysAccessLogService accessLogService;
+    private final SysUserService userService;
 
-//    ThreadLocal<Long> currentTime = new ThreadLocal<>();
+    private ThreadLocal<Long> currentTime = new ThreadLocal<>();
 
     /**
      * 配置切入点
@@ -45,6 +49,8 @@ public class AccessLogAspect {
 
     @Around("logPointcut()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
+        // 开始时间
+        currentTime.set(System.currentTimeMillis());
         // 先执行业务
         Object result = point.proceed();
         // 处理join point
@@ -53,6 +59,9 @@ public class AccessLogAspect {
     }
 
     private void handlePoint(ProceedingJoinPoint point) {
+        // 计算请求消耗时长
+        long elapsedTime = System.currentTimeMillis() - currentTime.get();
+        currentTime.remove();
         MethodSignature signature = (MethodSignature) point.getSignature();
         Method method = signature.getMethod();
         AccessLog annotation = method.getAnnotation(AccessLog.class);
@@ -82,8 +91,6 @@ public class AccessLogAspect {
         UserAgent ua = UserAgentUtil.parse(request.getHeader("User-Agent"));
         String browser = ua.getBrowser().toString();
         String os = ua.getOs().toString();
-        // todo 请求用户和请求耗费时间
-
         // 写库
         SysAccessLogEntity accessLogEntity = new SysAccessLogEntity();
         accessLogEntity.setMethod(methodName);
@@ -93,6 +100,13 @@ public class AccessLogAspect {
         accessLogEntity.setBrowser(browser);
         accessLogEntity.setOs(os);
         accessLogEntity.setUserAgent(request.getHeader("User-Agent"));
-        sysAccessLogService.save(accessLogEntity);
+        accessLogEntity.setElapsedTime(elapsedTime);
+        // 获取用户名
+        String userId = CurrentUserUtil.getFillUserId();
+        if (userId != null) {
+            SysUserEntity user = userService.getById(userId);
+            accessLogEntity.setUsername(user.getUsername());
+        }
+        accessLogService.save(accessLogEntity);
     }
 }
