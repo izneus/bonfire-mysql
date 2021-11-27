@@ -1,5 +1,6 @@
 package com.izneus.bonfire.module.system.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -26,9 +27,9 @@ public class SysAccessLogServiceImpl extends ServiceImpl<SysAccessLogMapper, Sys
         return page(
                 new Page<>(query.getPageNum(), query.getPageSize()),
                 new LambdaQueryWrapper<SysAccessLogEntity>()
-                        .ge(SysAccessLogEntity::getCreateTime, query.getStartTime())
-                        .le(SysAccessLogEntity::getCreateTime, query.getEndTime())
-                        .eq(SysAccessLogEntity::getClientIp, query.getClientIp())
+                        .ge(query.getStartTime() != null, SysAccessLogEntity::getCreateTime, query.getStartTime())
+                        .le(query.getEndTime() != null, SysAccessLogEntity::getCreateTime, query.getEndTime())
+                        .eq(StrUtil.isNotBlank(query.getClientIp()), SysAccessLogEntity::getClientIp, query.getClientIp())
                         .orderByDesc(SysAccessLogEntity::getCreateTime)
         );
 

@@ -53,13 +53,12 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFileEntity
 
     @Override
     public Page<SysFileEntity> listFiles(ListFileQuery query) {
-        boolean isTimes = query.getCreateTimes() != null && query.getCreateTimes().size() == 2;
         return page(
                 new Page<>(query.getPageNum(), query.getPageSize()),
                 new LambdaQueryWrapper<SysFileEntity>()
-                        .between(isTimes, SysFileEntity::getCreateTime,
-                                query.getCreateTimes().get(0), query.getCreateTimes().get(1))
-                        .and(wrapper -> wrapper
+                        .ge(query.getStartTime() != null, SysFileEntity::getCreateTime, query.getStartTime())
+                        .le(query.getEndTime() != null, SysFileEntity::getCreateTime, query.getEndTime())
+                        .and(StrUtil.isNotBlank(query.getQuery()), wrapper -> wrapper
                                 .like(StrUtil.isNotBlank(query.getQuery()),
                                         SysFileEntity::getFilename, query.getQuery())
                                 .or()

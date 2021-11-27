@@ -4,8 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.common.base.BasePageVO;
-import com.izneus.bonfire.module.system.controller.v1.query.FileQuery;
-import com.izneus.bonfire.module.system.controller.v1.query.ListFileQuery;
+import com.izneus.bonfire.module.system.controller.v1.query.*;
 import com.izneus.bonfire.module.system.controller.v1.vo.FileVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.ListFileVO;
@@ -44,12 +43,10 @@ public class SysFileController {
 
     @AccessLog("文件列表")
     @ApiOperation("文件列表")
-    @GetMapping("/files")
-    @PreAuthorize("hasAuthority('sys:files:list')")
-    public BasePageVO<ListFileVO> listFiles(@Validated ListFileQuery query) {
+    @PostMapping("/list")
+    @PreAuthorize("hasAuthority('sys:file:list') or hasAuthority('admin')")
+    public BasePageVO<ListFileVO> listFiles(@Validated @RequestBody ListFileQuery query) {
         // todo 文件上传可能会有权限控制，比如admin看所有，user看自己上传的
-        // todo validated list 参数
-        // 检查是否包含起止时间
         Page<SysFileEntity> page = fileService.listFiles(query);
         List<ListFileVO> rows = page.getRecords().stream()
                 .map(file -> BeanUtil.copyProperties(file, ListFileVO.class))
@@ -57,35 +54,44 @@ public class SysFileController {
         return new BasePageVO<>(page, rows);
     }
 
-    @AccessLog("文件详情")
-    @ApiOperation("文件详情")
-    @GetMapping("/files/{id}")
-    @PreAuthorize("hasAuthority('sys:files:get')")
-    public FileVO getUserById(@NotBlank @PathVariable String id) {
+    @AccessLog("文件信息详情")
+    @ApiOperation("文件信息详情")
+    @PostMapping("/get")
+    @PreAuthorize("hasAuthority('sys:file:get') or hasAuthority('admin')")
+    public FileVO getFileById(@Validated @RequestBody IdQuery query) {
         // todo 文件上传可能会有权限控制，比如admin看所有，user看自己上传的
-        SysFileEntity fileEntity = fileService.getById(id);
+        SysFileEntity fileEntity = fileService.getById(query.getId());
         return BeanUtil.copyProperties(fileEntity, FileVO.class);
     }
 
     @AccessLog("更新文件")
     @ApiOperation("更新文件")
-    @PutMapping("/files/{id}")
-    @PreAuthorize("hasAuthority('sys:files:update')")
+    @PostMapping("/update")
+    @PreAuthorize("hasAuthority('sys:file:update') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateAuthorityById(@NotBlank @PathVariable String id, @Validated @RequestBody FileQuery query) {
+    public void updateFileById(@Validated @RequestBody UpdateFileQuery query) {
         // todo 这里只是简单的更新文件表中的记录，并不修改硬盘上保存的文件
         SysFileEntity fileEntity = BeanUtil.copyProperties(query, SysFileEntity.class);
-        fileEntity.setId(id);
         fileService.updateById(fileEntity);
     }
 
     @AccessLog("删除文件")
     @ApiOperation("删除文件")
-    @DeleteMapping("/files/{id}")
-    @PreAuthorize("hasAuthority('sys:files:delete')")
+    @PostMapping("/delete")
+    @PreAuthorize("hasAuthority('sys:file:delete') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAuthorityById(@NotBlank @PathVariable String id) {
-        fileService.removeById(id);
+    public void deleteFileById(@Validated @RequestBody IdQuery query) {
+        fileService.removeById(query.getId());
+        // todo 有需要也可以继续删除硬盘上的文件
+    }
+
+    @AccessLog("批量删除文件")
+    @ApiOperation("批量删除文件")
+    @PostMapping("/deleteBatch")
+    @PreAuthorize("hasAuthority('sys:file:delete') or hasAuthority('admin')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteFilesByIds(@Validated @RequestBody IdsQuery query) {
+        fileService.removeByIds(query.getIds());
         // todo 有需要也可以继续删除硬盘上的文件
     }
 
