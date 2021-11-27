@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.izneus.bonfire.module.system.controller.v1.query.DictQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.ListDictQuery;
+import com.izneus.bonfire.module.system.controller.v1.query.UpdateDictQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.CacheDictVO;
 import com.izneus.bonfire.module.system.entity.SysDictEntity;
 import com.izneus.bonfire.module.system.mapper.SysDictMapper;
@@ -56,9 +57,8 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDictEntity
 
     @Override
     @CacheEvict(key = "'all'")
-    public void updateDictById(String dictId, DictQuery query) {
+    public void updateDictById(UpdateDictQuery query) {
         SysDictEntity dictEntity = BeanUtil.copyProperties(query, SysDictEntity.class);
-        dictEntity.setId(dictId);
         updateById(dictEntity);
     }
 
@@ -66,6 +66,12 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDictEntity
     @CacheEvict(key = "'all'")
     public void deleteDictById(String dictId) {
         removeById(dictId);
+    }
+
+    @Override
+    @CacheEvict(key = "'all'")
+    public void deleteDictsByIds(List<String> ids) {
+        removeByIds(ids);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.izneus.bonfire.module.system.controller.v1.query.DictQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.ListDictQuery;
+import com.izneus.bonfire.module.system.controller.v1.query.UpdateDictQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.CacheDictVO;
 import com.izneus.bonfire.module.system.entity.SysDictEntity;
 
@@ -37,10 +38,9 @@ public interface SysDictService extends IService<SysDictEntity> {
     /**
      * 更新字典
      *
-     * @param dictId id
      * @param query  参数
      */
-    void updateDictById(String dictId, DictQuery query);
+    void updateDictById(UpdateDictQuery query);
 
     /**
      * 删除字典
@@ -48,6 +48,13 @@ public interface SysDictService extends IService<SysDictEntity> {
      * @param dictId id
      */
     void deleteDictById(String dictId);
+
+    /**
+     * 批量删除字典
+     *
+     * @param ids id列表
+     */
+    void deleteDictsByIds(List<String> ids);
 
     /**
      * 缓存所有字典
