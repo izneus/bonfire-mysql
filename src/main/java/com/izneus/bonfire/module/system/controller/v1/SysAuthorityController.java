@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.common.base.BasePageVO;
 import com.izneus.bonfire.module.system.controller.v1.query.AuthQuery;
+import com.izneus.bonfire.module.system.controller.v1.query.IdQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.ListAuthQuery;
+import com.izneus.bonfire.module.system.controller.v1.query.UpdateAuthQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.AuthVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.ListAuthVO;
@@ -53,8 +55,8 @@ public class SysAuthorityController {
 
     @AccessLog("新增权限")
     @ApiOperation("新增权限")
-    @PostMapping("/authorities")
-    @PreAuthorize("hasAuthority('sys:authorities:create')")
+    @PostMapping("/create")
+    @PreAuthorize("hasAuthority('sys:auth:create') or hasAuthority('admin')")
     public IdVO createAuthority(@Validated @RequestBody AuthQuery authQuery) {
         SysAuthorityEntity authorityEntity = BeanUtil.copyProperties(authQuery, SysAuthorityEntity.class);
         String id = authService.save(authorityEntity) ? authorityEntity.getId() : null;
@@ -63,10 +65,10 @@ public class SysAuthorityController {
 
     @AccessLog("权限详情")
     @ApiOperation("权限详情")
-    @GetMapping("/authorities/{id}")
-    @PreAuthorize("hasAuthority('sys:authorities:get')")
-    public AuthVO getAuthorityById(@NotBlank @PathVariable String id) {
-        SysAuthorityEntity authorityEntity = authService.getById(id);
+    @PostMapping("/get")
+    @PreAuthorize("hasAuthority('sys:auth:get') or hasAuthority('admin')")
+    public AuthVO getAuthorityById(@Validated @RequestBody IdQuery query) {
+        SysAuthorityEntity authorityEntity = authService.getById(query.getId());
         if (authorityEntity == null) {
             return null;
         }
@@ -75,21 +77,21 @@ public class SysAuthorityController {
 
     @AccessLog("更新权限")
     @ApiOperation("更新权限")
-    @PutMapping("/authorities/{id}")
-    @PreAuthorize("hasAuthority('sys:authorities:update')")
+    @PostMapping("/update")
+    @PreAuthorize("hasAuthority('sys:auth:update') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateAuthorityById(@NotBlank @PathVariable String id, @Validated @RequestBody AuthQuery authQuery) {
-        SysAuthorityEntity authorityEntity = BeanUtil.copyProperties(authQuery, SysAuthorityEntity.class);
-        authorityEntity.setId(id);
+    public void updateAuthorityById(@Validated @RequestBody UpdateAuthQuery query) {
+        SysAuthorityEntity authorityEntity = BeanUtil.copyProperties(query, SysAuthorityEntity.class);
+        authorityEntity.setId(query.getId());
         authService.updateById(authorityEntity);
     }
 
     @AccessLog("删除权限")
     @ApiOperation("删除权限")
-    @DeleteMapping("/authorities/{id}")
-    @PreAuthorize("hasAuthority('sys:authorities:delete')")
+    @PostMapping("/delete")
+    @PreAuthorize("hasAuthority('sys:auth:delete')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAuthorityById(@NotBlank @PathVariable String id) {
-        authService.removeById(id);
+    public void deleteAuthorityById(@Validated @RequestBody IdQuery query) {
+        authService.removeById(query.getId());
     }
 }
