@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.izneus</groupId>
     <artifactId>bonfire</artifactId>
-    <version>0.3.1-SNAPSHOT</version>
+    <version>0.3.2-SNAPSHOT</version>
     <name>bonfire</name>
     <description>中小企业级信息系统快速开发框架</description>
 
@@ -20,6 +20,7 @@
         <mybatisplus.version>3.3.2</mybatisplus.version>
         <ojdbc.version>19.3.0.0</ojdbc.version>
         <jjwt.version>0.11.2</jjwt.version>
+        <skipTests>true</skipTests>
     </properties>
 
     <profiles>
