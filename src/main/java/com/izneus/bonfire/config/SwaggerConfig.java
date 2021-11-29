@@ -14,9 +14,11 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import static java.util.Collections.singletonList;
+import static springfox.documentation.builders.PathSelectors.regex;
 
 /**
  * swagger配置文件，配合swagger-ui使用，用不习惯的话，另一个可以选择的ui是knife4j
+ * 在线访问地址: http://localhost:8080/swagger-ui.html
  *
  * @author Izneus
  * @date 2020/06/28
@@ -31,8 +33,8 @@ public class SwaggerConfig {
                 .groupName("v1")
                 .select()
                 .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
-                .paths(PathSelectors.any())
-                // .paths(regex("/person/v1.0.*"))
+                // .paths(PathSelectors.any())
+                .paths(regex("/api/v1/.*"))
                 .build()
                 .globalOperationParameters(
                         singletonList(new ParameterBuilder()
@@ -51,15 +53,16 @@ public class SwaggerConfig {
                 .apiInfo(apiInfo())
                 .groupName("v2")
                 .select()
-                .apis(RequestHandlerSelectors.any())
+                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
+                .paths(regex("/api/v2/.*"))
                 .paths(PathSelectors.any())
                 .build();
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("BONFIRE API DOC")
-                .description("bonfire api文档")
+                .title("Bonfire API Doc")
+                .description("后端快速开发框架Bonfire的API文档，项目官网Url：[todo]")
                 .version("0.0.1")
                 .build();
     }
