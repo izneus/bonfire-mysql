@@ -88,7 +88,7 @@ public class SysAuthorityController {
     @AccessLog("删除权限")
     @ApiOperation("删除权限")
     @PostMapping("/delete")
-    @PreAuthorize("hasAuthority('sys:auth:delete')")
+    @PreAuthorize("hasAuthority('sys:auth:delete') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAuthorityById(@Validated @RequestBody IdQuery query) {
         authService.removeById(query.getId());
