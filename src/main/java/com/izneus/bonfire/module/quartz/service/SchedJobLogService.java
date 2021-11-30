@@ -14,6 +14,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2020-11-05
  */
 public interface SchedJobLogService extends IService<SchedJobLogEntity> {
-    Page<SchedJobLogEntity> listLogsByJobId(String jobId, ListLogQuery query);
+    Page<SchedJobLogEntity> listLogsByJobId(ListLogQuery query);
 
 }

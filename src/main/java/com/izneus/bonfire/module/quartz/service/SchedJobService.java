@@ -3,6 +3,7 @@ package com.izneus.bonfire.module.quartz.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.module.quartz.controller.v1.query.JobQuery;
 import com.izneus.bonfire.module.quartz.controller.v1.query.ListJobQuery;
+import com.izneus.bonfire.module.quartz.controller.v1.query.UpdateJobQuery;
 import com.izneus.bonfire.module.quartz.entity.SchedJobEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -65,9 +66,8 @@ public interface SchedJobService extends IService<SchedJobEntity> {
     /**
      * 更新任务
      *
-     * @param id    任务id
      * @param query 任务信息
      */
-    void updateJob(String id, JobQuery query);
+    void updateJob(UpdateJobQuery query);
 
 }

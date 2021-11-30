@@ -92,7 +92,7 @@ public class SysDictController {
 
     @AccessLog("批量删除字典")
     @ApiOperation("批量删除字典")
-    @PostMapping("/deleteBatch")
+    @PostMapping("/batchDelete")
     @PreAuthorize("hasAuthority('sys:dict:delete') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteDictById(@Validated @RequestBody IdsQuery query) {

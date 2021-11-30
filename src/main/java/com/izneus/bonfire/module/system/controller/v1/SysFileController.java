@@ -87,7 +87,7 @@ public class SysFileController {
 
     @AccessLog("批量删除文件")
     @ApiOperation("批量删除文件")
-    @PostMapping("/deleteBatch")
+    @PostMapping("/batchDelete")
     @PreAuthorize("hasAuthority('sys:file:delete') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteFilesByIds(@Validated @RequestBody IdsQuery query) {

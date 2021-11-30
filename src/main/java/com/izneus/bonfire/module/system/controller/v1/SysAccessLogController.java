@@ -70,10 +70,10 @@ public class SysAccessLogController {
 
     @AccessLog("批量删除访问日志")
     @ApiOperation("批量删除访问日志")
-    @PostMapping("/deleteBatch")
+    @PostMapping("/batchDelete")
     @PreAuthorize("hasAuthority('sys:accessLog:delete') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteBatch(@Validated @RequestBody IdsQuery query) {
+    public void batchDelete(@Validated @RequestBody IdsQuery query) {
         logService.removeByIds(query.getIds());
     }
 

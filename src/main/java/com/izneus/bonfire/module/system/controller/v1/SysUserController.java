@@ -111,10 +111,10 @@ public class SysUserController {
 
     @AccessLog("批量删除用户")
     @ApiOperation("批量删除用户")
-    @PostMapping("/deleteBatch")
+    @PostMapping("/batchDelete")
     @PreAuthorize("hasAuthority('sys:user:delete') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteBatch(@Validated @RequestBody IdsQuery query) {
+    public void batchDelete(@Validated @RequestBody IdsQuery query) {
         userService.deleteUserBatch(query.getIds());
     }
 

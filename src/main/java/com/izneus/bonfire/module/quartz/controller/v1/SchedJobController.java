@@ -1,6 +1,5 @@
 package com.izneus.bonfire.module.quartz.controller.v1;
 
-
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
@@ -8,12 +7,15 @@ import com.izneus.bonfire.common.base.BasePageVO;
 import com.izneus.bonfire.module.quartz.controller.v1.query.JobQuery;
 import com.izneus.bonfire.module.quartz.controller.v1.query.ListJobQuery;
 import com.izneus.bonfire.module.quartz.controller.v1.query.ListLogQuery;
+import com.izneus.bonfire.module.quartz.controller.v1.query.UpdateJobQuery;
 import com.izneus.bonfire.module.quartz.controller.v1.vo.ListJobVO;
 import com.izneus.bonfire.module.quartz.controller.v1.vo.ListLogVO;
 import com.izneus.bonfire.module.quartz.entity.SchedJobEntity;
 import com.izneus.bonfire.module.quartz.entity.SchedJobLogEntity;
 import com.izneus.bonfire.module.quartz.service.SchedJobLogService;
 import com.izneus.bonfire.module.quartz.service.SchedJobService;
+import com.izneus.bonfire.module.system.controller.v1.query.IdQuery;
+import com.izneus.bonfire.module.system.controller.v1.query.IdsQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -37,18 +39,17 @@ import java.util.stream.Collectors;
  */
 @Api(tags = "系统:调度任务")
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/job")
 @RequiredArgsConstructor
 public class SchedJobController {
 
     private final SchedJobService jobService;
-    private final SchedJobLogService jobLogService;
 
     @AccessLog("任务列表")
     @ApiOperation("任务列表")
-    @GetMapping("/jobs")
-    @PreAuthorize("hasAuthority('sched:jobs:list')")
-    public BasePageVO<ListJobVO> listJobs(@Validated ListJobQuery query) {
+    @PostMapping("/list")
+    @PreAuthorize("hasAuthority('sched:job:list') or hasAuthority('admin')")
+    public BasePageVO<ListJobVO> listJobs(@Validated @RequestBody ListJobQuery query) {
         Page<SchedJobEntity> page = jobService.listJobs(query);
         List<ListJobVO> rows = page.getRecords().stream()
                 .map(job -> BeanUtil.copyProperties(job, ListJobVO.class))
@@ -58,8 +59,8 @@ public class SchedJobController {
 
     @AccessLog("新增任务")
     @ApiOperation("新增任务")
-    @PostMapping("/jobs")
-    @PreAuthorize("hasAuthority('sched:jobs:create')")
+    @PostMapping("/create")
+    @PreAuthorize("hasAuthority('sched:job:create') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.CREATED)
     public IdVO createJob(@Validated @RequestBody JobQuery query) {
         String id = jobService.createJob(query);
@@ -78,59 +79,44 @@ public class SchedJobController {
 
     @AccessLog("更新任务")
     @ApiOperation("更新任务")
-    @PreAuthorize("hasAuthority('sys:jobs:update')")
-    @PutMapping("/jobs/{id}")
+    @PreAuthorize("hasAuthority('sched:job:update') or hasAuthority('admin')")
+    @PostMapping("/update")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateJob(@NotBlank @PathVariable String id,
-                          @Validated @RequestBody JobQuery query) {
-        jobService.updateJob(id, query);
+    public void updateJob(@Validated @RequestBody UpdateJobQuery query) {
+        jobService.updateJob(query);
     }
 
     @AccessLog("批量暂停任务")
     @ApiOperation("批量暂停任务")
-    @PostMapping("/jobs:batchPause")
-    @PreAuthorize("hasAuthority('sched:jobs:pause')")
-    public void pauseJobs(@RequestBody List<String> ids) {
-        jobService.batchPauseJobs(ids);
+    @PostMapping("/batchPause")
+    @PreAuthorize("hasAuthority('sched:job:pause') or hasAuthority('admin')")
+    public void pauseJobs(@Validated @RequestBody IdsQuery query) {
+        jobService.batchPauseJobs(query.getIds());
     }
 
     @AccessLog("批量恢复任务")
     @ApiOperation("批量恢复任务")
-    @PostMapping("/jobs:batchResume")
-    @PreAuthorize("hasAuthority('sched:jobs:resume')")
-    public void resumeJobs(@RequestBody List<String> ids) {
-        jobService.batchResumeJobs(ids);
+    @PostMapping("/batchResume")
+    @PreAuthorize("hasAuthority('sched:job:resume') or hasAuthority('admin')")
+    public void resumeJobs(@Validated @RequestBody IdsQuery query) {
+        jobService.batchResumeJobs(query.getIds());
     }
 
     @AccessLog("批量删除任务")
     @ApiOperation("批量删除任务")
-    @PostMapping("/jobs:batchDelete")
-    @PreAuthorize("hasAuthority('sched:jobs:delete')")
-    public void deleteJobs(@RequestBody List<String> ids) {
-        jobService.batchDeleteJobs(ids);
+    @PostMapping("/batchDelete")
+    @PreAuthorize("hasAuthority('sched:job:delete') or hasAuthority('admin')")
+    public void deleteJobs(@Validated @RequestBody IdsQuery query) {
+        jobService.batchDeleteJobs(query.getIds());
     }
 
     @AccessLog("删除任务")
     @ApiOperation("删除任务")
-    @DeleteMapping("/jobs/{id}")
-    @PreAuthorize("hasAuthority('sched:jobs:delete')")
+    @PostMapping("/delete")
+    @PreAuthorize("hasAuthority('sched:job:delete') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteJob(@NotBlank @PathVariable String id) {
-        jobService.deleteJob(id);
+    public void deleteJob(@Validated @RequestBody IdQuery query) {
+        jobService.deleteJob(query.getId());
     }
-
-    @AccessLog("任务日志列表")
-    @ApiOperation("任务日志列表")
-    @GetMapping("/jobs/{jobId}/logs")
-    @PreAuthorize("hasAuthority('sched:logs:list')")
-    public BasePageVO<ListLogVO> listLogs(@NotBlank @PathVariable String jobId, @Validated ListLogQuery query) {
-        Page<SchedJobLogEntity> page = jobLogService.listLogsByJobId(jobId, query);
-        // 查询结果转换成vo
-        List<ListLogVO> rows = page.getRecords().stream()
-                .map(log -> BeanUtil.copyProperties(log, ListLogVO.class))
-                .collect(Collectors.toList());
-        return new BasePageVO<>(page, rows);
-    }
-
 
 }

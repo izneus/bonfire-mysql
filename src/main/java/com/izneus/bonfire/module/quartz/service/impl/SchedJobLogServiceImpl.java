@@ -21,11 +21,11 @@ import org.springframework.stereotype.Service;
 public class SchedJobLogServiceImpl extends ServiceImpl<SchedJobLogMapper, SchedJobLogEntity> implements SchedJobLogService {
 
     @Override
-    public Page<SchedJobLogEntity> listLogsByJobId(String jobId, ListLogQuery query) {
+    public Page<SchedJobLogEntity> listLogsByJobId(ListLogQuery query) {
         return page(
                 new Page<>(query.getPageNum(), query.getPageSize()),
                 new LambdaQueryWrapper<SchedJobLogEntity>()
-                        .eq(SchedJobLogEntity::getJobId, jobId)
+                        .eq(SchedJobLogEntity::getJobId, query.getId())
                         .orderByDesc(SchedJobLogEntity::getCreateTime)
         );
     }
