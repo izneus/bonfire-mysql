@@ -8,10 +8,7 @@ import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.common.base.BasePageVO;
 import com.izneus.bonfire.common.constant.Dict;
 import com.izneus.bonfire.module.system.controller.v1.query.*;
-import com.izneus.bonfire.module.system.controller.v1.vo.CacheDictVO;
-import com.izneus.bonfire.module.system.controller.v1.vo.DictDetailVO;
-import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
-import com.izneus.bonfire.module.system.controller.v1.vo.ListDictVO;
+import com.izneus.bonfire.module.system.controller.v1.vo.*;
 import com.izneus.bonfire.module.system.entity.SysDictEntity;
 import com.izneus.bonfire.module.system.service.SysDictService;
 import com.izneus.bonfire.module.system.service.dto.DictDetailDTO;
@@ -61,6 +58,18 @@ public class SysDictController {
     @ResponseStatus(HttpStatus.CREATED)
     public IdVO createDict(@Validated @RequestBody DictQuery dictQuery) {
         return new IdVO(dictService.createDict(dictQuery));
+    }
+
+    @AccessLog("字典详情")
+    @ApiOperation("字典详情")
+    @PostMapping("/get")
+    @PreAuthorize("hasAuthority('sys:dict:get') or hasAuthority('admin')")
+    public GetDictVO getDictById(@Validated @RequestBody IdQuery query) {
+        SysDictEntity dictEntity = dictService.getById(query.getId());
+        if (dictEntity == null) {
+            return null;
+        }
+        return BeanUtil.copyProperties(dictEntity, GetDictVO.class);
     }
 
     /// 字典一般没什么详情好看的

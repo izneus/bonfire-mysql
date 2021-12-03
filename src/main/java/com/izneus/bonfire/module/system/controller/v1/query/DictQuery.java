@@ -13,6 +13,9 @@ import javax.validation.constraints.NotBlank;
 @ApiModel("字典列表dto")
 @Data
 public class DictQuery {
+    @ApiModelProperty("字典id")
+    private String id;
+
     @ApiModelProperty("字典类型")
     @NotBlank(message = "字典类型不能为空")
     private String dictType;

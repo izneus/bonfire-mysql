@@ -17,8 +17,20 @@ public class ListAccessLogVO {
     @ApiModelProperty("请求者id")
     private String createUser;
 
+    @ApiModelProperty("日志id")
+    private String id;
+
+    @ApiModelProperty("方法名称")
+    private String method;
+
+    @ApiModelProperty("用户代理")
+    private String userAgent;
+
     @ApiModelProperty("客户端ip")
     private String clientIp;
+
+    @ApiModelProperty("注解描述")
+    private String description;
 
     @ApiModelProperty("浏览器")
     private String browser;
@@ -26,6 +38,9 @@ public class ListAccessLogVO {
     @ApiModelProperty("系统")
     private String os;
 
-    @ApiModelProperty("请求耗时,单位毫秒")
+    @ApiModelProperty("备注")
+    private String remark;
+
+    @ApiModelProperty("请求耗时，单位毫秒")
     private Long elapsedTime;
 }

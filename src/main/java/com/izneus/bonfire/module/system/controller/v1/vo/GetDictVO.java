@@ -21,6 +21,9 @@ public class GetDictVO {
     @ApiModelProperty("字典值")
     private String dictValue;
 
+    @ApiModelProperty("字典标签")
+    private String dictLabel;
+
     @ApiModelProperty("排序号")
     private String dictSort;
 

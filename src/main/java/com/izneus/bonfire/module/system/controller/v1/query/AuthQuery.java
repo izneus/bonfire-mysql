@@ -13,6 +13,9 @@ import javax.validation.constraints.NotBlank;
 @ApiModel("权限Query")
 @Data
 public class AuthQuery {
+    @ApiModelProperty("权限id")
+    private String id;
+
     @ApiModelProperty("权限名称")
     @NotBlank(message = "权限名不能为空")
     private String authority;

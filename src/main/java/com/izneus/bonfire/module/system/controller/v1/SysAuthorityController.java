@@ -4,10 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.common.base.BasePageVO;
-import com.izneus.bonfire.module.system.controller.v1.query.AuthQuery;
-import com.izneus.bonfire.module.system.controller.v1.query.IdQuery;
-import com.izneus.bonfire.module.system.controller.v1.query.ListAuthQuery;
-import com.izneus.bonfire.module.system.controller.v1.query.UpdateAuthQuery;
+import com.izneus.bonfire.module.system.controller.v1.query.*;
 import com.izneus.bonfire.module.system.controller.v1.vo.AuthVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.ListAuthVO;
@@ -92,5 +89,14 @@ public class SysAuthorityController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAuthorityById(@Validated @RequestBody IdQuery query) {
         authService.removeById(query.getId());
+    }
+
+    @AccessLog("批量删除权限")
+    @ApiOperation("批量删除权限")
+    @PostMapping("/batchDelete")
+    @PreAuthorize("hasAuthority('sys:auth:delete') or hasAuthority('admin')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAuthorityById(@Validated @RequestBody IdsQuery query) {
+        authService.deleteAuthoritiesByIds(query.getIds());
     }
 }

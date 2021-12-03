@@ -8,7 +8,10 @@ import com.izneus.bonfire.module.system.controller.v1.query.ListAuthQuery;
 import com.izneus.bonfire.module.system.entity.SysAuthorityEntity;
 import com.izneus.bonfire.module.system.mapper.SysAuthorityMapper;
 import com.izneus.bonfire.module.system.service.SysAuthorityService;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -36,5 +39,10 @@ public class SysAuthorityServiceImpl extends ServiceImpl<SysAuthorityMapper, Sys
                                         .like(StrUtil.isNotBlank(query.getQuery()),
                                                 SysAuthorityEntity::getRemark, query.getQuery()))
         );
+    }
+
+    @Override
+    public void deleteAuthoritiesByIds(List<String> ids) {
+        removeByIds(ids);
     }
 }
