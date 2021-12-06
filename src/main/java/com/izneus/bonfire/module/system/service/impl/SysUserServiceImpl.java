@@ -101,10 +101,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         // 更新用户表
         SysUserEntity userEntity = BeanUtil.copyProperties(query, SysUserEntity.class);
         updateById(userEntity);
-        /// 更新用户角色表，先删除现有角色信息，再重新插入新角色
-        /*userRoleService.remove(new LambdaQueryWrapper<SysUserRoleEntity>()
-                .eq(SysUserRoleEntity::getUserId, query.getId()));
-        saveUserRoles(query.getId(), query.getRoleIds());*/
+        saveUserRoles(query.getId(), query.getRoleIds());
     }
 
     @Override
@@ -200,18 +197,32 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         redisUtil.del(key);
     }
 
-    private void saveUserRoles(String userId, List<String> roleIds) {
+    @Override
+    public void saveUserRoles(String userId, List<String> roleIds) {
         if (userId == null) {
             return;
         }
+        // 先删除该用户之前的所有角色信息
+        userRoleService.remove(new LambdaQueryWrapper<SysUserRoleEntity>()
+                .eq(SysUserRoleEntity::getUserId, userId));
+        //
         if (roleIds != null && roleIds.size() > 0) {
-            List<SysUserRoleEntity> userRoles = new ArrayList<>();
+            /// 提供一种for循环的写法，仅供参考
+            /*List<SysUserRoleEntity> userRoles = new ArrayList<>();
             for (String roleId : roleIds) {
                 SysUserRoleEntity userRoleEntity = new SysUserRoleEntity();
                 userRoleEntity.setUserId(userId);
                 userRoleEntity.setRoleId(roleId);
                 userRoles.add(userRoleEntity);
-            }
+            }*/
+            List<SysUserRoleEntity> userRoles = roleIds.stream()
+                    .map(roleId -> {
+                        SysUserRoleEntity userRoleEntity = new SysUserRoleEntity();
+                        userRoleEntity.setUserId(userId);
+                        userRoleEntity.setRoleId(roleId);
+                        return userRoleEntity;
+                    }).collect(Collectors.toList());
+
             userRoleService.saveBatch(userRoles);
         }
     }

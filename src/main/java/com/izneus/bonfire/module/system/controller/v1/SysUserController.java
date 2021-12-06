@@ -205,6 +205,7 @@ public class SysUserController {
         return cityService.list();
     }
 
+    /// 暂时关闭
     /*@AccessLog("当前认证用户信息")
     @ApiOperation("当前认证用户信息")
     @GetMapping("/user")
@@ -213,5 +214,13 @@ public class SysUserController {
         UserVO userVO = userService.getUserById(userId);
         return BeanUtil.copyProperties(userVO, AuthUserVO.class);
     }*/
+
+    @AccessLog("用户设置角色")
+    @ApiOperation("用户设置角色")
+    @PostMapping("/setRole")
+    @PreAuthorize("hasAuthority('sys:user:create') or hasAuthority('admin')")
+    public void setRole(@Validated @RequestBody SetUserRoleQuery query) {
+        userService.saveUserRoles(query.getUserId(), query.getRoleIds());
+    }
 
 }

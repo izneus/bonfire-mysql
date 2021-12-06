@@ -96,4 +96,12 @@ public interface SysUserService extends IService<SysUserEntity> {
      * @param userId 用户id
      */
     void kickOut(String userId);
+
+    /**
+     * 保存用户和角色关联信息
+     *
+     * @param userId  用户id
+     * @param roleIds 角色id列表
+     */
+    void saveUserRoles(String userId, List<String> roleIds);
 }
