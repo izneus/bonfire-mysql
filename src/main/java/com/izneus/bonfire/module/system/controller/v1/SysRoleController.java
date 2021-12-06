@@ -5,9 +5,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.common.base.BasePageVO;
 import com.izneus.bonfire.module.system.controller.v1.query.*;
-import com.izneus.bonfire.module.system.controller.v1.vo.RoleVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.ListRoleVO;
+import com.izneus.bonfire.module.system.controller.v1.vo.RoleVO;
 import com.izneus.bonfire.module.system.entity.SysRoleEntity;
 import com.izneus.bonfire.module.system.service.SysRoleService;
 import io.swagger.annotations.Api;
@@ -18,7 +18,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.stream.Collectors;
 
