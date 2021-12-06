@@ -10,9 +10,12 @@ import java.util.List;
  * @author Izneus
  * @date 2020/09/01
  */
-@ApiModel("设置角色权限query")
+@ApiModel("角色设置权限query")
 @Data
 public class RoleAuthQuery {
+    @ApiModelProperty("角色id")
+    private String roleId;
+
     @ApiModelProperty("权限id列表")
     private List<String> authIds;
 }

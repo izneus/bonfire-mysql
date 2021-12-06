@@ -4,9 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.common.base.BasePageVO;
-import com.izneus.bonfire.module.system.controller.v1.query.RoleAuthQuery;
-import com.izneus.bonfire.module.system.controller.v1.query.RoleQuery;
-import com.izneus.bonfire.module.system.controller.v1.query.ListRoleQuery;
+import com.izneus.bonfire.module.system.controller.v1.query.*;
 import com.izneus.bonfire.module.system.controller.v1.vo.RoleVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.ListRoleVO;
@@ -42,9 +40,9 @@ public class SysRoleController {
 
     @AccessLog("角色列表")
     @ApiOperation("角色列表")
-    @GetMapping("/list")
+    @PostMapping("/list")
     @PreAuthorize("hasAuthority('sys:role:list') or hasAuthority('admin')")
-    public BasePageVO<ListRoleVO> listRoles(@Validated ListRoleQuery query) {
+    public BasePageVO<ListRoleVO> listRoles(@Validated @RequestBody ListRoleQuery query) {
         Page<SysRoleEntity> page = roleService.listRoles(query);
         // 组装vo
         List<ListRoleVO> rows = page.getRecords().stream()
@@ -55,8 +53,8 @@ public class SysRoleController {
 
     @AccessLog("新增角色")
     @ApiOperation("新增角色")
-    @PostMapping("/roles")
-    @PreAuthorize("hasAuthority('sys:roles:create')")
+    @PostMapping("/create")
+    @PreAuthorize("hasAuthority('sys:role:create') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.CREATED)
     public IdVO createRole(@Validated @RequestBody RoleQuery roleQuery) {
         SysRoleEntity roleEntity = BeanUtil.copyProperties(roleQuery, SysRoleEntity.class);
@@ -66,10 +64,10 @@ public class SysRoleController {
 
     @AccessLog("角色详情")
     @ApiOperation("角色详情")
-    @GetMapping("/roles/{id}")
-    @PreAuthorize("hasAuthority('sys:roles:get')")
-    public RoleVO getRoleById(@NotBlank @PathVariable String id) {
-        SysRoleEntity roleEntity = roleService.getById(id);
+    @PostMapping("/get")
+    @PreAuthorize("hasAuthority('sys:role:get') or hasAuthority('admin')")
+    public RoleVO getRoleById(@Validated @RequestBody IdQuery query) {
+        SysRoleEntity roleEntity = roleService.getById(query.getId());
         if (roleEntity == null) {
             return null;
         }
@@ -78,30 +76,29 @@ public class SysRoleController {
 
     @AccessLog("更新角色")
     @ApiOperation("更新角色")
-    @PutMapping("/roles/{id}")
-    @PreAuthorize("hasAuthority('sys:roles:update')")
+    @PostMapping("/update")
+    @PreAuthorize("hasAuthority('sys:role:update') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateRoleById(@NotBlank @PathVariable String id, @Validated @RequestBody RoleQuery roleQuery) {
-        SysRoleEntity roleEntity = BeanUtil.copyProperties(roleQuery, SysRoleEntity.class);
-        roleEntity.setId(id);
+    public void updateRoleById(@Validated @RequestBody UpdateRoleQuery query) {
+        SysRoleEntity roleEntity = BeanUtil.copyProperties(query, SysRoleEntity.class);
         roleService.updateById(roleEntity);
     }
 
     @AccessLog("删除角色")
     @ApiOperation("删除角色")
-    @DeleteMapping("/roles/{id}")
-    @PreAuthorize("hasAuthority('sys:roles:delete')")
+    @PostMapping("/delete")
+    @PreAuthorize("hasAuthority('sys:role:delete') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteRoleById(@NotBlank @PathVariable String id) {
-        roleService.deleteRoleById(id);
+    public void deleteRoleById(@Validated @RequestBody IdQuery query) {
+        roleService.deleteRoleById(query.getId());
     }
 
     @AccessLog("设置角色权限")
     @ApiOperation("设置角色权限")
-    @PostMapping("/roles/{id}/authorities")
-    @PreAuthorize("hasAnyAuthority('sys:roles:create','sys:roles:update')")
+    @PostMapping("/setAuth")
+    @PreAuthorize("hasAnyAuthority('sys:role:create','sys:role:update') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void setRoleAuthById(@NotBlank @PathVariable String id, @Validated @RequestBody RoleAuthQuery query) {
-        roleService.setRoleAuthById(id, query.getAuthIds());
+    public void setRoleAuthById(@Validated @RequestBody RoleAuthQuery query) {
+        roleService.setRoleAuthById(query.getRoleId(), query.getAuthIds());
     }
 }
