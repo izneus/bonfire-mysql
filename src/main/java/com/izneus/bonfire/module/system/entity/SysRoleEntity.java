@@ -1,12 +1,13 @@
 package com.izneus.bonfire.module.system.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import java.util.Date;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -61,6 +62,4 @@ public class SysRoleEntity implements Serializable {
      * 备注
      */
     private String remark;
-
-
 }

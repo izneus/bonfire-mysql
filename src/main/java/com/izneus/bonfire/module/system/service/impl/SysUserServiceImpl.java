@@ -222,7 +222,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
                         userRoleEntity.setRoleId(roleId);
                         return userRoleEntity;
                     }).collect(Collectors.toList());
-
             userRoleService.saveBatch(userRoles);
         }
     }

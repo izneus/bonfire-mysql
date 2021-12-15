@@ -56,8 +56,7 @@ public class SysRoleController {
     @PreAuthorize("hasAuthority('sys:role:create') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.CREATED)
     public IdVO createRole(@Validated @RequestBody RoleQuery roleQuery) {
-        SysRoleEntity roleEntity = BeanUtil.copyProperties(roleQuery, SysRoleEntity.class);
-        String id = roleService.save(roleEntity) ? roleEntity.getId() : null;
+        String id = roleService.createRole(roleQuery);
         return new IdVO(id);
     }
 
@@ -66,11 +65,7 @@ public class SysRoleController {
     @PostMapping("/get")
     @PreAuthorize("hasAuthority('sys:role:get') or hasAuthority('admin')")
     public RoleVO getRoleById(@Validated @RequestBody IdQuery query) {
-        SysRoleEntity roleEntity = roleService.getById(query.getId());
-        if (roleEntity == null) {
-            return null;
-        }
-        return BeanUtil.copyProperties(roleEntity, RoleVO.class);
+        return roleService.getRoleById(query.getId());
     }
 
     @AccessLog("更新角色")
@@ -79,8 +74,7 @@ public class SysRoleController {
     @PreAuthorize("hasAuthority('sys:role:update') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateRoleById(@Validated @RequestBody UpdateRoleQuery query) {
-        SysRoleEntity roleEntity = BeanUtil.copyProperties(query, SysRoleEntity.class);
-        roleService.updateById(roleEntity);
+        roleService.updateRoleById(query);
     }
 
     @AccessLog("删除角色")
@@ -92,12 +86,22 @@ public class SysRoleController {
         roleService.deleteRoleById(query.getId());
     }
 
+    @AccessLog("批量删除角色")
+    @ApiOperation("批量删除角色")
+    @PostMapping("/batchDelete")
+    @PreAuthorize("hasAuthority('sys:role:delete') or hasAuthority('admin')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void batchDelete(@Validated @RequestBody IdsQuery query) {
+        roleService.deleteRoleBatch(query.getIds());
+    }
+
+
     @AccessLog("设置角色权限")
     @ApiOperation("设置角色权限")
     @PostMapping("/setAuth")
     @PreAuthorize("hasAnyAuthority('sys:role:create','sys:role:update') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void setRoleAuthById(@Validated @RequestBody RoleAuthQuery query) {
-        roleService.setRoleAuthById(query.getRoleId(), query.getAuthIds());
+        roleService.setRoleAuthById(query.getRoleId(), query.getAuthorityIds());
     }
 }

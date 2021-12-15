@@ -28,4 +28,7 @@ public class ListFileVO {
 
     @ApiModelProperty("创建人")
     private String createUser;
+
+    @ApiModelProperty("备注")
+    private String remark;
 }

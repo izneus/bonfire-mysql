@@ -11,6 +11,12 @@ import lombok.Data;
 @ApiModel("更新文件query")
 @Data
 public class FileQuery {
+    @ApiModelProperty("文件id")
+    private String id;
+
+    @ApiModelProperty("文件名称")
+    private String filename;
+
     @ApiModelProperty("备注")
     private String remark;
 }
