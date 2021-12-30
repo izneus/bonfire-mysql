@@ -88,6 +88,7 @@ public class AuthUserController {
         return UserInfoVO.builder()
                 .id(userId)
                 .fullname(user.getFullname())
+                .username(user.getUsername())
                 .roles(roles)
                 .build();
     }

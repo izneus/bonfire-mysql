@@ -15,11 +15,15 @@ import java.util.List;
 @ApiModel("登录后获得用户信息vo")
 @Builder
 public class UserInfoVO {
+
     @ApiModelProperty("id")
     private String id;
 
     @ApiModelProperty("fullname")
     private String fullname;
+
+    @ApiModelProperty("username")
+    private String username;
 
     @ApiModelProperty("权限列表，包含角色+权限字符串，半角逗号分隔")
     private List<String> roles;
