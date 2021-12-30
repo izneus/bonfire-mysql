@@ -17,5 +17,5 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class ListLogQuery extends BasePageQuery {
     @ApiModelProperty("任务id")
-    private String id;
+    private String jobId;
 }

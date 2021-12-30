@@ -3,6 +3,7 @@ package com.izneus.bonfire.module.system.controller.v1.vo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import java.util.List;
 
 /**
  * @author Izneus
@@ -20,4 +21,7 @@ public class RoleVO {
 
     @ApiModelProperty("备注")
     private String remark;
+
+    @ApiModelProperty("权限id数组")
+    private List<String> authorityIds;
 }
