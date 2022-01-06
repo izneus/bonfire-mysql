@@ -8,6 +8,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.common.util.HttpContextUtil;
+import com.izneus.bonfire.config.BonfireConfig;
 import com.izneus.bonfire.module.security.CurrentUserUtil;
 import com.izneus.bonfire.module.system.entity.SysAccessLogEntity;
 import com.izneus.bonfire.module.system.entity.SysUserEntity;
@@ -37,6 +38,7 @@ public class AccessLogAspect {
 
     private final SysAccessLogService accessLogService;
     private final SysUserService userService;
+    private final BonfireConfig bonfireConfig;
 
     private ThreadLocal<Long> currentTime = new ThreadLocal<>();
 
@@ -62,51 +64,54 @@ public class AccessLogAspect {
         // 计算请求消耗时长
         long elapsedTime = System.currentTimeMillis() - currentTime.get();
         currentTime.remove();
-        MethodSignature signature = (MethodSignature) point.getSignature();
-        Method method = signature.getMethod();
-        AccessLog annotation = method.getAnnotation(AccessLog.class);
-        // 方法路径
-        String className = point.getTarget().getClass().getName();
-        String funcName = signature.getName();
-        String methodName = className + "." + funcName + "()";
-        // 请求参数，序列化为json字符串
-        Object[] argValues = point.getArgs();
-        JSONArray argJson = JSONUtil.parseArray(argValues);
-        String param = null;
-        // 注意数据脱敏，特别是用户密码
-        if (argJson.size() > 0) {
-            String loginMethod = "com.izneus.bonfire.module.system.controller.v1.LoginController.login()";
-            if (loginMethod.equals(methodName)) {
-                ((JSONObject) argJson.get(0)).set("password", "*");
+        // 是否开启@AccessLog功能，开启就写库
+        if (bonfireConfig.getAccessLog()) {
+            MethodSignature signature = (MethodSignature) point.getSignature();
+            Method method = signature.getMethod();
+            AccessLog annotation = method.getAnnotation(AccessLog.class);
+            // 方法路径
+            String className = point.getTarget().getClass().getName();
+            String funcName = signature.getName();
+            String methodName = className + "." + funcName + "()";
+            // 请求参数，序列化为json字符串
+            Object[] argValues = point.getArgs();
+            JSONArray argJson = JSONUtil.parseArray(argValues);
+            String param = null;
+            // 注意数据脱敏，特别是用户密码
+            if (argJson.size() > 0) {
+                String loginMethod = "com.izneus.bonfire.module.system.controller.v1.LoginController.login()";
+                if (loginMethod.equals(methodName)) {
+                    ((JSONObject) argJson.get(0)).set("password", "*");
+                }
+                param = argJson.toString();
             }
-            param = argJson.toString();
+            // 注解描述
+            String description = annotation.value();
+            // 获取request
+            HttpServletRequest request = HttpContextUtil.getHttpServletRequest();
+            // 客户端ip
+            String clientIp = ServletUtil.getClientIP(request);
+            // ua和解析出的浏览器和系统
+            UserAgent ua = UserAgentUtil.parse(request.getHeader("User-Agent"));
+            String browser = ua.getBrowser().toString();
+            String os = ua.getOs().toString();
+            // 写库
+            SysAccessLogEntity accessLogEntity = new SysAccessLogEntity();
+            accessLogEntity.setMethod(methodName);
+            accessLogEntity.setParam(param);
+            accessLogEntity.setDescription(description);
+            accessLogEntity.setClientIp(clientIp);
+            accessLogEntity.setBrowser(browser);
+            accessLogEntity.setOs(os);
+            accessLogEntity.setUserAgent(request.getHeader("User-Agent"));
+            accessLogEntity.setElapsedTime(elapsedTime);
+            // 获取用户名
+            String userId = CurrentUserUtil.getFillUserId();
+            if (userId != null) {
+                SysUserEntity user = userService.getById(userId);
+                accessLogEntity.setUsername(user.getUsername());
+            }
+            accessLogService.save(accessLogEntity);
         }
-        // 注解描述
-        String description = annotation.value();
-        // 获取request
-        HttpServletRequest request = HttpContextUtil.getHttpServletRequest();
-        // 客户端ip
-        String clientIp = ServletUtil.getClientIP(request);
-        // ua和解析出的浏览器和系统
-        UserAgent ua = UserAgentUtil.parse(request.getHeader("User-Agent"));
-        String browser = ua.getBrowser().toString();
-        String os = ua.getOs().toString();
-        // 写库
-        SysAccessLogEntity accessLogEntity = new SysAccessLogEntity();
-        accessLogEntity.setMethod(methodName);
-        accessLogEntity.setParam(param);
-        accessLogEntity.setDescription(description);
-        accessLogEntity.setClientIp(clientIp);
-        accessLogEntity.setBrowser(browser);
-        accessLogEntity.setOs(os);
-        accessLogEntity.setUserAgent(request.getHeader("User-Agent"));
-        accessLogEntity.setElapsedTime(elapsedTime);
-        // 获取用户名
-        String userId = CurrentUserUtil.getFillUserId();
-        if (userId != null) {
-            SysUserEntity user = userService.getById(userId);
-            accessLogEntity.setUsername(user.getUsername());
-        }
-        accessLogService.save(accessLogEntity);
     }
 }

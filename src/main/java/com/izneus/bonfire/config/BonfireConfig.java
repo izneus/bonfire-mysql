@@ -26,6 +26,7 @@ public class BonfireConfig {
 
     private Boolean captchaEnabled;
     private String defaultPassword;
+    private Boolean accessLog;
     private BonfirePath mac;
     private BonfirePath win;
     private BonfirePath linux;
