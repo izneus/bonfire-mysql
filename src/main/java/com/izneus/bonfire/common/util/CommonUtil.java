@@ -4,6 +4,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.EnumUtil;
 import com.izneus.bonfire.common.constant.Dict;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Map;
 
@@ -24,6 +25,7 @@ public class CommonUtil {
      * @param filename 文件名
      * @return boolean
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isValidFilename(String filename) {
         if (filename == null || filename.length() > MAX_FILENAME_LENGTH) {
             return false;
@@ -50,6 +52,17 @@ public class CommonUtil {
         Map<Object, String> inverseMap = MapUtil.inverse(enumMap);
         String enumName = MapUtil.getStr(inverseMap, fieldValue);
         return EnumUtil.fromString(enumClass, enumName);
+    }
+
+    /**
+     * 生成加密密码
+     *
+     * @param plaintext 明文
+     * @return ciphertext 密文
+     */
+    @SuppressWarnings("WeakerAccess")
+    public static String encryptPassword(String plaintext) {
+        return new BCryptPasswordEncoder().encode(plaintext);
     }
 
 }

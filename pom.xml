@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.izneus</groupId>
     <artifactId>bonfire</artifactId>
-    <version>0.3.2-SNAPSHOT</version>
+    <version>0.3.11</version>
     <name>bonfire</name>
     <description>中小企业级信息系统快速开发框架</description>
 
@@ -21,6 +21,7 @@
         <ojdbc.version>19.3.0.0</ojdbc.version>
         <jjwt.version>0.11.2</jjwt.version>
         <skipTests>true</skipTests>
+        <maven.build.timestamp.format>yyyyMMddSSS</maven.build.timestamp.format>
     </properties>
 
     <profiles>
@@ -53,6 +54,17 @@
     </repositories>
 
     <dependencies>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter</artifactId>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.apache.logging.log4j</groupId>-->
+<!--                    <artifactId>log4j-to-slf4j</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
@@ -262,6 +274,9 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+        <finalName>
+            ${project.artifactId}-${project.version}-build${maven.build.timestamp}
+        </finalName>
     </build>
 
 </project>
