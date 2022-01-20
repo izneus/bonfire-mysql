@@ -31,7 +31,7 @@ public class SysPrivilegeController {
 
     @AccessLog("权限树")
     @ApiOperation("权限树")
-    @PostMapping("/listTree")
+    @PostMapping("/getPrivilegeTree")
     @PreAuthorize("hasAuthority('sys:priv:list') or hasAuthority('admin')")
     public List<PrivTreeVO> getPrivilegeTree() {
         return privilegeService.getPrivilegeTree();
