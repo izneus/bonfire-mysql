@@ -1,4 +1,4 @@
-package com.izneus.bonfire.module.system.controller.v1.vo;
+package com.izneus.bonfire.module.system.service.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -7,14 +7,12 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * 权限树vo
- *
  * @author Izneus
  * @date 2022/01/20
  */
-@ApiModel("权限树vo")
+@ApiModel("权限树dto")
 @Data
-public class PrivTreeVO {
+public class PrivTreeDTO {
 
     @ApiModelProperty("id")
     private String id;
@@ -38,6 +36,6 @@ public class PrivTreeVO {
     private Integer sort;
 
     @ApiModelProperty("子权限")
-    private List<PrivTreeVO> children;
+    private List<PrivTreeDTO> children;
 
 }

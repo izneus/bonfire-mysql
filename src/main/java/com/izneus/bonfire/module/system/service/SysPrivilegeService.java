@@ -1,6 +1,6 @@
 package com.izneus.bonfire.module.system.service;
 
-import com.izneus.bonfire.module.system.controller.v1.vo.PrivTreeVO;
+import com.izneus.bonfire.module.system.service.dto.PrivTreeDTO;
 import com.izneus.bonfire.module.system.entity.SysPrivilegeEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -21,6 +21,6 @@ public interface SysPrivilegeService extends IService<SysPrivilegeEntity> {
      *
      * @return 权限树
      */
-    List<PrivTreeVO> getPrivilegeTree();
+    List<PrivTreeDTO> getPrivilegeTree();
 
 }

@@ -1,5 +1,6 @@
 package com.izneus.bonfire.module.system.controller.v1.vo;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -7,6 +8,7 @@ import lombok.Data;
  * @author Izneus
  * @date 2020/09/09
  */
+@ApiModel("字典vo")
 @Data
 public class GetDictVO {
     @ApiModelProperty("id")
