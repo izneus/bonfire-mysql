@@ -10,11 +10,11 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 系统_权限
+ * 系统_权限表
  * </p>
  *
  * @author Izneus
- * @since 2022-01-19
+ * @since 2022-01-20
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -73,9 +73,9 @@ public class SysPrivilegeEntity implements Serializable {
     private String privKey;
 
     /**
-     * 父级key
+     * 父级id，根节点该值为0
      */
-    private String parentKey;
+    private String parentId;
 
     /**
      * 排序

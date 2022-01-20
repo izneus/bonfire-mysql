@@ -13,6 +13,7 @@ import com.izneus.bonfire.module.system.entity.SysRoleAuthorityEntity;
 import com.izneus.bonfire.module.system.entity.SysRoleEntity;
 import com.izneus.bonfire.module.system.mapper.SysRoleMapper;
 import com.izneus.bonfire.module.system.service.SysRoleAuthorityService;
+import com.izneus.bonfire.module.system.service.SysRolePrivilegeService;
 import com.izneus.bonfire.module.system.service.SysRoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity> implements SysRoleService {
 
     private final SysRoleAuthorityService roleAuthorityService;
+    private final SysRolePrivilegeService rolePrivilegeService;
 
     @Override
     public Page<SysRoleEntity> listRoles(ListRoleQuery query) {
@@ -109,6 +111,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
             }).collect(Collectors.toList());
             roleAuthorityService.saveBatch(roleAuths);
         }
+    }
+
+    @Override
+    public List<String> listPrivByRoleId(String roleId) {
+        return null;
     }
 
     @Override

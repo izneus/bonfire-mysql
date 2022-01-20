@@ -66,4 +66,6 @@ public interface SysRoleService extends IService<SysRoleEntity> {
      * @param authIds authId列表
      */
     void setRoleAuthById(String roleId, List<String> authIds);
+
+    List<String> listPrivByRoleId(String roleId);
 }
