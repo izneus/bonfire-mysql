@@ -25,7 +25,7 @@
     </properties>
 
     <profiles>
-        <!--开发环境-->
+        <!-- 开发环境 -->
         <profile>
             <id>dev</id>
             <properties>
@@ -35,7 +35,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
         </profile>
-        <!--生产环境-->
+        <!-- 生产环境 -->
         <profile>
             <id>prod</id>
             <properties>
@@ -44,7 +44,7 @@
         </profile>
     </profiles>
 
-    <!--添加阿里源，防止默认源的龟速下载，也可以修改maven的setting.xml修改全局源地址-->
+    <!-- 添加阿里源，防止默认源的龟速下载，也可以修改maven的setting.xml修改全局源地址 -->
     <repositories>
         <repository>
             <id>alimaven</id>
@@ -54,16 +54,16 @@
     </repositories>
 
     <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter</artifactId>-->
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    <groupId>org.apache.logging.log4j</groupId>-->
-<!--                    <artifactId>log4j-to-slf4j</artifactId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.boot</groupId>-->
+        <!--            <artifactId>spring-boot-starter</artifactId>-->
+        <!--            <exclusions>-->
+        <!--                <exclusion>-->
+        <!--                    <groupId>org.apache.logging.log4j</groupId>-->
+        <!--                    <artifactId>log4j-to-slf4j</artifactId>-->
+        <!--                </exclusion>-->
+        <!--            </exclusions>-->
+        <!--        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -121,7 +121,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!--jwt-->
+        <!-- jwt -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
@@ -149,8 +149,8 @@
         </dependency>
         -->
 
-        <!--ojdbc-->
-        <dependency>
+        <!-- ojdbc -->
+        <!--<dependency>
             <groupId>com.oracle.ojdbc</groupId>
             <artifactId>ojdbc8</artifactId>
             <version>${ojdbc.version}</version>
@@ -159,41 +159,41 @@
             <groupId>com.oracle.ojdbc</groupId>
             <artifactId>orai18n</artifactId>
             <version>${ojdbc.version}</version>
-        </dependency>
+        </dependency>-->
 
-        <!--mysql jdbc driver-->
+        <!-- mysql jdbc driver -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.23</version>
         </dependency>
 
-        <!--mybatis-plus-->
+        <!-- mybatis-plus -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>${mybatisplus.version}</version>
         </dependency>
-        <!--mybatis-plus代码生成器-->
+        <!-- mybatis-plus代码生成器 -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-generator</artifactId>
             <version>${mybatisplus.version}</version>
         </dependency>
-        <!--mybatis-plus代码生成器模版引擎-->
+        <!-- mybatis-plus代码生成器模版引擎 -->
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
             <version>2.3.30</version>
         </dependency>
-        <!--多数据源-->
+        <!-- 多数据源 -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
             <version>3.3.1</version>
         </dependency>
 
-        <!--swagger-->
+        <!-- swagger -->
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
@@ -205,44 +205,44 @@
             <version>${swagger.version}</version>
         </dependency>
 
-        <!--图形验证码-->
+        <!-- 图形验证码 -->
         <dependency>
             <groupId>com.github.whvcse</groupId>
             <artifactId>easy-captcha</artifactId>
             <version>1.6.2</version>
         </dependency>
 
-        <!--redis-->
+        <!-- redis -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
-        <!--redis连接池-->
+        <!-- redis连接池 -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
             <version>2.8.0</version>
         </dependency>
 
-        <!--spring boot 缓存-->
+        <!-- spring boot 缓存 -->
         <!--<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>-->
 
-        <!--hutool，各种工具类-->
+        <!-- hutool，各种工具类 -->
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>5.6.0</version>
         </dependency>
-        <!--操作excel-->
+        <!-- 操作excel -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>4.1.2</version>
         </dependency>
-        <!--hutool的ServletUtil需要依赖-->
+        <!-- hutool的ServletUtil需要依赖 -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -251,18 +251,35 @@
             <scope>provided</scope>
         </dependency>
 
-        <!--os和硬件监控-->
+        <!-- os和硬件监控 -->
         <dependency>
             <groupId>com.github.oshi</groupId>
             <artifactId>oshi-core</artifactId>
             <version>5.2.5</version>
         </dependency>
 
-        <!--调度框架quartz-->
+        <!-- 调度框架quartz -->
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
             <version>2.3.2</version>
+        </dependency>
+
+        <!-- 解决log4j核弹级bug -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.17.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.17.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-to-slf4j</artifactId>
+            <version>2.17.1</version>
         </dependency>
 
     </dependencies>
@@ -273,6 +290,30 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+            <!-- 安装本地依赖，别忘记在上面引入dependency -->
+            <!--<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>2.5.2</version>
+                <configuration>
+                    <groupId>com.xxx.demo</groupId>
+                    <artifactId>yyy</artifactId>
+                    <version>1.0.6</version>
+                    <packaging>jar</packaging>
+                    <file>${basedir}/libs/xxx-1.0.6.jar</file>
+                    <generatePom>true</generatePom>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>install-jar-lib</id>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <phase>validate</phase>
+                    </execution>
+                </executions>
+            </plugin>-->
         </plugins>
         <finalName>
             ${project.artifactId}-${project.version}-build${maven.build.timestamp}
