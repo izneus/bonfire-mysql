@@ -57,7 +57,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
         RoleVO roleVO = BeanUtil.copyProperties(roleEntity, RoleVO.class);
         // 查询角色权限
         List<SysRolePrivilegeEntity> privs = rolePrivService.list(
-                new LambdaQueryWrapper<SysRolePrivilegeEntity>().eq(SysRolePrivilegeEntity::getId, roleId)
+                new LambdaQueryWrapper<SysRolePrivilegeEntity>().eq(SysRolePrivilegeEntity::getRoleId, roleId)
         );
         List<String> privIds = privs.stream().map(SysRolePrivilegeEntity::getPrivId).collect(Collectors.toList());
         roleVO.setPrivilegeIds(privIds);
