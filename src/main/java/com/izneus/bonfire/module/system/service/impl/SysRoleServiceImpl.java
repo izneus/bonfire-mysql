@@ -9,11 +9,9 @@ import com.izneus.bonfire.module.system.controller.v1.query.ListRoleQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.RoleQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.UpdateRoleQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.RoleVO;
-import com.izneus.bonfire.module.system.entity.SysRoleAuthorityEntity;
 import com.izneus.bonfire.module.system.entity.SysRoleEntity;
 import com.izneus.bonfire.module.system.entity.SysRolePrivilegeEntity;
 import com.izneus.bonfire.module.system.mapper.SysRoleMapper;
-import com.izneus.bonfire.module.system.service.SysRoleAuthorityService;
 import com.izneus.bonfire.module.system.service.SysRolePrivilegeService;
 import com.izneus.bonfire.module.system.service.SysRoleService;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +33,6 @@ import java.util.stream.Collectors;
 @Service
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity> implements SysRoleService {
 
-    private final SysRoleAuthorityService roleAuthorityService;
     private final SysRolePrivilegeService rolePrivService;
 
     @Override
@@ -82,15 +79,16 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
         // 先删除角色表
         removeById(id);
         // 再删除角色对应的权限
-        roleAuthorityService.remove(new LambdaQueryWrapper<SysRoleAuthorityEntity>()
-                .eq(SysRoleAuthorityEntity::getRoleId, id));
+        rolePrivService.remove(new LambdaQueryWrapper<SysRolePrivilegeEntity>()
+                .eq(SysRolePrivilegeEntity::getRoleId, id));
     }
 
     @Override
     public void deleteRoleBatch(List<String> roleIds) {
         removeByIds(roleIds);
         // todo 潜在的in查询，可能超过1000
-        roleAuthorityService.remove(new LambdaQueryWrapper<SysRoleAuthorityEntity>().in(SysRoleAuthorityEntity::getRoleId, roleIds));
+        rolePrivService.remove(new LambdaQueryWrapper<SysRolePrivilegeEntity>()
+                .in(SysRolePrivilegeEntity::getRoleId, roleIds));
     }
 
     @Override
