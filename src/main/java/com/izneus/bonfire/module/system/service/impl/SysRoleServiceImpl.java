@@ -11,6 +11,7 @@ import com.izneus.bonfire.module.system.controller.v1.query.UpdateRoleQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.RoleVO;
 import com.izneus.bonfire.module.system.entity.SysRoleAuthorityEntity;
 import com.izneus.bonfire.module.system.entity.SysRoleEntity;
+import com.izneus.bonfire.module.system.entity.SysRolePrivilegeEntity;
 import com.izneus.bonfire.module.system.mapper.SysRoleMapper;
 import com.izneus.bonfire.module.system.service.SysRoleAuthorityService;
 import com.izneus.bonfire.module.system.service.SysRolePrivilegeService;
@@ -35,7 +36,7 @@ import java.util.stream.Collectors;
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity> implements SysRoleService {
 
     private final SysRoleAuthorityService roleAuthorityService;
-    private final SysRolePrivilegeService rolePrivilegeService;
+    private final SysRolePrivilegeService rolePrivService;
 
     @Override
     public Page<SysRoleEntity> listRoles(ListRoleQuery query) {
@@ -58,11 +59,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
         }
         RoleVO roleVO = BeanUtil.copyProperties(roleEntity, RoleVO.class);
         // 查询角色权限
-        List<SysRoleAuthorityEntity> roles = roleAuthorityService.list(
-                new LambdaQueryWrapper<SysRoleAuthorityEntity>().eq(SysRoleAuthorityEntity::getRoleId, roleId)
+        List<SysRolePrivilegeEntity> privs = rolePrivService.list(
+                new LambdaQueryWrapper<SysRolePrivilegeEntity>().eq(SysRolePrivilegeEntity::getId, roleId)
         );
-        List<String> authorityIds = roles.stream().map(SysRoleAuthorityEntity::getAuthorityId).collect(Collectors.toList());
-        roleVO.setAuthorityIds(authorityIds);
+        List<String> privIds = privs.stream().map(SysRolePrivilegeEntity::getPrivId).collect(Collectors.toList());
+        roleVO.setPrivilegeIds(privIds);
         return roleVO;
     }
 

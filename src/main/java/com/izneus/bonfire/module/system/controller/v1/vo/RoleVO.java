@@ -24,4 +24,7 @@ public class RoleVO {
 
     @ApiModelProperty("权限id数组")
     private List<String> authorityIds;
+
+    @ApiModelProperty("权限id数组")
+    private List<String> privilegeIds;
 }
