@@ -22,6 +22,12 @@ spring:
     lettuce:
       pool:
         max-active: 8
+  servlet:
+    multipart:
+      # 单文件最大尺寸，注意Nginx也有类似设置项，水管效应
+      max-file-size: 10MB
+      # 单请求最大尺寸
+      max-request-size: 10MB
 
 # 工程自定义参数
 bonfire:
