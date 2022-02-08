@@ -101,26 +101,26 @@ public class SysRoleController {
     @PostMapping("/setAuth")
     @PreAuthorize("hasAnyAuthority('sys:role:create','sys:role:update') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void setRoleAuthById(@Validated @RequestBody RoleAuthQuery query) {
-        roleService.setRoleAuthById(query.getRoleId(), query.getAuthorityIds());
+    public void setRolePrivById(@Validated @RequestBody RoleAuthQuery query) {
+        roleService.setRolePrivById(query.getRoleId(), query.getAuthorityIds());
     }*/
 
-    @AccessLog("设置角色权限")
+    /*@AccessLog("设置角色权限")
     @ApiOperation("设置角色权限")
     @PostMapping("/setPrivilege")
     @PreAuthorize("hasAnyAuthority('sys:role:create','sys:role:update') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void setPrivilege() {
 
-    }
+    }*/
 
-    @AccessLog("获得角色权限")
+    /*@AccessLog("获得角色权限")
     @ApiOperation("获得角色权限")
     @PostMapping("/listPrivilege")
     @PreAuthorize("hasAnyAuthority('sys:role:create','sys:role:update') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void listPrivilege(@Validated @RequestBody IdQuery query) {
 
-    }
+    }*/
 
 }

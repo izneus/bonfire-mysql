@@ -14,9 +14,6 @@ import java.util.List;
 @Data
 public class RoleQuery {
 
-    @ApiModelProperty("角色id")
-    private String id;
-
     @ApiModelProperty("角色名称")
     @NotBlank(message = "角色名不能为空")
     private String roleName;
@@ -25,5 +22,6 @@ public class RoleQuery {
     private String remark;
 
     @ApiModelProperty("权限id数组")
-    private List<String> authorityIds;
+    private List<String> privilegeIds;
+
 }

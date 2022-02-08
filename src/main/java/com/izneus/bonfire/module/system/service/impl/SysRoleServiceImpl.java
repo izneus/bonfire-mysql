@@ -73,7 +73,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
         // 更新角色表
         SysRoleEntity roleEntity = BeanUtil.copyProperties(query, SysRoleEntity.class);
         updateById(roleEntity);
-        setRoleAuthById(query.getId(), query.getAuthorityIds());
+        setRolePrivById(query.getId(), query.getPrivilegeIds());
     }
 
     @Override
@@ -95,28 +95,23 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void setRoleAuthById(String roleId, List<String> authIds) {
+    public void setRolePrivById(String roleId, List<String> privIds) {
         if (roleId == null) {
             return;
         }
         // 先删除角色当前权限
-        roleAuthorityService.remove(new LambdaQueryWrapper<SysRoleAuthorityEntity>()
-                .eq(SysRoleAuthorityEntity::getRoleId, roleId));
+        rolePrivService.remove(new LambdaQueryWrapper<SysRolePrivilegeEntity>()
+                .eq(SysRolePrivilegeEntity::getRoleId, roleId));
         // 插入权限
-        if (authIds != null && authIds.size() > 0) {
-            List<SysRoleAuthorityEntity> roleAuths = authIds.stream().map(authId -> {
-                SysRoleAuthorityEntity roleAuthorityEntity = new SysRoleAuthorityEntity();
-                roleAuthorityEntity.setRoleId(roleId);
-                roleAuthorityEntity.setAuthorityId(authId);
-                return roleAuthorityEntity;
+        if (privIds != null && privIds.size() > 0) {
+            List<SysRolePrivilegeEntity> rolePrivs = privIds.stream().map(privId -> {
+                SysRolePrivilegeEntity rolePrivilegeEntity = new SysRolePrivilegeEntity();
+                rolePrivilegeEntity.setRoleId(roleId);
+                rolePrivilegeEntity.setPrivId(privId);
+                return rolePrivilegeEntity;
             }).collect(Collectors.toList());
-            roleAuthorityService.saveBatch(roleAuths);
+            rolePrivService.saveBatch(rolePrivs);
         }
-    }
-
-    @Override
-    public List<String> listPrivByRoleId(String roleId) {
-        return null;
     }
 
     @Override
@@ -126,7 +121,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
         SysRoleEntity roleEntity = BeanUtil.copyProperties(roleQuery, SysRoleEntity.class);
         String roleId = save(roleEntity) ? roleEntity.getId() : null;
         // 新增角色权限关联
-        setRoleAuthById(roleId, roleQuery.getAuthorityIds());
+        setRolePrivById(roleId, roleQuery.getPrivilegeIds());
         return roleId;
     }
 }

@@ -63,9 +63,7 @@ public interface SysRoleService extends IService<SysRoleEntity> {
      * 给角色设置权限
      *
      * @param roleId  roleId
-     * @param authIds authId列表
+     * @param privIds authId列表
      */
-    void setRoleAuthById(String roleId, List<String> authIds);
-
-    List<String> listPrivByRoleId(String roleId);
+    void setRolePrivById(String roleId, List<String> privIds);
 }
