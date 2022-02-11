@@ -19,9 +19,9 @@ public class Constant {
     public static final String REDIS_KEY_LOGIN_RETRY = "username:{}:retry";
 
     /**
-     * 用户权限的redis key，{}为userId，实际存储的key形如 user:userId:auths
+     * 用户权限的redis key，{}为userId，实际存储的key形如 user:userId:privs
      */
-    public static final String REDIS_KEY_AUTHS = "user:{}:auths";
+    public static final String REDIS_KEY_AUTHS = "user:{}:privs";
 
     /**
      * 黑名单的redis key，黑名单用来实现登出、服务端锁定账号等，{}为jwt

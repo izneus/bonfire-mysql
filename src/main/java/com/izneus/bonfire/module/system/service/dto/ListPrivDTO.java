@@ -7,8 +7,19 @@ import lombok.Data;
  * @date 2020/08/10
  */
 @Data
-public class ListAuthDTO {
+public class ListPrivDTO {
+    /**
+     * 用户id
+     */
     private String userId;
+
+    /**
+     * 角色名称
+     */
     private String roleName;
-    private String authority;
+
+    /**
+     * 权限字符串
+     */
+    private String privKey;
 }

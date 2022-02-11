@@ -17,7 +17,7 @@ import com.izneus.bonfire.module.system.entity.SysUserEntity;
 import com.izneus.bonfire.module.system.mapper.SysUserMapper;
 import com.izneus.bonfire.module.system.service.LoginService;
 import com.izneus.bonfire.module.system.service.SysUserService;
-import com.izneus.bonfire.module.system.service.dto.ListAuthDTO;
+import com.izneus.bonfire.module.system.service.dto.ListPrivDTO;
 import com.wf.captcha.ArithmeticCaptcha;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -117,15 +117,15 @@ public class LoginServiceImpl implements LoginService {
         String token = jwtUtil.createToken(user.getId());
 
         // 保存权限到redis
-        List<ListAuthDTO> authorityList = ((SysUserMapper) userService.getBaseMapper()).listAuthsByUserId(user.getId());
-        if (authorityList != null && authorityList.size() > 0) {
+        List<ListPrivDTO> privList = ((SysUserMapper) userService.getBaseMapper()).listPrivsByUserId(user.getId());
+        if (privList != null && privList.size() > 0) {
             // 取角色和权限，拼接成一个字符串，用半角逗号分隔
-            String roles = authorityList.stream().map(i -> "ROLE_" + i.getRoleName()).distinct()
+            String roles = privList.stream().map(i -> "ROLE_" + i.getRoleName()).distinct()
                     .collect(Collectors.joining(","));
-            String auths = authorityList.stream().map(ListAuthDTO::getAuthority).distinct()
+            String privs = privList.stream().map(ListPrivDTO::getPrivKey).distinct()
                     .collect(Collectors.joining(","));
             String key = StrUtil.format(REDIS_KEY_AUTHS, user.getId());
-            redisUtil.set(key, roles + "," + auths, jwtExpire, TimeUnit.SECONDS);
+            redisUtil.set(key, roles + "," + privs, jwtExpire, TimeUnit.SECONDS);
         }
         // todo single login
         return LoginVO.builder()

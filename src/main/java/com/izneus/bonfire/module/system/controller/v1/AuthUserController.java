@@ -22,7 +22,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,7 +40,7 @@ import static com.izneus.bonfire.common.constant.Constant.REDIS_KEY_AUTHS;
 @Api(tags = "系统:当前认证用户")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/me")
 public class AuthUserController {
 
     private final SysNoticeService noticeService;
@@ -50,7 +50,7 @@ public class AuthUserController {
 
     @AccessLog("我的通知列表")
     @ApiOperation("我的通知列表")
-    @GetMapping("/me/notices")
+    @PostMapping("/notice/list")
     public BasePageVO<ListNoticeVO> listNoticesByUserId(@Validated ListUserNoticeQuery query) {
         Page<SysNoticeEntity> page = noticeService.listNoticesByUserId(query);
         // 组装vo
@@ -62,7 +62,7 @@ public class AuthUserController {
 
     @AccessLog("我的工单")
     @ApiOperation("我的工单")
-    @GetMapping("/me/tickets")
+    @PostMapping("/ticket/list")
     public BasePageVO<ListTicketVO> listTicketsByUserId(@Validated ListUserTicketQuery query) {
         Page<SysTicketEntity> page = ticketService.listTicketsByUserId(query, CurrentUserUtil.getUserId());
         // 组装vo
@@ -74,13 +74,13 @@ public class AuthUserController {
 
     @AccessLog("我的信息")
     @ApiOperation("我的信息")
-    @GetMapping("/me/info")
+    @PostMapping("/info")
     public UserInfoVO getUserInfo() {
         // 获得redis里登录时组装好的角色+权限字符串
         String userId = CurrentUserUtil.getUserId();
         String key = StrUtil.format(REDIS_KEY_AUTHS, userId);
         String authString = (String) redisUtil.get(key);
-        // 按照前端要求，字符串切分后转数组
+        // 按照前端要求，字符串切分后转数组，包含角色和权限
         List<String> roles = StrUtil.split(authString, ',');
 
         UserVO user = userService.getUserById(userId);
@@ -92,4 +92,5 @@ public class AuthUserController {
                 .roles(roles)
                 .build();
     }
+
 }
