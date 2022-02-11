@@ -1,12 +1,19 @@
 package com.izneus.bonfire.module.system.service.impl;
 
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.izneus.bonfire.module.system.service.dto.PrivTreeDTO;
+import com.izneus.bonfire.module.system.controller.v1.query.ListPrivilegeQuery;
+import com.izneus.bonfire.module.system.controller.v1.query.PrivilegeQuery;
+import com.izneus.bonfire.module.system.controller.v1.query.UpdatePrivilegeQuery;
+import com.izneus.bonfire.module.system.controller.v1.vo.PrivilegeVO;
 import com.izneus.bonfire.module.system.entity.SysPrivilegeEntity;
+import com.izneus.bonfire.module.system.service.dto.PrivTreeDTO;
 import com.izneus.bonfire.module.system.mapper.SysPrivilegeMapper;
 import com.izneus.bonfire.module.system.service.SysPrivilegeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +28,10 @@ import java.util.stream.Collectors;
  * @since 2022-01-19
  */
 @Service
+@RequiredArgsConstructor
 public class SysPrivilegeServiceImpl extends ServiceImpl<SysPrivilegeMapper, SysPrivilegeEntity> implements SysPrivilegeService {
+
+    private final SysPrivilegeMapper sysPrivilegeMapper;
 
     @Override
     public List<PrivTreeDTO> getPrivilegeTree() {
@@ -59,4 +69,51 @@ public class SysPrivilegeServiceImpl extends ServiceImpl<SysPrivilegeMapper, Sys
         return children;
     }
 
+    @Override
+    public Page<SysPrivilegeEntity> getPrivilegeList(ListPrivilegeQuery query) {
+        return page(
+                new Page<>(query.getPageNum(), query.getPageSize()),
+                new LambdaQueryWrapper<SysPrivilegeEntity>()
+                        .like(StrUtil.isNotBlank(query.getPrivName()),
+                                SysPrivilegeEntity::getPrivName, query.getPrivName())
+                        .orderByDesc(SysPrivilegeEntity::getCreateTime)
+        );
+    }
+
+    @Override
+    public String createPrivilege(PrivilegeQuery privilegeQuery) {
+        // 新增权限
+        SysPrivilegeEntity sysPrivilegeEntity = BeanUtil.copyProperties(privilegeQuery, SysPrivilegeEntity.class);
+        String privilegeId = save(sysPrivilegeEntity) ? sysPrivilegeEntity.getId() : null;
+        return privilegeId;
+    }
+
+    @Override
+    public PrivilegeVO getPrivilegeById(String privId) {
+        // 查询用户表
+        SysPrivilegeEntity sysPrivilegeEntity = getById(privId);
+        if (sysPrivilegeEntity == null) {
+            return null;
+        }
+        PrivilegeVO PrivilegeVO = BeanUtil.copyProperties(sysPrivilegeEntity, PrivilegeVO.class);
+        return PrivilegeVO;
+    }
+
+    @Override
+    public void updatePrivilegeById(UpdatePrivilegeQuery query) {
+        // 更新用户表
+        SysPrivilegeEntity sysPrivilegeEntity = BeanUtil.copyProperties(query, SysPrivilegeEntity.class);
+        updateById(sysPrivilegeEntity);
+    }
+
+    @Override
+    public void removePrivilegeById(String privId) {
+        // 删除用户表
+        removeById(privId);
+    }
+
+    @Override
+    public void deletePrivilegeBatch(List<String> privIds) {
+        removeByIds(privIds);
+    }
 }
