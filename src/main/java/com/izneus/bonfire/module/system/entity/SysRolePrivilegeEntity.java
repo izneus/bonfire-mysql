@@ -38,7 +38,7 @@ public class SysRolePrivilegeEntity implements Serializable {
     private Date updateTime;
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Date updateUser;
+    private String updateUser;
 
     private String remark;
 
