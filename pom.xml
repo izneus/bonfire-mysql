@@ -255,7 +255,7 @@
         <dependency>
             <groupId>com.github.oshi</groupId>
             <artifactId>oshi-core</artifactId>
-            <version>5.2.5</version>
+            <version>6.1.1</version>
         </dependency>
 
         <!-- 调度框架quartz -->
