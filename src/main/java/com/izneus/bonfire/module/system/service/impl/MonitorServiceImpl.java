@@ -52,7 +52,10 @@ public class MonitorServiceImpl implements MonitorService {
         monitorVO.setOsName(osName);
         monitorVO.setOsVersion(osVersion);
 
-        monitorVO.setCpuModel(cpuInfo.getCpuModel());
+        String cpuModel = cpuInfo.getCpuModel();
+        String cpu = cpuModel.substring(0, cpuModel.indexOf("CPU")+3);
+        monitorVO.setCpuModel(cpu);
+
         monitorVO.setCpuNum(cpuInfo.getCpuNum());
         monitorVO.setCpuTotal(cpuInfo.getToTal());
         monitorVO.setCpuFree(cpuInfo.getFree());

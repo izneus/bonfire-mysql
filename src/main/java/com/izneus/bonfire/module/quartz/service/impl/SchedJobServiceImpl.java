@@ -10,10 +10,13 @@ import com.izneus.bonfire.common.constant.Dict;
 import com.izneus.bonfire.module.quartz.controller.v1.query.JobQuery;
 import com.izneus.bonfire.module.quartz.controller.v1.query.ListJobQuery;
 import com.izneus.bonfire.module.quartz.controller.v1.query.UpdateJobQuery;
+import com.izneus.bonfire.module.quartz.controller.v1.vo.JobVO;
 import com.izneus.bonfire.module.quartz.entity.SchedJobEntity;
 import com.izneus.bonfire.module.quartz.mapper.SchedJobMapper;
 import com.izneus.bonfire.module.quartz.service.SchedJobService;
 import com.izneus.bonfire.module.quartz.util.QuartzUtils;
+import com.izneus.bonfire.module.system.controller.v1.vo.PrivilegeVO;
+import com.izneus.bonfire.module.system.entity.SysPrivilegeEntity;
 import lombok.RequiredArgsConstructor;
 import org.quartz.Scheduler;
 import org.springframework.stereotype.Service;
@@ -112,5 +115,16 @@ public class SchedJobServiceImpl extends ServiceImpl<SchedJobMapper, SchedJobEnt
         jobEntity.setId(query.getId());
         QuartzUtils.updateJob(scheduler, jobEntity);
         updateById(jobEntity);
+    }
+
+    @Override
+    public JobVO getJobById(String jobId) {
+        // 查询任务表
+        SchedJobEntity schedJobEntity = getById(jobId);
+        if (schedJobEntity == null) {
+            return null;
+        }
+        JobVO jobVO = BeanUtil.copyProperties(schedJobEntity, JobVO.class);
+        return jobVO;
     }
 }

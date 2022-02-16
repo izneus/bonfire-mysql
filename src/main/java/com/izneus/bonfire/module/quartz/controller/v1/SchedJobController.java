@@ -8,6 +8,7 @@ import com.izneus.bonfire.module.quartz.controller.v1.query.JobQuery;
 import com.izneus.bonfire.module.quartz.controller.v1.query.ListJobQuery;
 import com.izneus.bonfire.module.quartz.controller.v1.query.ListLogQuery;
 import com.izneus.bonfire.module.quartz.controller.v1.query.UpdateJobQuery;
+import com.izneus.bonfire.module.quartz.controller.v1.vo.JobVO;
 import com.izneus.bonfire.module.quartz.controller.v1.vo.ListJobVO;
 import com.izneus.bonfire.module.quartz.controller.v1.vo.ListLogVO;
 import com.izneus.bonfire.module.quartz.entity.SchedJobEntity;
@@ -67,15 +68,13 @@ public class SchedJobController {
         return new IdVO(id);
     }
 
-    /// job没那么多详情,暂时注释了
-    /*@AccessLog("任务详情")
+    @AccessLog("任务详情")
     @ApiOperation("任务详情")
-    @GetMapping("/jobs/{id}")
-    @PreAuthorize("hasAuthority('sched:jobs:get')")
-    public JobVO getJobById(@NotBlank @PathVariable String id) {
-        SchedJobEntity job = jobService.getById(id);
-        return null
-    }*/
+    @PostMapping("/get")
+    @PreAuthorize("hasAuthority('sched:job:get') or hasAuthority('admin')")
+    public JobVO getJobById(@Validated @RequestBody IdQuery query) {
+        return jobService.getJobById(query.getId());
+    }
 
     @AccessLog("更新任务")
     @ApiOperation("更新任务")
