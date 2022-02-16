@@ -76,7 +76,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     public String createUser(UserQuery userQuery) {
         // 新增用户
         SysUserEntity userEntity = BeanUtil.copyProperties(userQuery, SysUserEntity.class);
-        userEntity.setPassword(new BCryptPasswordEncoder().encode(bonfireConfig.getDefaultPassword()));
+        userEntity.setPassword(CommonUtil.encryptPassword(bonfireConfig.getDefaultPassword()));
         String userId = save(userEntity) ? userEntity.getId() : null;
         // 新增用户角色关联
         saveUserRoles(userId, userQuery.getRoleIds());
@@ -158,7 +158,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
 
     @Override
     public boolean resetPasswordBatch(List<String> userIds) {
-        String password = new BCryptPasswordEncoder().encode(bonfireConfig.getDefaultPassword());
+        String password = CommonUtil.encryptPassword(bonfireConfig.getDefaultPassword());
         List<SysUserEntity> list = userIds.stream().map(id -> {
             SysUserEntity userEntity = new SysUserEntity();
             userEntity.setId(id);
