@@ -98,7 +98,7 @@ public class AuthUserController {
     @PostMapping("/changePassword")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void changePassword(@Validated @RequestBody ChangePasswordQuery query) {
-
+        userService.changePassword(query);
     }
 
 }
