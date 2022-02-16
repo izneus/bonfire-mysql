@@ -241,13 +241,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         // 当前密码是否正确
         String userId = CurrentUserUtil.getUserId();
         SysUserEntity userEntity = getById(userId);
-        String password = CommonUtil.encryptPassword(query.getCurrentPassword());
-        if (!password.equals(userEntity.getPassword())) {
+        if (!new BCryptPasswordEncoder().matches(query.getCurrentPassword(), userEntity.getPassword())) {
             // 不相等
             throw new BadRequestException(ErrorCode.INVALID_ARGUMENT, "当前密码错误");
         }
         // 更新用户密码
-        userEntity.setPassword(password);
+        userEntity.setPassword(CommonUtil.encryptPassword(query.getNewPassword()));
         updateById(userEntity);
     }
 
