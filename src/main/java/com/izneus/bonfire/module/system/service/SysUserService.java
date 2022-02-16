@@ -2,6 +2,7 @@ package com.izneus.bonfire.module.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.izneus.bonfire.module.system.controller.v1.query.ChangePasswordQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.ListUserQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.UpdateUserQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.UserVO;
@@ -104,4 +105,11 @@ public interface SysUserService extends IService<SysUserEntity> {
      * @param roleIds 角色id列表
      */
     void saveUserRoles(String userId, List<String> roleIds);
+
+    /**
+     * 修改用户密码，绝大部分情况下，只能用户自己修改自己的密码
+     *
+     * @param query 密码query
+     */
+    void changePassword(ChangePasswordQuery query);
 }

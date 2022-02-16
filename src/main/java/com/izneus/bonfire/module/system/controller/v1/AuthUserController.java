@@ -7,6 +7,7 @@ import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.common.base.BasePageVO;
 import com.izneus.bonfire.common.util.RedisUtil;
 import com.izneus.bonfire.module.security.CurrentUserUtil;
+import com.izneus.bonfire.module.system.controller.v1.query.ChangePasswordQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.ListUserNoticeQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.ListUserTicketQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.ListNoticeVO;
@@ -21,10 +22,9 @@ import com.izneus.bonfire.module.system.service.SysUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,7 +51,7 @@ public class AuthUserController {
     @AccessLog("我的通知列表")
     @ApiOperation("我的通知列表")
     @PostMapping("/notice/list")
-    public BasePageVO<ListNoticeVO> listNoticesByUserId(@Validated ListUserNoticeQuery query) {
+    public BasePageVO<ListNoticeVO> listNoticesByUserId(@Validated @RequestBody ListUserNoticeQuery query) {
         Page<SysNoticeEntity> page = noticeService.listNoticesByUserId(query);
         // 组装vo
         List<ListNoticeVO> rows = page.getRecords().stream()
@@ -63,7 +63,7 @@ public class AuthUserController {
     @AccessLog("我的工单")
     @ApiOperation("我的工单")
     @PostMapping("/ticket/list")
-    public BasePageVO<ListTicketVO> listTicketsByUserId(@Validated ListUserTicketQuery query) {
+    public BasePageVO<ListTicketVO> listTicketsByUserId(@Validated @RequestBody ListUserTicketQuery query) {
         Page<SysTicketEntity> page = ticketService.listTicketsByUserId(query, CurrentUserUtil.getUserId());
         // 组装vo
         List<ListTicketVO> rows = page.getRecords().stream()
@@ -91,6 +91,14 @@ public class AuthUserController {
                 .username(user.getUsername())
                 .roles(roles)
                 .build();
+    }
+
+    @AccessLog("修改密码")
+    @ApiOperation("修改密码")
+    @PostMapping("/changePassword")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void changePassword(@Validated @RequestBody ChangePasswordQuery query) {
+
     }
 
 }

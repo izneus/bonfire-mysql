@@ -9,8 +9,13 @@ import cn.hutool.poi.excel.ExcelUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.izneus.bonfire.common.constant.ErrorCode;
+import com.izneus.bonfire.common.exception.BadRequestException;
+import com.izneus.bonfire.common.util.CommonUtil;
 import com.izneus.bonfire.common.util.RedisUtil;
 import com.izneus.bonfire.config.BonfireConfig;
+import com.izneus.bonfire.module.security.CurrentUserUtil;
+import com.izneus.bonfire.module.system.controller.v1.query.ChangePasswordQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.ListUserQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.UpdateUserQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.UserQuery;
@@ -205,7 +210,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         // 先删除该用户之前的所有角色信息
         userRoleService.remove(new LambdaQueryWrapper<SysUserRoleEntity>()
                 .eq(SysUserRoleEntity::getUserId, userId));
-        //
+        // 保存当前用户所有角色
         if (roleIds != null && roleIds.size() > 0) {
             /// 提供一种for循环的写法，仅供参考
             /*List<SysUserRoleEntity> userRoles = new ArrayList<>();
@@ -224,6 +229,26 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
                     }).collect(Collectors.toList());
             userRoleService.saveBatch(userRoles);
         }
+    }
+
+    @Override
+    public void changePassword(ChangePasswordQuery query) {
+        // 判断新密码、重复输入的新密码是否一致
+        if (!query.getNewPassword().equals(query.getConfirmPassword())) {
+            // 不相等
+            throw new BadRequestException(ErrorCode.INVALID_ARGUMENT, "二次输入的新密码不一致");
+        }
+        // 当前密码是否正确
+        String userId = CurrentUserUtil.getUserId();
+        SysUserEntity userEntity = getById(userId);
+        String password = CommonUtil.encryptPassword(query.getCurrentPassword());
+        if (!password.equals(userEntity.getPassword())) {
+            // 不相等
+            throw new BadRequestException(ErrorCode.INVALID_ARGUMENT, "当前密码错误");
+        }
+        // 更新用户密码
+        userEntity.setPassword(password);
+        updateById(userEntity);
     }
 
 }
