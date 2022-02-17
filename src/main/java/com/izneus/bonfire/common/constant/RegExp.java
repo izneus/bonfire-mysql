@@ -18,7 +18,7 @@ public class RegExp {
     public static final String PASSWORD = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,16}$";
 
     /**
-     * 用户名，必须为6～20位字母
+     * 用户名，必须为5～20位字母
      */
     public static final String USERNAME = "^[a-zA-Z0-9]{5,20}$";
 }
