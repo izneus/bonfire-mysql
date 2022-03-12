@@ -1,18 +1,18 @@
 package com.izneus.bonfire.module.system.service.impl;
 
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.izneus.bonfire.module.system.controller.v1.query.ListPrivilegeQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.PrivilegeQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.UpdatePrivilegeQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.PrivilegeVO;
 import com.izneus.bonfire.module.system.entity.SysPrivilegeEntity;
-import com.izneus.bonfire.module.system.service.dto.PrivTreeDTO;
 import com.izneus.bonfire.module.system.mapper.SysPrivilegeMapper;
 import com.izneus.bonfire.module.system.service.SysPrivilegeService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.izneus.bonfire.module.system.service.dto.PrivTreeDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -84,32 +84,31 @@ public class SysPrivilegeServiceImpl extends ServiceImpl<SysPrivilegeMapper, Sys
     public String createPrivilege(PrivilegeQuery privilegeQuery) {
         // 新增权限
         SysPrivilegeEntity sysPrivilegeEntity = BeanUtil.copyProperties(privilegeQuery, SysPrivilegeEntity.class);
-        String privilegeId = save(sysPrivilegeEntity) ? sysPrivilegeEntity.getId() : null;
-        return privilegeId;
+        return save(sysPrivilegeEntity) ? sysPrivilegeEntity.getId() : null;
     }
 
     @Override
     public PrivilegeVO getPrivilegeById(String privId) {
-        // 查询用户表
+        // 查询权限表
         SysPrivilegeEntity sysPrivilegeEntity = getById(privId);
         if (sysPrivilegeEntity == null) {
             return null;
         }
-        PrivilegeVO PrivilegeVO = BeanUtil.copyProperties(sysPrivilegeEntity, PrivilegeVO.class);
-        return PrivilegeVO;
+        return BeanUtil.copyProperties(sysPrivilegeEntity, PrivilegeVO.class);
     }
 
     @Override
     public void updatePrivilegeById(UpdatePrivilegeQuery query) {
-        // 更新用户表
+        // 更新权限表
         SysPrivilegeEntity sysPrivilegeEntity = BeanUtil.copyProperties(query, SysPrivilegeEntity.class);
         updateById(sysPrivilegeEntity);
     }
 
     @Override
     public void removePrivilegeById(String privId) {
-        // 删除用户表
+        // 删除id的权限
         removeById(privId);
+        // todo 删除子权限。这里只用了parentId来关联树形，并没有采用线索类字段，一并删除子节点较为麻烦
     }
 
     @Override

@@ -9,9 +9,8 @@ import lombok.ToString;
 import javax.validation.constraints.NotBlank;
 
 /**
- * @Author: Joker
- * @Description: TODO
- * @DateTime: 2022-02-10 14:18
+ * @author Joker
+ * @date 2022-02-10 14:18
  **/
 @ApiModel("更新角色query")
 @Data

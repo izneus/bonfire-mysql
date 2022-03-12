@@ -1,12 +1,13 @@
 package com.izneus.bonfire.module.system.controller.v1;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.izneus.bonfire.common.annotation.AccessLog;
-import com.izneus.bonfire.common.base.BasePageVO;
-import com.izneus.bonfire.module.system.controller.v1.query.*;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.izneus.bonfire.module.system.controller.v1.vo.*;
-import com.izneus.bonfire.module.system.entity.SysPrivilegeEntity;
+import com.izneus.bonfire.module.system.controller.v1.query.IdQuery;
+import com.izneus.bonfire.module.system.controller.v1.query.IdsQuery;
+import com.izneus.bonfire.module.system.controller.v1.query.PrivilegeQuery;
+import com.izneus.bonfire.module.system.controller.v1.query.UpdatePrivilegeQuery;
+import com.izneus.bonfire.module.system.controller.v1.vo.GetPrivTreeVO;
+import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
+import com.izneus.bonfire.module.system.controller.v1.vo.PrivilegeVO;
 import com.izneus.bonfire.module.system.service.SysPrivilegeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,9 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -38,12 +36,13 @@ public class SysPrivilegeController {
     @AccessLog("权限树")
     @ApiOperation("权限树")
     @PostMapping("/getPrivilegeTree")
-    @PreAuthorize("hasAuthority('sys:priv:list') or hasAuthority('admin')")
+    @PreAuthorize("hasAuthority('sys:privilege:list') or hasAuthority('admin')")
     public GetPrivTreeVO getPrivilegeTree() {
         return GetPrivTreeVO.builder().privilegeTree(privilegeService.getPrivilegeTree()).build();
     }
 
-    @AccessLog("权限列表")
+    /// 权限已经修改为树形结构，这是分页查询列表，暂时注释
+    /*@AccessLog("权限列表")
     @ApiOperation("权限列表")
     @PostMapping("/getPrivilegeList")
     @PreAuthorize("hasAuthority('sys:priv:list') or hasAuthority('admin')")
@@ -53,7 +52,7 @@ public class SysPrivilegeController {
         List<ListPrivVO> rows = page.getRecords().stream().map(priv -> BeanUtil.copyProperties(priv, ListPrivVO.class))
                 .collect(Collectors.toList());
         return new BasePageVO<>(page, rows);
-    }
+    }*/
 
     @AccessLog("新增权限")
     @ApiOperation("新增权限")
@@ -61,7 +60,6 @@ public class SysPrivilegeController {
     @PreAuthorize("hasAuthority('sys:privilege:create') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.CREATED)
     public IdVO createPrivilege(@Validated @RequestBody PrivilegeQuery privilegeQuery) {
-        System.err.println(privilegeQuery.getParentId());
         String id = privilegeService.createPrivilege(privilegeQuery);
         return new IdVO(id);
     }
