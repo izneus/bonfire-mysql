@@ -34,7 +34,7 @@ bonfire:
   # 登录是否启用验证码校验
   captchaEnabled: true
   # 默认密码
-  defaultPassword: Password666
+  defaultPassword: Bonfire@2022
   # 是否开启@AccessLog日志记录写库
   accessLog: true
   mac:

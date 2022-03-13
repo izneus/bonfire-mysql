@@ -15,7 +15,7 @@ public class RegExp {
     /**
      * 强密码，必须包含小写字母、大写字母、数字，长度为8～16
      */
-    public static final String PASSWORD = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,16}$";
+    public static final String PASSWORD = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d$@$!%*#?&]{8,16}$";
 
     /**
      * 用户名，必须为5～20位字母
