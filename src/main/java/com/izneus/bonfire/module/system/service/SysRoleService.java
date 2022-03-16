@@ -57,6 +57,11 @@ public interface SysRoleService extends IService<SysRoleEntity> {
      */
     void deleteRoleById(String id);
 
+    /**
+     * 批量删除角色
+     *
+     * @param roleIds 角色id列表
+     */
     void deleteRoleBatch(List<String> roleIds);
 
     /**

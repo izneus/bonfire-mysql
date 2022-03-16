@@ -17,9 +17,6 @@ public class GetDictVO {
     @ApiModelProperty("字典类型")
     private String dictType;
 
-    @ApiModelProperty("字典编码")
-    private String dictCode;
-
     @ApiModelProperty("字典值")
     private String dictValue;
 
