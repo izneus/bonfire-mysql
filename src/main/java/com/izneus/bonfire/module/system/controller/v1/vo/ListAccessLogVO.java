@@ -1,8 +1,11 @@
 package com.izneus.bonfire.module.system.controller.v1.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+
+import java.util.Date;
 
 /**
  * @author Izneus
@@ -43,4 +46,8 @@ public class ListAccessLogVO {
 
     @ApiModelProperty("请求耗时，单位毫秒")
     private Long elapsedTime;
+
+    @ApiModelProperty("创建时间")
+    @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
 }
