@@ -25,10 +25,5 @@ public class ListFileQuery extends BasePageQuery {
     private String query;
 
     @ApiModelProperty("开始时间")
-    @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date startTime;
-
-    @ApiModelProperty("结束时间")
-    @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date endTime;
+    private List<Date> createTime;
 }

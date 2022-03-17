@@ -20,6 +20,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import oshi.util.FormatUtil;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
@@ -49,7 +50,11 @@ public class SysFileController {
         // todo 文件上传可能会有权限控制，比如admin看所有，user看自己上传的
         Page<SysFileEntity> page = fileService.listFiles(query);
         List<ListFileVO> rows = page.getRecords().stream()
-                .map(file -> BeanUtil.copyProperties(file, ListFileVO.class))
+                .map(file -> {
+                    ListFileVO vo = BeanUtil.copyProperties(file, ListFileVO.class);
+                    vo.setFileSize(FormatUtil.formatBytes(file.getFileSize()));
+                    return vo;
+                })
                 .collect(Collectors.toList());
         return new BasePageVO<>(page, rows);
     }
