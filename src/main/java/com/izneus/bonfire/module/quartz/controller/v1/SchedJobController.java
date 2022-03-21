@@ -6,14 +6,10 @@ import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.common.base.BasePageVO;
 import com.izneus.bonfire.module.quartz.controller.v1.query.JobQuery;
 import com.izneus.bonfire.module.quartz.controller.v1.query.ListJobQuery;
-import com.izneus.bonfire.module.quartz.controller.v1.query.ListLogQuery;
 import com.izneus.bonfire.module.quartz.controller.v1.query.UpdateJobQuery;
 import com.izneus.bonfire.module.quartz.controller.v1.vo.JobVO;
 import com.izneus.bonfire.module.quartz.controller.v1.vo.ListJobVO;
-import com.izneus.bonfire.module.quartz.controller.v1.vo.ListLogVO;
 import com.izneus.bonfire.module.quartz.entity.SchedJobEntity;
-import com.izneus.bonfire.module.quartz.entity.SchedJobLogEntity;
-import com.izneus.bonfire.module.quartz.service.SchedJobLogService;
 import com.izneus.bonfire.module.quartz.service.SchedJobService;
 import com.izneus.bonfire.module.system.controller.v1.query.IdQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.IdsQuery;
@@ -22,11 +18,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.support.CronSequenceGenerator;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotBlank;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,8 +50,19 @@ public class SchedJobController {
     public BasePageVO<ListJobVO> listJobs(@Validated @RequestBody ListJobQuery query) {
         Page<SchedJobEntity> page = jobService.listJobs(query);
         List<ListJobVO> rows = page.getRecords().stream()
-                .map(job -> BeanUtil.copyProperties(job, ListJobVO.class))
+                .map(job -> {
+                    ListJobVO vo = BeanUtil.copyProperties(job, ListJobVO.class);
+                    // 计算下一次执行时间
+                    CronSequenceGenerator cronSequenceGenerator = new CronSequenceGenerator(vo.getCron());
+                    Date now = new Date();
+                    Date nextRunTime = cronSequenceGenerator.next(now);
+                    vo.setNextRunTime(nextRunTime);
+                    return vo;
+                })
                 .collect(Collectors.toList());
+        // 拼接上一次运行情况
+        List<String> jobIds = rows.stream().map(ListJobVO::getId).collect(Collectors.toList());
+
         return new BasePageVO<>(page, rows);
     }
 
@@ -115,6 +123,15 @@ public class SchedJobController {
     @PreAuthorize("hasAuthority('sched:job:delete') or hasAuthority('admin')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteJob(@Validated @RequestBody IdQuery query) {
+        jobService.deleteJob(query.getId());
+    }
+
+    @AccessLog("立即执行一次")
+    @ApiOperation("立即执行一次")
+    @PostMapping("/runAtOnce")
+    @PreAuthorize("hasAuthority('sched:job:create') or hasAuthority('admin')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void runJobAtOnce(@Validated @RequestBody IdQuery query) {
         jobService.deleteJob(query.getId());
     }
 

@@ -15,8 +15,6 @@ import com.izneus.bonfire.module.quartz.entity.SchedJobEntity;
 import com.izneus.bonfire.module.quartz.mapper.SchedJobMapper;
 import com.izneus.bonfire.module.quartz.service.SchedJobService;
 import com.izneus.bonfire.module.quartz.util.QuartzUtils;
-import com.izneus.bonfire.module.system.controller.v1.vo.PrivilegeVO;
-import com.izneus.bonfire.module.system.entity.SysPrivilegeEntity;
 import lombok.RequiredArgsConstructor;
 import org.quartz.Scheduler;
 import org.springframework.stereotype.Service;
@@ -124,7 +122,11 @@ public class SchedJobServiceImpl extends ServiceImpl<SchedJobMapper, SchedJobEnt
         if (schedJobEntity == null) {
             return null;
         }
-        JobVO jobVO = BeanUtil.copyProperties(schedJobEntity, JobVO.class);
-        return jobVO;
+        return BeanUtil.copyProperties(schedJobEntity, JobVO.class);
+    }
+
+    @Override
+    public void runJobAtOnce(String id) {
+        QuartzUtils.runAtOnce(scheduler, id);
     }
 }

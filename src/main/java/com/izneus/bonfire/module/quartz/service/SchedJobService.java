@@ -78,4 +78,6 @@ public interface SchedJobService extends IService<SchedJobEntity> {
      */
     JobVO getJobById(String id);
 
+    void runJobAtOnce(String id);
+
 }

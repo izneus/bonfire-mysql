@@ -96,4 +96,12 @@ public class QuartzUtils {
         }
     }
 
+    public static void runAtOnce(Scheduler scheduler, String jobId) {
+        try {
+            scheduler.triggerJob(new JobKey(JOB_PREFIX + jobId));
+        } catch (SchedulerException e) {
+            throw new BadRequestException("立即执行一次任务失败", e);
+        }
+    }
+
 }

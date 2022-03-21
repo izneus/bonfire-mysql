@@ -33,7 +33,7 @@ public class ScheduleJob extends QuartzJobBean {
         SchedJobLogService jobLogService = SpringUtil.getBean(SchedJobLogService.class);
         // 构建jobLog准备保存任务运行日志
         SchedJobLogEntity jobLog = BeanUtil.copyProperties(job, SchedJobLogEntity.class,
-                "id", "status");
+                "id", "status", "create_time", "update_time");
         jobLog.setJobId(job.getId());
 
         Instant startTime = Instant.now();
