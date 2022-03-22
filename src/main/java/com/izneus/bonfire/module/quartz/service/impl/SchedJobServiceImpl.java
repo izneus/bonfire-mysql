@@ -126,7 +126,7 @@ public class SchedJobServiceImpl extends ServiceImpl<SchedJobMapper, SchedJobEnt
     }
 
     @Override
-    public void runJobAtOnce(String id) {
-        QuartzUtils.runAtOnce(scheduler, id);
+    public void runJobOnce(String id) {
+        QuartzUtils.runOnce(scheduler, id);
     }
 }

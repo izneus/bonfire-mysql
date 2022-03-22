@@ -27,13 +27,13 @@ public class ScheduleJob extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) {
-        // 获取参数
+        // 获取参数，如果运行本行报java.lang.ClassCastException错误，是因为devtools热部署导致，pom.xml注释即可
         SchedJobEntity job = (SchedJobEntity) jobExecutionContext.getMergedJobDataMap().get(Constant.JOB_KEY);
         // 获取调度任务日志服务的bean
         SchedJobLogService jobLogService = SpringUtil.getBean(SchedJobLogService.class);
         // 构建jobLog准备保存任务运行日志
         SchedJobLogEntity jobLog = BeanUtil.copyProperties(job, SchedJobLogEntity.class,
-                "id", "status", "create_time", "update_time");
+                "id", "status", "createTime", "updateTime");
         jobLog.setJobId(job.getId());
 
         Instant startTime = Instant.now();

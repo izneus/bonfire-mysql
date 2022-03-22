@@ -2,5 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.izneus.bonfire.module.quartz.mapper.SchedJobLogMapper">
     <select id="listLastJobLog" resultType="com.izneus.bonfire.module.quartz.entity.SchedJobLogEntity">
+        select tb.*
+        from (
+        select job_id, max(create_time) as create_time
+        from sched_job_log
+        where
+        <foreach item="item" index="index" collection="jobIds"
+                 open="job_id in (" separator="," close=")">
+            #{item}
+        </foreach>
+        group by job_id
+        ) ta,
+        sched_job_log tb
+        where ta.job_id = tb.job_id
+        and ta.create_time = tb.create_time
     </select>
 </mapper>

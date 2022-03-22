@@ -2,6 +2,7 @@ package com.izneus.bonfire.module.quartz.mapper;
 
 import com.izneus.bonfire.module.quartz.entity.SchedJobLogEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -15,6 +16,6 @@ import java.util.List;
  */
 public interface SchedJobLogMapper extends BaseMapper<SchedJobLogEntity> {
 
-    List<SchedJobLogEntity> listLastJobLog(List<String> jobIds);
+    List<SchedJobLogEntity> listLastJobLog(@Param("jobIds") List<String> jobIds);
 
 }

@@ -96,7 +96,7 @@ public class QuartzUtils {
         }
     }
 
-    public static void runAtOnce(Scheduler scheduler, String jobId) {
+    public static void runOnce(Scheduler scheduler, String jobId) {
         try {
             scheduler.triggerJob(new JobKey(JOB_PREFIX + jobId));
         } catch (SchedulerException e) {

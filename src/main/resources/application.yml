@@ -2,10 +2,10 @@ spring:
   # 激活的配置文件 dev|prod
   profiles:
     active: @env@
-#  quartz:
-#    job-store-type: jdbc
-#    jdbc:
-#      initialize-schema: never
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: never
 
 # jwt
 jwt:
