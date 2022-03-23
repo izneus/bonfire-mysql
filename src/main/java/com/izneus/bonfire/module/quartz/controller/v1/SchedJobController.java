@@ -58,7 +58,8 @@ public class SchedJobController {
         Page<SchedJobEntity> page = jobService.listJobs(query);
         // 查询上一次运行情况
         List<String> jobIds = page.getRecords().stream().map(SchedJobEntity::getId).collect(Collectors.toList());
-        List<SchedJobLogEntity> jobLogs = jobLogMapper.listLastJobLog(jobIds);
+        // jobIds元素为空的时候，不要执行查询
+        List<SchedJobLogEntity> jobLogs = jobIds.size() > 0 ? jobLogMapper.listLastJobLog(jobIds) : null;
         // 准备vo
         List<ListJobVO> rows = page.getRecords().stream()
                 .map(job -> {
@@ -69,11 +70,13 @@ public class SchedJobController {
                     Date nextRunTime = cronSequenceGenerator.next(now);
                     vo.setNextRunTime(nextRunTime);
                     // 拼接上次执行时间和耗时
-                    for (SchedJobLogEntity jobLog : jobLogs) {
-                        if (jobLog.getJobId().equals(vo.getId())) {
-                            vo.setPrevRunTime(jobLog.getCreateTime());
-                            vo.setDurationMillis(jobLog.getDurationMillis());
-                            break;
+                    if (jobLogs != null) {
+                        for (SchedJobLogEntity jobLog : jobLogs) {
+                            if (jobLog.getJobId().equals(vo.getId())) {
+                                vo.setPrevRunTime(jobLog.getCreateTime());
+                                vo.setDurationMillis(jobLog.getDurationMillis());
+                                break;
+                            }
                         }
                     }
                     return vo;

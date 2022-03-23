@@ -7,6 +7,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * @author Izneus
  * @date 2020/11/10
@@ -16,6 +19,6 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class ListLogQuery extends BasePageQuery {
-    @ApiModelProperty("任务id")
-    private String jobId;
+    @ApiModelProperty("开始时间")
+    private List<Date> createTime;
 }
