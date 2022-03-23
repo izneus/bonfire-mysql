@@ -10,6 +10,7 @@ import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Izneus
@@ -20,14 +21,17 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class ListAccessLogQuery extends BasePageQuery {
-    @ApiModelProperty("客户端ip")
-    private String clientIp;
+    @ApiModelProperty("接口名称")
+    private String query;
 
     @ApiModelProperty("开始时间")
-    @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date startTime;
+    private List<Date> createTime;
 
-    @ApiModelProperty("结束时间")
-    @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date endTime;
+//    @ApiModelProperty("开始时间")
+//    @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+//    private Date startTime;
+//
+//    @ApiModelProperty("结束时间")
+//    @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+//    private Date endTime;
 }

@@ -32,6 +32,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
+import java.util.List;
 
 import static com.izneus.bonfire.common.constant.Constant.TEMP_FILE;
 import static com.izneus.bonfire.common.constant.Constant.UPLOAD_FILE;
@@ -54,19 +55,13 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFileEntity
 
     @Override
     public Page<SysFileEntity> listFiles(ListFileQuery query) {
-        // creatTime列表里取值，分别设置开始时间和结束时间
-        Date startTime = null;
-        Date endTime = null;
-        boolean hasTime = query.getCreateTime() != null && query.getCreateTime().size() == 2;
-        if (hasTime) {
-            startTime = query.getCreateTime().get(0);
-            endTime = query.getCreateTime().get(1);
-        }
+        // 解析设置时间
+        List<Date> createTimes = CommonUtil.parseDateRange(query.getCreateTime());
         return page(
                 new Page<>(query.getPageNum(), query.getPageSize()),
                 new LambdaQueryWrapper<SysFileEntity>()
-                        .ge(startTime != null, SysFileEntity::getCreateTime, startTime)
-                        .le(endTime != null, SysFileEntity::getCreateTime, endTime)
+                        .ge(createTimes.get(0) != null, SysFileEntity::getCreateTime, createTimes.get(0))
+                        .le(createTimes.get(1) != null, SysFileEntity::getCreateTime, createTimes.get(1))
                         .and(StrUtil.isNotBlank(query.getQuery()), wrapper -> wrapper
                                 .like(StrUtil.isNotBlank(query.getQuery()),
                                         SysFileEntity::getFilename, query.getQuery())

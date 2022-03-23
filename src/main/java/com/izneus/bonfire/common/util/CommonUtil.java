@@ -3,9 +3,11 @@ package com.izneus.bonfire.common.util;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.EnumUtil;
-import com.izneus.bonfire.common.constant.Dict;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -60,9 +62,19 @@ public class CommonUtil {
      * @param plaintext 明文
      * @return ciphertext 密文
      */
-    @SuppressWarnings("WeakerAccess")
     public static String encryptPassword(String plaintext) {
         return new BCryptPasswordEncoder().encode(plaintext);
+    }
+
+    public static List<Date> parseDateRange(List<Date> dateRange) {
+        Date startTime = null;
+        Date endTime = null;
+        boolean hasTime = dateRange != null && dateRange.size() == 2;
+        if (hasTime) {
+            startTime = dateRange.get(0);
+            endTime = dateRange.get(1);
+        }
+        return Arrays.asList(startTime, endTime);
     }
 
 }
