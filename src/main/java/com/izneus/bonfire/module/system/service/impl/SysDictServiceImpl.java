@@ -43,7 +43,9 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDictEntity
                                 SysDictEntity::getDictLabel, query.getDictLabel())
                         .like(StringUtils.hasText(query.getStatus()),
                                 SysDictEntity::getStatus, query.getStatus())
-                        .orderByDesc(SysDictEntity::getCreateTime)
+                        .orderByAsc(SysDictEntity::getDictType)
+                        .orderByAsc(SysDictEntity::getDictSort)
+                        .orderByAsc(SysDictEntity::getId)
         );
     }
 
