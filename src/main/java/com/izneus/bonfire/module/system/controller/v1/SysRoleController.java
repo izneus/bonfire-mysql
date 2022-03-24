@@ -95,16 +95,6 @@ public class SysRoleController {
         roleService.deleteRoleBatch(query.getIds());
     }
 
-    /// todo 权限更新，待删除
-    /*@AccessLog("设置角色权限")
-    @ApiOperation("设置角色权限")
-    @PostMapping("/setAuth")
-    @PreAuthorize("hasAnyAuthority('sys:role:create','sys:role:update') or hasAuthority('admin')")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void setRolePrivById(@Validated @RequestBody RoleAuthQuery query) {
-        roleService.setRolePrivById(query.getRoleId(), query.getAuthorityIds());
-    }*/
-
     /*@AccessLog("设置角色权限")
     @ApiOperation("设置角色权限")
     @PostMapping("/setPrivilege")
