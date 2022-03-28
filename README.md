@@ -57,7 +57,8 @@ Github：[https://github.com/izneus/bonfire-admin-vue.git](https://github.com/iz
 TODO
 
 ## 反馈交流
-技术交流QQ群：xxxxxxx
+技术交流QQ群：1017877875   
+微信群：TODO
 
 ## 产品路线图
 未来计划会添加的功能：
