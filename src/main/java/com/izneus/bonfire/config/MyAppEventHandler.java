@@ -25,8 +25,8 @@ public class MyAppEventHandler {
         try {
             String hostAddress = Inet4Address.getLocalHost().getHostAddress();
             String port = event.getApplicationContext().getEnvironment().getProperty("local.server.port");
-            log.info("Swagger地址：http://{}:{}/swagger-ui.html", hostAddress, port);
-            log.info("Swagger地址：http://localhost:{}/swagger-ui.html", port);
+            log.info("Swagger地址：http://{}:{}/swagger-ui/index.html", hostAddress, port);
+            log.info("Swagger地址：http://localhost:{}/swagger-ui/index.html", port);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }

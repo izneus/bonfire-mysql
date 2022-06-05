@@ -16,12 +16,11 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <swagger.version>2.9.2</swagger.version>
         <mybatisplus.version>3.3.2</mybatisplus.version>
         <ojdbc.version>19.3.0.0</ojdbc.version>
         <jjwt.version>0.11.2</jjwt.version>
         <skipTests>true</skipTests>
-        <maven.build.timestamp.format>yyyyMMddSSS</maven.build.timestamp.format>
+        <maven.build.timestamp.format>yyyyMMdd</maven.build.timestamp.format>
     </properties>
 
     <profiles>
@@ -54,16 +53,6 @@
     </repositories>
 
     <dependencies>
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-starter</artifactId>-->
-        <!--            <exclusions>-->
-        <!--                <exclusion>-->
-        <!--                    <groupId>org.apache.logging.log4j</groupId>-->
-        <!--                    <artifactId>log4j-to-slf4j</artifactId>-->
-        <!--                </exclusion>-->
-        <!--            </exclusions>-->
-        <!--        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -197,13 +186,14 @@
         <!-- swagger -->
         <dependency>
             <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>${swagger.version}</version>
+            <artifactId>springfox-boot-starter</artifactId>
+            <version>3.0.0</version>
         </dependency>
+        <!-- fix warning "Illegal DefaultValue 0 for parameter type integer" -->
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${swagger.version}</version>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-models</artifactId>
+            <version>1.6.6</version>
         </dependency>
 
         <!-- 图形验证码 -->
@@ -281,6 +271,21 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-to-slf4j</artifactId>
             <version>2.17.1</version>
+        </dependency>
+
+        <!-- flowable -->
+        <dependency>
+            <groupId>org.flowable</groupId>
+            <artifactId>flowable-spring-boot-starter</artifactId>
+            <version>6.7.2</version>
+        </dependency>
+        <!-- 解决Liquibase
+        java.lang.ClassCastException:
+        java.time.LocalDateTime cannot be cast to java.lang.String报错问题 -->
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>4.10.0</version>
         </dependency>
 
     </dependencies>

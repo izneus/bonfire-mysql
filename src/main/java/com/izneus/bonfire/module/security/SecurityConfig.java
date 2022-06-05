@@ -28,6 +28,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
+    private static final String[] AUTH_WHITELIST = {
+            // swagger相关
+            "/authenticate",
+            "/swagger-resources/**",
+            "/swagger-ui/**",
+            "/*/api-docs",
+            "/webjars/**",
+            // 登录相关，允许匿名访问
+            "/api/*/login",
+            "/api/*/captcha",
+            // 文件get方式下载
+            "/api/*/file/download"
+    };
+
     /*@Bean
     GrantedAuthorityDefaults grantedAuthorityDefaults() {
         // 去除 ROLE_ 前缀
@@ -58,13 +72,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                // swagger 文档
-                .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/webjars/**",
-                        "/*/api-docs").permitAll()
-                // 登录允许匿名访问
-                .antMatchers("/api/*/login", "/api/*/captcha").permitAll()
-                // 下载文件路径
-                .antMatchers("/api/*/file/download").permitAll()
+                .antMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated();
     }
 }

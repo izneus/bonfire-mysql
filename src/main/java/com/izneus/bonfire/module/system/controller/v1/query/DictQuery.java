@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
  * @author Izneus
  * @date 2020/09/09
  */
-@ApiModel("字典列表dto")
+@ApiModel("字典列表query")
 @Data
 public class DictQuery {
 

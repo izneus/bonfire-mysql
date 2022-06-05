@@ -34,3 +34,10 @@ jwt:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# 流程引擎
+flowable:
+  database-schema-update: false
+  db-history-used: true
+  check-process-definitions: false
+  history-level: full

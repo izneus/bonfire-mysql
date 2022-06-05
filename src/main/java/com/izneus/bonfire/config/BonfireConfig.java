@@ -24,6 +24,7 @@ public class BonfireConfig {
         private String tempPath;
     }
 
+    private String version;
     private Boolean captchaEnabled;
     private String defaultPassword;
     private Boolean accessLog;

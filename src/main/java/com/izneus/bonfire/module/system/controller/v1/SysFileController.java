@@ -4,9 +4,13 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.common.base.BasePageVO;
-import com.izneus.bonfire.module.system.controller.v1.query.*;
+import com.izneus.bonfire.module.system.controller.v1.query.IdQuery;
+import com.izneus.bonfire.module.system.controller.v1.query.IdsQuery;
+import com.izneus.bonfire.module.system.controller.v1.query.ListFileQuery;
+import com.izneus.bonfire.module.system.controller.v1.query.UpdateFileQuery;
 import com.izneus.bonfire.module.system.controller.v1.vo.FileVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
+import com.izneus.bonfire.module.system.controller.v1.vo.IdsVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.ListFileVO;
 import com.izneus.bonfire.module.system.entity.SysFileEntity;
 import com.izneus.bonfire.module.system.service.SysFileService;
@@ -107,6 +111,16 @@ public class SysFileController {
     public IdVO uploadFile(@RequestParam("file") MultipartFile multipartFile) {
         String fileId = fileService.uploadFile(multipartFile);
         return new IdVO(fileId);
+    }
+
+    @AccessLog("上传多文件")
+    @ApiOperation("上传多文件")
+    @PostMapping(value = "/batchUpload")
+    @PreAuthorize("hasAuthority('sys:file:upload') or hasAuthority('admin')")
+    public IdsVO uploadFiles(@RequestParam("file") List<MultipartFile> multipartFiles) {
+        // 多文件接口swagger测试失败，content-type好像设置错了，postman测试可以
+        List<String> fileIds = fileService.uploadFiles(multipartFiles);
+        return new IdsVO(fileIds);
     }
 
     /**

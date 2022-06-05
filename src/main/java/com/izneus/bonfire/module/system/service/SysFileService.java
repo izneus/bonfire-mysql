@@ -8,6 +8,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 /**
  * <p>
  * 上传文件信息表 服务类
@@ -32,6 +34,14 @@ public interface SysFileService extends IService<SysFileEntity> {
      * @return 文件id
      */
     String uploadFile(MultipartFile multipartFile);
+
+    /**
+     * 上传多个文件
+     *
+     * @param multipartFiles 上传文件列表
+     * @return 文件id
+     */
+    List<String> uploadFiles(List<MultipartFile> multipartFiles);
 
     /**
      * 下载文件

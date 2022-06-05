@@ -33,6 +33,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.izneus.bonfire.common.constant.Constant.TEMP_FILE;
 import static com.izneus.bonfire.common.constant.Constant.UPLOAD_FILE;
@@ -106,6 +107,11 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFileEntity
         fileEntity.setFileSize(sizeBytes);
         save(fileEntity);
         return fileEntity.getId();
+    }
+
+    @Override
+    public List<String> uploadFiles(List<MultipartFile> multipartFiles) {
+        return multipartFiles.stream().map(this::uploadFile).collect(Collectors.toList());
     }
 
     @Override
