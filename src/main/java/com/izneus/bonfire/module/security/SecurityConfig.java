@@ -28,6 +28,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
+    /**
+     * 允许匿名访问的白名单，不需要加Authorization Header即可访问的地址
+     */
     private static final String[] AUTH_WHITELIST = {
             // swagger相关
             "/authenticate",
@@ -35,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/swagger-ui/**",
             "/*/api-docs",
             "/webjars/**",
-            // 登录相关，允许匿名访问
+            // 登录相关
             "/api/*/login",
             "/api/*/captcha",
             // 文件get方式下载
