@@ -322,7 +322,7 @@
             </plugin>-->
         </plugins>
         <finalName>
-            ${project.artifactId}-${project.version}-build${maven.build.timestamp}
+            ${project.name}-${project.version}-build${maven.build.timestamp}
         </finalName>
     </build>
 
