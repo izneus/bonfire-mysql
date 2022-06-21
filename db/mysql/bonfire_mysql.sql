@@ -300,6 +300,27 @@ CREATE TABLE `sys_user_role`
 ;
 
 -- ----------------------------
+-- 工作流_OA_请假业务表
+-- ----------------------------
+CREATE TABLE `bpm_oa_leave`
+(
+    `id`                  varchar(64) NOT NULL COMMENT 'pk',
+    `process_instance_id` varchar(64)  DEFAULT NULL COMMENT '流程实例id',
+    `start_time`          datetime     DEFAULT NULL COMMENT '请假开始时间',
+    `end_time`            datetime     DEFAULT NULL COMMENT '请假结束时间',
+    `reason`              varchar(200) DEFAULT NULL COMMENT '请假原因',
+    `create_time`         datetime     DEFAULT NULL COMMENT '创建时间',
+    `update_time`         datetime     DEFAULT NULL COMMENT '更新时间',
+    `create_user`         varchar(64)  DEFAULT NULL COMMENT '创建用户',
+    `update_user`         varchar(64)  DEFAULT NULL COMMENT '更新用户',
+    `remark`              varchar(200) DEFAULT NULL COMMENT '备注',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `oa_leave_id_uindex` (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_general_ci COMMENT ='请假业务数据'
+;
+
+-- ----------------------------
 -- 初始化数据
 -- ----------------------------
 -- sched_job
