@@ -150,7 +150,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFileEntity
                             "attachment; filename=\"" + resource.getFilename() + "\"")
                     .body(resource);
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            log.error("MalformedURLException", e);
         }
         return ResponseEntity.notFound().build();
     }

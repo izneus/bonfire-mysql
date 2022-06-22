@@ -28,7 +28,7 @@ public class MyAppEventHandler {
             log.info("Swagger地址：http://{}:{}/swagger-ui/index.html", hostAddress, port);
             log.info("Swagger地址：http://localhost:{}/swagger-ui/index.html", port);
         } catch (UnknownHostException e) {
-            e.printStackTrace();
+            log.error("UnknownHostException", e);
         }
     }
 
