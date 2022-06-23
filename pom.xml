@@ -155,7 +155,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.23</version>
+            <version>8.0.28</version>
         </dependency>
 
         <!-- mybatis-plus -->
@@ -231,7 +231,7 @@
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
-            <version>4.1.2</version>
+            <version>5.2.1</version>
         </dependency>
         <!-- hutool的ServletUtil需要依赖 -->
         <dependency>
