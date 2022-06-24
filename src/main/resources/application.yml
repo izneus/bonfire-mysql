@@ -41,3 +41,15 @@ flowable:
   db-history-used: true
   check-process-definitions: false
   history-level: full
+
+# ssl 开启https
+# mac的chrome或者新版chrome不允许访问自签证书（以前可以选择跳过、继续访问），提示ERR_CERT_INVALID，
+# 解决办法是页面空白处，输入 thisisunsafe
+#server:
+#  ssl:
+#    key-store-type: PKCS12
+#    key-store: classpath:keystore/bonfire.p12
+#    key-store-password: 123456
+#    key-alias: bonfire
+#    enabled: true
+#  port: 443
