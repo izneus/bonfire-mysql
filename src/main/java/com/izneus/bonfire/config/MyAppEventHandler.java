@@ -32,6 +32,7 @@ public class MyAppEventHandler {
             String httpStr = "true".equals(isSsl) ? "https" : "http";
             log.info("Swagger地址：{}://{}:{}/swagger-ui/index.html", httpStr, hostAddress, port);
             log.info("Swagger地址：{}://localhost:{}/swagger-ui/index.html", httpStr, port);
+            log.info("Knife4j地址：{}://localhost:{}/doc.html", httpStr, port);
         } catch (UnknownHostException e) {
             log.error("UnknownHostException", e);
         }

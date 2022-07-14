@@ -38,6 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/swagger-ui/**",
             "/*/api-docs",
             "/webjars/**",
+            // knife4j
+            "/doc.html",
             // 登录相关
             "/api/*/login",
             "/api/*/captcha",
