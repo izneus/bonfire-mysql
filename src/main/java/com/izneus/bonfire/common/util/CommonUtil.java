@@ -3,12 +3,19 @@ package com.izneus.bonfire.common.util;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.EnumUtil;
+import com.izneus.bonfire.module.system.controller.v1.query.UploadChunkQuery;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * 其他通用工具类
@@ -16,6 +23,7 @@ import java.util.Map;
  * @author Izneus
  * @date 2020/08/03
  */
+@Slf4j
 public class CommonUtil {
 
     private static final int MAX_FILENAME_LENGTH = 255;
@@ -75,6 +83,69 @@ public class CommonUtil {
             endTime = dateRange.get(1);
         }
         return Arrays.asList(startTime, endTime);
+    }
+
+    /**
+     * 创建分片文件保存路径
+     *
+     * @param basePath 根目录
+     * @param chunk    分片信息
+     * @return 路径
+     */
+    @SneakyThrows
+    public static String generatePath(String basePath, UploadChunkQuery chunk) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(basePath).append(File.separator).append(chunk.getIdentifier());
+        // todo 多余代码，可以考虑精简
+        //判断uploadFolder/identifier 路径是否存在，不存在则创建
+        if (!Files.isWritable(Paths.get(sb.toString()))) {
+            log.info("path not exist,create path: {}", sb.toString());
+            Files.createDirectories(Paths.get(sb.toString()));
+        }
+        return sb.append(File.separator)
+                .append(chunk.getFilename())
+                .append("-")
+                .append(chunk.getChunkNumber()).toString();
+    }
+
+    /**
+     * 合并分片文件
+     *
+     * @param folder   目录
+     * @param filename 文件名
+     */
+    @SneakyThrows
+    public static void mergeChunks(String folder, String filename) {
+        String targetFile = folder + File.separator + filename;
+
+        if (FileUtil.exist(targetFile)) {
+            // 存在文件，不用继续合并
+            return;
+        }
+        Files.createFile(Paths.get(targetFile));
+        Stream<Path> stream = Files.list(Paths.get(folder));
+        stream
+                .filter(path ->
+                        !path.getFileName().toString().equals(filename)
+                                && !".DS_Store".equals(path.getFileName().toString())
+                )
+                .sorted((o1, o2) -> {
+                    String p1 = o1.getFileName().toString();
+                    String p2 = o2.getFileName().toString();
+                    int i1 = p1.lastIndexOf("-");
+                    int i2 = p2.lastIndexOf("-");
+                    return Integer.valueOf(p2.substring(i2)).compareTo(Integer.valueOf(p1.substring(i1)));
+                })
+                .forEach(path -> {
+                    try {
+                        //以追加的形式写入文件
+                        Files.write(Paths.get(targetFile), Files.readAllBytes(path), StandardOpenOption.APPEND);
+                        //合并后删除该块
+                        Files.delete(path);
+                    } catch (IOException e) {
+                        log.error(e.getMessage(), e);
+                    }
+                });
     }
 
 }

@@ -1,13 +1,11 @@
 package com.izneus.bonfire.module.system.controller.v1.query;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.izneus.bonfire.common.base.BasePageQuery;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.List;

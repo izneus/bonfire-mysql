@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.izneus.bonfire.common.util.CommonUtil;
 import com.izneus.bonfire.module.system.controller.v1.query.ListAccessLogQuery;
 import com.izneus.bonfire.module.system.entity.SysAccessLogEntity;
-import com.izneus.bonfire.module.system.entity.SysFileEntity;
 import com.izneus.bonfire.module.system.mapper.SysAccessLogMapper;
 import com.izneus.bonfire.module.system.service.SysAccessLogService;
 import org.springframework.stereotype.Service;

@@ -1,5 +1,6 @@
 package com.izneus.bonfire.module.system.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
@@ -11,9 +12,13 @@ import com.izneus.bonfire.common.exception.BadRequestException;
 import com.izneus.bonfire.common.util.CommonUtil;
 import com.izneus.bonfire.config.BonfireConfig;
 import com.izneus.bonfire.module.security.JwtUtil;
+import com.izneus.bonfire.module.system.controller.v1.query.UploadChunkQuery;
+import com.izneus.bonfire.module.system.controller.v1.query.ChunkQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.ListFileQuery;
+import com.izneus.bonfire.module.system.entity.SysFileChunkEntity;
 import com.izneus.bonfire.module.system.entity.SysFileEntity;
 import com.izneus.bonfire.module.system.mapper.SysFileMapper;
+import com.izneus.bonfire.module.system.service.SysFileChunkService;
 import com.izneus.bonfire.module.system.service.SysFileService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -53,6 +58,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFileEntity
 
     private final BonfireConfig bonfireConfig;
     private final JwtUtil jwtUtil;
+    private final SysFileChunkService chunkService;
 
     @Override
     public Page<SysFileEntity> listFiles(ListFileQuery query) {
@@ -107,6 +113,48 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFileEntity
         fileEntity.setFileSize(sizeBytes);
         save(fileEntity);
         return fileEntity.getId();
+    }
+
+    @Override
+    public String uploadChunk(UploadChunkQuery chunkFileQuery) {
+        MultipartFile multipartFile = chunkFileQuery.getFile();
+        // 保存分片文件
+        String path = CommonUtil.generatePath(bonfireConfig.getPath().getUploadPath(), chunkFileQuery);
+        File file = FileUtil.touch(path);
+        // 转储文件
+        try {
+            multipartFile.transferTo(file);
+        } catch (IOException e) {
+            log.error("IOException", e);
+            throw new BadRequestException(ErrorCode.INTERNAL, "转储分片文件失败", e);
+        }
+        // 保存分片基础信息
+        SysFileChunkEntity chunkEntity = BeanUtil.copyProperties(chunkFileQuery, SysFileChunkEntity.class);
+        return chunkService.save(chunkEntity) ? chunkEntity.getId() : null;
+    }
+
+    @Override
+    public String checkChunk(ChunkQuery chunkQuery) {
+        SysFileChunkEntity chunkEntity = chunkService.getOne(
+                new LambdaQueryWrapper<SysFileChunkEntity>()
+                        .eq(SysFileChunkEntity::getIdentifier, chunkQuery.getIdentifier())
+                        .eq(SysFileChunkEntity::getChunkNumber, chunkQuery.getChunkNumber())
+        );
+        // todo 查询文件在硬盘上的实际情况
+        if (chunkEntity == null) {
+            // 文件不存在
+            throw new BadRequestException(ErrorCode.INVALID_ARGUMENT, "文件不存在");
+        }
+        return chunkEntity.getId();
+    }
+
+    @Override
+    public List<SysFileChunkEntity> listUploadedChunks(ChunkQuery chunkQuery) {
+        return chunkService.list(
+                new LambdaQueryWrapper<SysFileChunkEntity>()
+                        .eq(SysFileChunkEntity::getIdentifier, chunkQuery.getIdentifier())
+                        .select(SysFileChunkEntity::getChunkNumber)
+        );
     }
 
     @Override

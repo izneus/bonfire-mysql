@@ -4,14 +4,12 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.common.base.BasePageVO;
-import com.izneus.bonfire.module.system.controller.v1.query.IdQuery;
-import com.izneus.bonfire.module.system.controller.v1.query.IdsQuery;
-import com.izneus.bonfire.module.system.controller.v1.query.ListFileQuery;
-import com.izneus.bonfire.module.system.controller.v1.query.UpdateFileQuery;
-import com.izneus.bonfire.module.system.controller.v1.vo.FileVO;
-import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
-import com.izneus.bonfire.module.system.controller.v1.vo.IdsVO;
-import com.izneus.bonfire.module.system.controller.v1.vo.ListFileVO;
+import com.izneus.bonfire.common.util.CommonUtil;
+import com.izneus.bonfire.common.util.MinioUtil;
+import com.izneus.bonfire.config.BonfireConfig;
+import com.izneus.bonfire.module.system.controller.v1.query.*;
+import com.izneus.bonfire.module.system.controller.v1.vo.*;
+import com.izneus.bonfire.module.system.entity.SysFileChunkEntity;
 import com.izneus.bonfire.module.system.entity.SysFileEntity;
 import com.izneus.bonfire.module.system.service.SysFileService;
 import io.swagger.annotations.Api;
@@ -27,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import oshi.util.FormatUtil;
 
 import javax.validation.constraints.NotBlank;
+import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +44,8 @@ import java.util.stream.Collectors;
 public class SysFileController {
 
     private final SysFileService fileService;
+    private final MinioUtil minioUtil;
+    private final BonfireConfig bonfireConfig;
 
     @AccessLog("文件列表")
     @ApiOperation("文件列表")
@@ -131,6 +132,53 @@ public class SysFileController {
     @GetMapping("/download")
     public ResponseEntity<Resource> downloadFile(@NotBlank String token) {
         return fileService.downloadFile(token);
+    }
+
+    /**
+     * 提供给oss使用预签名
+     *
+     * @return url
+     */
+    @ApiOperation("生成上传路径")
+    @PostMapping("/getUploadUrl")
+    public String getUploadUrl() {
+        return minioUtil.getUploadUrl("xxx.png");
+    }
+
+    @AccessLog("上传分片文件")
+    @ApiOperation("上传分片文件")
+    @PostMapping("/uploadChunk")
+    @PreAuthorize("hasAuthority('sys:file:upload') or hasAuthority('admin')")
+    public String uploadChunk(UploadChunkQuery chunk) {
+        return fileService.uploadChunk(chunk);
+    }
+
+    @AccessLog("检查分片文件")
+    @ApiOperation("检查分片文件")
+    @GetMapping("/uploadChunk")
+    @PreAuthorize("hasAuthority('sys:file:upload') or hasAuthority('admin')")
+    public CheckChunkVO checkChunk(ChunkQuery chunk) {
+        /// return fileService.checkChunk(chunk);
+        List<SysFileChunkEntity> chunks = fileService.listUploadedChunks(chunk);
+        List<Long> chunkNumbers = chunks.stream()
+                .map(SysFileChunkEntity::getChunkNumber).collect(Collectors.toList());
+        return CheckChunkVO.builder().uploadChunks(chunkNumbers).build();
+    }
+
+    @AccessLog("合并文件")
+    @ApiOperation("合并文件")
+    @PostMapping("/mergeChunks")
+    @PreAuthorize("hasAuthority('sys:file:upload') or hasAuthority('admin')")
+    public String mergeChunks(@RequestBody MergeFileQuery query) {
+        String filename = query.getFilename();
+        String folder = bonfireConfig.getPath().getUploadPath()
+                + File.separator
+                + query.getIdentifier();
+        CommonUtil.mergeChunks(folder, filename);
+        /// todo 保存新生成的文件，返回相应信息
+        // fileInfo.setLocation(file);
+        // fileInfoService.addFileInfo(fileInfo);
+        return "合并成功";
     }
 
 }
