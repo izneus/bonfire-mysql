@@ -139,11 +139,12 @@ public class SysFileController {
      *
      * @return url
      */
-    @ApiOperation("生成上传路径")
+    /// todo 添加minio相关功能
+    /*@ApiOperation("生成上传路径")
     @PostMapping("/getUploadUrl")
     public String getUploadUrl() {
         return minioUtil.getUploadUrl("xxx.png");
-    }
+    }*/
 
     @AccessLog("上传分片文件")
     @ApiOperation("上传分片文件")

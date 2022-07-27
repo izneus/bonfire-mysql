@@ -47,3 +47,8 @@ bonfire:
   linux:
     uploadPath: /home/bonfire/upload
     tempPath: /home/bonfire/temp
+
+minio:
+  endpoint: url
+  accessKey: ak
+  secretKey: sk
