@@ -321,6 +321,29 @@ CREATE TABLE `bpm_oa_leave`
 ;
 
 -- ----------------------------
+-- 系统_文件分片表
+-- ----------------------------
+CREATE TABLE `sys_file_chunk`
+(
+    `id`                 varchar(64)    DEFAULT NULL COMMENT 'pk',
+    `chunk_number`       bigint(20)     DEFAULT NULL COMMENT '当前块的次序，第一个块是 1，注意不是从 0 开始的',
+    `chunk_size`         decimal(20, 2) DEFAULT NULL COMMENT '分片大小，单位',
+    `current_chunk_size` decimal(20, 2) DEFAULT NULL COMMENT '当前块的大小，实际大小',
+    `total_size`         bigint(20)     DEFAULT NULL COMMENT '文件总大小',
+    `identifier`         varchar(64)    DEFAULT NULL COMMENT '每个文件的唯一标示',
+    `filename`           varchar(200)   DEFAULT NULL COMMENT '文件名',
+    `relative_path`      varchar(200)   DEFAULT NULL COMMENT '文件夹上传的时候文件的相对路径属性',
+    `total_chunks`       bigint(20)     DEFAULT NULL COMMENT '总分片数',
+    `create_time`        datetime       DEFAULT NULL COMMENT '创建时间',
+    `create_user`        varchar(64)    DEFAULT NULL COMMENT '创建人',
+    `update_time`        datetime       DEFAULT NULL COMMENT '更新时间',
+    `update_user`        varchar(64)    DEFAULT NULL COMMENT '更新人',
+    `remark`             varchar(500)   DEFAULT NULL COMMENT '备注'
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_general_ci COMMENT ='分片文件表'
+;
+
+-- ----------------------------
 -- 初始化数据
 -- ----------------------------
 -- sched_job
