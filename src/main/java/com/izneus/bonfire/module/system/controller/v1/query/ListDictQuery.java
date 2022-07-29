@@ -9,7 +9,7 @@ import lombok.ToString;
 
 /**
  * @author Izneus
- * @date 2020/09/08
+ * @date 2020-09-08
  */
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)

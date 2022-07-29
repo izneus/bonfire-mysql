@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  * 获取当前用户的信息
  *
  * @author Izneus
- * @date 2020/01/08
+ * @date 2020-01-08
  */
 public class CurrentUserUtil {
 

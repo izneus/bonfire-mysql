@@ -4,7 +4,7 @@ package com.izneus.bonfire.common.constant;
  * 常用正则表达式
  *
  * @author Izneus
- * @date 2020/06/29
+ * @date 2020-06-29
  */
 public class RegExp {
     /**

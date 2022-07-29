@@ -16,7 +16,7 @@ import java.nio.charset.StandardCharsets;
  * 解决匿名用户访问无权限资源时的异常
  *
  * @author Izneus
- * @date 2020/07/03
+ * @date 2020-07-03
  */
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {

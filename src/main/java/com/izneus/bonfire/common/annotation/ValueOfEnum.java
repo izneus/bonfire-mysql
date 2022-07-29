@@ -13,7 +13,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * 校验字符串是否为合法枚举值
  *
  * @author Izneus
- * @date 2020/12/15
+ * @date 2020-12-15
  */
 @SuppressWarnings("unused")
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})

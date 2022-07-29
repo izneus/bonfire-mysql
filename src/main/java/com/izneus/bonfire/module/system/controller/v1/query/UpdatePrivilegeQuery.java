@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 
 /**
  * @author Joker
- * @date 2022-02-10 14:18
+ * @date 2022-02-10
  **/
 @ApiModel("更新角色query")
 @Data

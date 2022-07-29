@@ -7,7 +7,7 @@ import lombok.Data;
  * 统一异常处理返回信息
  *
  * @author Izneus
- * @date 2020/06/30
+ * @date 2020-06-30
  */
 @Data
 public class ApiError {

@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * @author Izneus
- * @date 2020/09/22
+ * @date 2020-09-22
  */
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)

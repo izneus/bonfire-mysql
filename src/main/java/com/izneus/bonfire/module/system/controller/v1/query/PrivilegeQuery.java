@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 /**
  * @author Joker
- * @date 2022-02-10 11:00
+ * @date 2022-02-10
  **/
 @ApiModel("权限Query")
 @Data

@@ -6,7 +6,7 @@ import lombok.Data;
 
 /**
  * @author Izneus
- * @date 2020/07/29
+ * @date 2020-07-29
  */
 @ApiModel("用户列表vo")
 @Data

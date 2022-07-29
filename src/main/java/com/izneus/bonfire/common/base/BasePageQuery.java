@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
  * 分页参数使用的基类
  *
  * @author Izneus
- * @date 2020/07/29
+ * @date 2020-07-29
  */
 @ApiModel("分页查询请求参数基类")
 @Data

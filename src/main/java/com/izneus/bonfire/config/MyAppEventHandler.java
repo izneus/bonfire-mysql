@@ -14,7 +14,7 @@ import java.net.UnknownHostException;
  * ApplicationEvent监听处理类
  *
  * @author Izneus
- * @date 2022/01/06
+ * @date 2022-01-06
  */
 @Component
 @RequiredArgsConstructor

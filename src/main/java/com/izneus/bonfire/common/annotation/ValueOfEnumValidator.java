@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  * ValueOfEnum注解的校验器，校验参数是否是合法枚举值，可以自行选择决定是校验枚举name或自定义字段value，当前用使用的字段名是value
  *
  * @author Izneus
- * @date 2020/12/15
+ * @date 2020-12-15
  */
 public class ValueOfEnumValidator implements ConstraintValidator<ValueOfEnum, CharSequence> {
     private List<String> acceptedValues;

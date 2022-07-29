@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 
 /**
  * @author Izneus
- * @date 2020/08/04
+ * @date 2020-08-04
  */
 public class BeanCopyUtil {
 

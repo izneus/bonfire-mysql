@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author Izneus
- * @date 2020/07/14
+ * @date 2020-07-14
  */
 @RequiredArgsConstructor
 @Component

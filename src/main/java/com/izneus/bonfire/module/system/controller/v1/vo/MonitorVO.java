@@ -8,7 +8,7 @@ import lombok.Data;
  * 软硬件监控信息，按需添加
  *
  * @author Izneus
- * @date 2020/10/10
+ * @date 2020-10-10
  */
 @ApiModel("监控详情")
 @Data

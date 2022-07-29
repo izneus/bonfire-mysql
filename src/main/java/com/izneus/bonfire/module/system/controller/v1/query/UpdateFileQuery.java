@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 
 /**
  * @author Izneus
- * @date 2021/10/28
+ * @date 2021-10-28
  */
 @ApiModel("更新文件信息query")
 @Data

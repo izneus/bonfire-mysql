@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
  * 当前认证用户controller，基本是查询一些"我的"信息
  *
  * @author Izneus
- * @date 2021/03/17
+ * @date 2021-03-17
  */
 @Api(tags = "系统:当前认证用户")
 @RestController

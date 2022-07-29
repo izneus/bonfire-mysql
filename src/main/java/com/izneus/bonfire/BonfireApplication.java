@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Import;
 
 /**
  * @author Izneus
- * @date 2020/06/30
+ * @date 2020-06-30
  */
 @SpringBootApplication
 @Import(cn.hutool.extra.spring.SpringUtil.class)

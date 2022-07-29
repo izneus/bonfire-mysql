@@ -4,7 +4,7 @@ import lombok.Data;
 
 /**
  * @author Izneus
- * @date 2020/08/10
+ * @date 2020-08-10
  */
 @Data
 public class ListPrivDTO {

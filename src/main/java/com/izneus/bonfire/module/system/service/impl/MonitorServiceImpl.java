@@ -10,7 +10,7 @@ import oshi.util.FormatUtil;
 
 /**
  * @author Izneus
- * @date 2020/09/24
+ * @date 2020-09-24
  */
 @Service
 public class MonitorServiceImpl implements MonitorService {

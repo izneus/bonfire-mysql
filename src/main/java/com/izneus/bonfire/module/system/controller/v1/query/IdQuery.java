@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 
 /**
  * @author Izneus
- * @date 2021/01/08
+ * @date 2021-01-08
  */
 @Data
 @ApiModel("通用idQuery")

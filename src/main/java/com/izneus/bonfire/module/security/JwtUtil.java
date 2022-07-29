@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author Izneus
- * @date 2020/06/20
+ * @date 2020-06-20
  */
 @Component
 @Slf4j

@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * @author Izneus
- * @date 2022/01/20
+ * @date 2022-01-20
  */
 @ApiModel("权限树vo")
 @Data

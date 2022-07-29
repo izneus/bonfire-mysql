@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
  * 密码生成器，留给一些临时需要手动看明文或者密文的场景使用
  *
  * @author Izneus
- * @date 2022/01/06
+ * @date 2022-01-06
  */
 @Slf4j
 public class PasswordGenerator {

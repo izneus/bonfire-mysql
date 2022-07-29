@@ -21,7 +21,7 @@ import java.util.List;
  * 全局出错处理
  *
  * @author Izneus
- * @date 2020/06/29
+ * @date 2020-06-29
  */
 @RestControllerAdvice
 @Slf4j

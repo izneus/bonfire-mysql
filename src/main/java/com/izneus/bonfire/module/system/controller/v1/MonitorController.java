@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Izneus
- * @date 2020/09/24
+ * @date 2020-09-24
  */
 @Api(tags = "系统:硬件监控")
 @RestController

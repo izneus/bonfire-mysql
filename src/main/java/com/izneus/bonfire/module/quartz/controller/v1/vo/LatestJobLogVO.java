@@ -8,7 +8,7 @@ import java.util.Date;
 
 /**
  * @author Izneus
- * @date 2022/03/22
+ * @date 2022-03-22
  */
 @Data
 public class LatestJobLogVO {

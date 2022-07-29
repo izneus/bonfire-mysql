@@ -8,7 +8,7 @@ import java.util.Date;
 
 /**
  * @author Izneus
- * @date 2020/09/23
+ * @date 2020-09-23
  */
 @ApiModel("文件详情vo")
 @Data

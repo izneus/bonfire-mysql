@@ -26,7 +26,7 @@ import static springfox.documentation.builders.PathSelectors.regex;
  * 3.x = http://localhost:8080/swagger-ui/index.html
  *
  * @author Izneus
- * @date 2020/06/28
+ * @date 2020-06-28
  */
 @Configuration
 @EnableSwagger2

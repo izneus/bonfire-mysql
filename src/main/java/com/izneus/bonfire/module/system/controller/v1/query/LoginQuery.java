@@ -10,7 +10,7 @@ import javax.validation.constraints.Pattern;
 
 /**
  * @author Izneus
- * @date 2020/06/29
+ * @date 2020-06-29
  */
 @ApiModel("登录表单")
 @Data

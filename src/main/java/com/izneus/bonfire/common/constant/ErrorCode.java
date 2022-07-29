@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
  * 比如400大多数为请求参数有误，而500是服务器异常
  *
  * @author Izneus
- * @date 2020/06/30
+ * @date 2020-06-30
  */
 @RequiredArgsConstructor
 @Getter

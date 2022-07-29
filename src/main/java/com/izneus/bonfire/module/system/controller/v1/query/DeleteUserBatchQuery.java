@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * @author Izneus
- * @date 2021/08/22
+ * @date 2021-08-22
  */
 @ApiModel("批量删除用户query")
 @Data

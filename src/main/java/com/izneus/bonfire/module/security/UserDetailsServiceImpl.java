@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  * spring security使用的UserDetailsService实现
  *
  * @author Izneus
- * @date 2020/07/03
+ * @date 2020-07-03
  */
 @RequiredArgsConstructor
 @Service("userDetailsService")

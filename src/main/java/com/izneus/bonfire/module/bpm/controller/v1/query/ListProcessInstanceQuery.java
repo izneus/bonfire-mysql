@@ -9,7 +9,7 @@ import lombok.ToString;
 
 /**
  * @author Izneus
- * @date 2020/07/20
+ * @date 2020-07-20
  */
 @ApiModel("流程实例列表query")
 @Data

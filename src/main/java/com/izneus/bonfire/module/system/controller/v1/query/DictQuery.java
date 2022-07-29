@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 
 /**
  * @author Izneus
- * @date 2020/09/09
+ * @date 2020-09-09
  */
 @ApiModel("字典列表query")
 @Data

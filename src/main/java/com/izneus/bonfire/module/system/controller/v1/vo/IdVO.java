@@ -7,7 +7,7 @@ import lombok.Data;
 
 /**
  * @author Izneus
- * @date 2020/08/14
+ * @date 2020-08-14
  */
 @AllArgsConstructor
 @ApiModel("通用IdVO")

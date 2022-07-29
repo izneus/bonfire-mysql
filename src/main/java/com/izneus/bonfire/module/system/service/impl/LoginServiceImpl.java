@@ -35,7 +35,7 @@ import static com.izneus.bonfire.common.constant.Constant.RedisKey;
 
 /**
  * @author Izneus
- * @date 2020/07/01
+ * @date 2020-07-01
  */
 @Service
 @RequiredArgsConstructor

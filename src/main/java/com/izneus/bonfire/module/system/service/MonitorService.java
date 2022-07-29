@@ -4,7 +4,7 @@ import com.izneus.bonfire.module.system.controller.v1.vo.MonitorVO;
 
 /**
  * @author Izneus
- * @date 2020/09/24
+ * @date 2020-09-24
  */
 public interface MonitorService {
 

@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * @author Izneus
- * @date 2020/12/04
+ * @date 2020-12-04
  */
 @Data
 @ApiModel("通知query")

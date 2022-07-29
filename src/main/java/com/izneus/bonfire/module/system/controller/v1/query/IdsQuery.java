@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * @author Izneus
- * @date 2021/08/31
+ * @date 2021-08-31
  */
 @Data
 @ApiModel("通用idsQuery")

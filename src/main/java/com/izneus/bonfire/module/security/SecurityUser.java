@@ -8,7 +8,7 @@ import java.util.Collection;
 
 /**
  * @author Izneus
- * @date 2020/07/20
+ * @date 2020-07-20
  */
 public class SecurityUser extends User {
     @Getter

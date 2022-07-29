@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * cors后端跨域配置
  *
  * @author Izneus
- * @date 2021/07/17
+ * @date 2021-07-17
  */
 @Configuration
 @EnableWebMvc

@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * Spring Security Config
  *
  * @author Izneus
- * @date 2020/07/02
+ * @date 2020-07-02
  */
 @Configuration
 @EnableWebSecurity

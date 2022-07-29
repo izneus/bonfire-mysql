@@ -7,7 +7,7 @@ import lombok.Data;
 
 /**
  * @author Izneus
- * @date 2020/07/17
+ * @date 2020-07-17
  */
 @ApiModel("验证码")
 @Data

@@ -21,7 +21,7 @@ import java.util.stream.Stream;
  * 其他通用工具类
  *
  * @author Izneus
- * @date 2020/08/03
+ * @date 2020-08-03
  */
 @Slf4j
 public class CommonUtil {

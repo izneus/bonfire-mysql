@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * 登录，当前默认用户名admin1，默认密码Admin123
  *
  * @author Izneus
- * @date 2020/06/28
+ * @date 2020-06-28
  */
 @Api(tags = "系统:登录")
 @RestController

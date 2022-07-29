@@ -9,7 +9,7 @@ import javax.validation.constraints.Pattern;
 
 /**
  * @author Izneus
- * @date 2021/08/01
+ * @date 2021-08-01
  */
 @Data
 @ApiModel("修改密码query")

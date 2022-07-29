@@ -16,7 +16,7 @@ import java.io.IOException;
 
 /**
  * @author Izneus
- * @date 2020/07/03
+ * @date 2020-07-03
  */
 @Slf4j
 @RequiredArgsConstructor

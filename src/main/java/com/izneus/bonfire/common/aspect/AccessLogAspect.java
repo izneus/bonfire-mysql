@@ -29,7 +29,7 @@ import java.lang.reflect.Method;
  * api访问日志切面，注意不要和slf4j等日志系统混淆
  *
  * @author Izneus
- * @date 2020/08/06
+ * @date 2020-08-06
  */
 @Aspect
 @Component

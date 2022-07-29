@@ -6,7 +6,7 @@ import lombok.Data;
 
 /**
  * @author Izneus
- * @date 2021/08/01
+ * @date 2021-08-01
  */
 @ApiModel("字典详情query")
 @Data

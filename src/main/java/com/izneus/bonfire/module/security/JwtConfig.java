@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @author Izneus
- * @date 2020/07/01
+ * @date 2020-07-01
  */
 @Configuration
 @ConfigurationProperties(prefix = "jwt")
