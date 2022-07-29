@@ -31,8 +31,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SysPrivilegeServiceImpl extends ServiceImpl<SysPrivilegeMapper, SysPrivilegeEntity> implements SysPrivilegeService {
 
-    private final SysPrivilegeMapper sysPrivilegeMapper;
-
     @Override
     public List<PrivTreeDTO> getPrivilegeTree() {
         // noinspection unchecked

@@ -2,6 +2,7 @@ package com.izneus.bonfire.module.security;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import com.izneus.bonfire.common.constant.Constant;
 import com.izneus.bonfire.common.util.RedisUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -18,8 +19,6 @@ import org.springframework.util.StringUtils;
 import java.security.Key;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static com.izneus.bonfire.common.constant.Constant.REDIS_KEY_AUTHS;
 
 /**
  * @author Izneus
@@ -91,7 +90,7 @@ public class JwtUtil {
                 .getBody();
         // redis获得权限字符串
         String userId = claims.getSubject();
-        String authString = (String) redisUtil.get(StrUtil.format(REDIS_KEY_AUTHS, userId));
+        String authString = (String) redisUtil.get(StrUtil.format(Constant.RedisKey.PRIVILEGE, userId));
         // 没有该key，即白名单
         /*if (null == authString) {
             return null;

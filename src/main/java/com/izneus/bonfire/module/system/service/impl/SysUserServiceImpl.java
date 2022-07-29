@@ -9,6 +9,7 @@ import cn.hutool.poi.excel.ExcelUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.izneus.bonfire.common.constant.Constant;
 import com.izneus.bonfire.common.constant.ErrorCode;
 import com.izneus.bonfire.common.exception.BadRequestException;
 import com.izneus.bonfire.common.util.CommonUtil;
@@ -39,9 +40,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static com.izneus.bonfire.common.constant.Constant.REDIS_KEY_AUTHS;
-import static com.izneus.bonfire.common.constant.Constant.REDIS_KEY_LOGIN_RETRY;
 
 /**
  * <p>
@@ -191,14 +189,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
 
     @Override
     public void unlockUser(String username) {
-        String retryKey = StrUtil.format(REDIS_KEY_LOGIN_RETRY, username);
+        String retryKey = StrUtil.format(Constant.RedisKey.RETRY_COUNT, username);
         redisUtil.del(retryKey);
     }
 
     @Override
     public void kickOut(String userId) {
         // 删除白名单
-        String key = StrUtil.format(REDIS_KEY_AUTHS, userId);
+        String key = StrUtil.format(Constant.RedisKey.PRIVILEGE, userId);
         redisUtil.del(key);
     }
 

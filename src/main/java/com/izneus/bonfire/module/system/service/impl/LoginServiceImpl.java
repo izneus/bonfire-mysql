@@ -30,7 +30,8 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static com.izneus.bonfire.common.constant.Constant.*;
+import static com.izneus.bonfire.common.constant.Constant.MAX_RETRY_COUNT;
+import static com.izneus.bonfire.common.constant.Constant.RedisKey;
 
 /**
  * @author Izneus
@@ -51,7 +52,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public LoginVO login(LoginQuery loginQuery) {
         // 登陆密码重试锁定功能, 检查连续密码输入错误次数
-        String retryKey = StrUtil.format(REDIS_KEY_LOGIN_RETRY, loginQuery.getUsername());
+        String retryKey = StrUtil.format(RedisKey.RETRY_COUNT, loginQuery.getUsername());
         int retryCount = (int) Optional.ofNullable(redisUtil.get(retryKey)).orElse(0);
         if (retryCount >= MAX_RETRY_COUNT) {
             throw new BadRequestException(ErrorCode.PERMISSION_DENIED,
@@ -60,7 +61,7 @@ public class LoginServiceImpl implements LoginService {
 
         if (bonfireConfig.getCaptchaEnabled()) {
             // 查询验证码
-            String key = StrUtil.format(REDIS_KEY_CAPTCHA, loginQuery.getCaptchaId());
+            String key = StrUtil.format(RedisKey.CAPTCHA, loginQuery.getCaptchaId());
             String captcha = (String) redisUtil.get(key);
             // 查询过的验证码及时清除
             redisUtil.del(key);
@@ -124,7 +125,7 @@ public class LoginServiceImpl implements LoginService {
                     .collect(Collectors.joining(","));
             String privs = privList.stream().map(ListPrivDTO::getPrivKey).distinct()
                     .collect(Collectors.joining(","));
-            String key = StrUtil.format(REDIS_KEY_AUTHS, user.getId());
+            String key = StrUtil.format(RedisKey.PRIVILEGE, user.getId());
             redisUtil.set(key, roles + "," + privs, jwtExpire, TimeUnit.SECONDS);
         }
         // todo single login
@@ -145,7 +146,7 @@ public class LoginServiceImpl implements LoginService {
         String value = captcha.text();
 
         String uuid = IdUtil.fastSimpleUUID();
-        String key = StrUtil.format(REDIS_KEY_CAPTCHA, uuid);
+        String key = StrUtil.format(RedisKey.CAPTCHA, uuid);
         // 保存验证码到redis缓存，2分钟后过期
         redisUtil.set(key, value, 2L, TimeUnit.MINUTES);
         return CaptchaVO.builder()
@@ -157,7 +158,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public void logout() {
         // 删除白名单
-        String key = StrUtil.format(REDIS_KEY_AUTHS, CurrentUserUtil.getUserId());
+        String key = StrUtil.format(RedisKey.PRIVILEGE, CurrentUserUtil.getUserId());
         redisUtil.del(key);
 
         /// 黑名单机制
