@@ -307,6 +307,19 @@
             <version>4.10.0</version>
         </dependency>
 
+        <!-- 钉钉OpenAPI新版SDK -->
+        <!--<dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>dingtalk</artifactId>
+            <version>1.3.89</version>
+        </dependency>-->
+        <!-- 钉钉OpenAPI旧版SDK -->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>alibaba-dingtalk-service-sdk</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>

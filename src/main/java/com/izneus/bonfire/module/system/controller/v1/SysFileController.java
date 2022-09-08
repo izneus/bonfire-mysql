@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 public class SysFileController {
 
     private final SysFileService fileService;
-    private final MinioUtil minioUtil;
+    // private final MinioUtil minioUtil;
     private final BonfireConfig bonfireConfig;
 
     @AccessLog("文件列表")

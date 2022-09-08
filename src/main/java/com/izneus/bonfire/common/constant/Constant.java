@@ -37,7 +37,7 @@ public class Constant {
         /**
          * 钉钉access_token，钉钉的token针对某一应用，有需要可以添加应用区分的标志
          */
-        public static final String DD_ACCESS_TOKEN = PROJECT_NAME + ":dd:accessToken";
+        public static final String DINGTALK_ACCESS_TOKEN = PROJECT_NAME + ":dd:accessToken";
     }
 
     /**

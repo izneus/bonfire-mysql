@@ -28,6 +28,10 @@ spring:
       max-file-size: 10MB
       # 单请求最大尺寸
       max-request-size: 10MB
+# 日志文件生成路径，一般生产环境需要配置，开发环境不需要了
+#logging:
+#  file:
+#    path: logs
 
 # 工程自定义参数
 bonfire:
@@ -52,3 +56,8 @@ minio:
   endpoint: url
   accessKey: ak
   secretKey: sk
+
+dingtalk:
+  agentId: id
+  appKey: ak
+  appSecret: as
