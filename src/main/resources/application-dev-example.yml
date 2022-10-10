@@ -53,11 +53,12 @@ bonfire:
     tempPath: /home/bonfire/temp
 
 minio:
-  endpoint: url
-  accessKey: ak
-  secretKey: sk
+  endpoint: endpoint
+  accessKey: access_key
+  secretKey: secret_key
 
 dingtalk:
-  agentId: id
-  appKey: ak
-  appSecret: as
+  agentId: agent_id
+  appKey: app_key
+  appSecret: app_secret
+  adminUserId: admin_user_id

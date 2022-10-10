@@ -8,6 +8,9 @@ package com.izneus.bonfire.common.constant;
  */
 public class Constant {
 
+    /**
+     * 所有RedisKey的前缀，一般使用项目名称，防止多个Jar公用一个Redis时互相冲突
+     */
     private static final String PROJECT_NAME = "bf";
 
     /**
