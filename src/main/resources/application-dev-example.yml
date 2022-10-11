@@ -62,3 +62,9 @@ dingtalk:
   appKey: app_key
   appSecret: app_secret
   adminUserId: admin_user_id
+
+server:
+  # port: 8084
+  tomcat:
+    # 预防slow http attack
+    connection-timeout: 8000
