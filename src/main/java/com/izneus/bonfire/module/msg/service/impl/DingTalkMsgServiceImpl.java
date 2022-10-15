@@ -61,7 +61,7 @@ public class DingTalkMsgServiceImpl implements DingTalkMsgService {
         try {
             response = client.execute(request);
         } catch (ApiException e) {
-            e.printStackTrace();
+            log.error("请求钉钉AccessToken失败", e);
         }
         if (response == null) {
             return null;
@@ -95,7 +95,7 @@ public class DingTalkMsgServiceImpl implements DingTalkMsgService {
         try {
             rsp = client.execute(request, getAccessToken());
         } catch (ApiException e) {
-            e.printStackTrace();
+            log.error("发送钉钉文本信息失败", e);
         }
         if (rsp == null) {
             return null;

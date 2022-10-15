@@ -52,11 +52,13 @@ bonfire:
     uploadPath: /home/bonfire/upload
     tempPath: /home/bonfire/temp
 
+# minio相关参数
 minio:
   endpoint: endpoint
   accessKey: access_key
   secretKey: secret_key
 
+# 钉钉相关参数
 dingtalk:
   agentId: agent_id
   appKey: app_key
