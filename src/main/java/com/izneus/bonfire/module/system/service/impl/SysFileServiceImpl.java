@@ -11,6 +11,7 @@ import com.izneus.bonfire.common.constant.ErrorCode;
 import com.izneus.bonfire.common.exception.BadRequestException;
 import com.izneus.bonfire.common.util.CommonUtil;
 import com.izneus.bonfire.config.BonfireConfig;
+import com.izneus.bonfire.module.security.CurrentUserUtil;
 import com.izneus.bonfire.module.security.JwtUtil;
 import com.izneus.bonfire.module.system.controller.v1.query.UploadChunkQuery;
 import com.izneus.bonfire.module.system.controller.v1.query.ChunkQuery;
@@ -37,7 +38,9 @@ import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.izneus.bonfire.common.constant.Constant.TEMP_FILE;
@@ -160,6 +163,15 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFileEntity
     @Override
     public List<String> uploadFiles(List<MultipartFile> multipartFiles) {
         return multipartFiles.stream().map(this::uploadFile).collect(Collectors.toList());
+    }
+
+    @Override
+    public String getFileToken(String filename, String fileType) {
+        Map<String, Object> claims = new HashMap<>(2);
+        claims.put("filename", filename);
+        claims.put("fileType", fileType);
+        // 生成文件下载的临时token
+        return jwtUtil.createToken(CurrentUserUtil.getUserId(), 120L, claims);
     }
 
     @Override

@@ -72,12 +72,20 @@ public interface SysFileService extends IService<SysFileEntity> {
     List<String> uploadFiles(List<MultipartFile> multipartFiles);
 
     /**
-     * 下载文件
+     * 下载文件第一步，获取临时token
      *
-     * @param token 文件下载2步中第一步生成的token
+     * @param filename 文件名
+     * @param fileType 文件类型
+     * @return token
+     */
+    String getFileToken(String filename, String fileType);
+
+    /**
+     * 下载文件第二步
+     *
+     * @param token 文件下载临时token
      * @return ResponseEntity<Resource>
      */
     ResponseEntity<Resource> downloadFile(String token);
-
 
 }

@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.common.base.BasePageVO;
 import com.izneus.bonfire.common.util.CommonUtil;
-import com.izneus.bonfire.common.util.MinioUtil;
 import com.izneus.bonfire.config.BonfireConfig;
 import com.izneus.bonfire.module.system.controller.v1.query.*;
 import com.izneus.bonfire.module.system.controller.v1.vo.*;
@@ -28,6 +27,8 @@ import javax.validation.constraints.NotBlank;
 import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.izneus.bonfire.common.constant.Constant.UPLOAD_FILE;
 
 /**
  * <p>
@@ -125,7 +126,21 @@ public class SysFileController {
     }
 
     /**
-     * 下载文件分为2步，第一步请求返回token，第二步用之前的token，get请求真正的文件
+     * 下载文件分为2步，第一步获取临时token，第二步使用临时token，get请求真正的文件
+     *
+     * 下载文件第一步
+     */
+    @AccessLog("获取文件下载token")
+    @ApiOperation("获取文件下载token")
+    @PostMapping("/getToken")
+    public GetFileTokenVO getFileToken(@Validated @RequestBody IdQuery query) {
+        SysFileEntity file = fileService.getById(query.getId());
+        String token = fileService.getFileToken(file.getUniqueFilename(), UPLOAD_FILE);
+        return GetFileTokenVO.builder().token(token).build();
+    }
+
+    /**
+     * 下载文件第二步
      */
     @AccessLog("下载文件")
     @ApiOperation("下载文件")
