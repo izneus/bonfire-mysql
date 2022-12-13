@@ -111,10 +111,11 @@ CREATE TABLE `sys_dict`
     `create_user` varchar(64)  DEFAULT NULL COMMENT '创建人',
     `update_user` varchar(64)  DEFAULT NULL COMMENT '更新人',
     `status`      varchar(64)  DEFAULT NULL COMMENT '字典状态，0=有效，1=无效',
-    `dict_sort`   varchar(10)  DEFAULT NULL COMMENT '排序号',
+    `dict_sort`   int(11)      DEFAULT NULL COMMENT '排序号',
     `remark`      varchar(500) DEFAULT NULL COMMENT '备注',
     PRIMARY KEY (`id`),
-    UNIQUE KEY `sys_dict_id_uindex` (`id`)
+    UNIQUE KEY `sys_dict_id_uindex` (`id`),
+    UNIQUE KEY `uk_dict_type_value` (`dict_type`, `dict_value`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_general_ci COMMENT ='系统_字典'
 ;

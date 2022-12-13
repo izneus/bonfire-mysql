@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author Izneus
- * @since 2021-11-10
+ * @since 2022-12-13
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
