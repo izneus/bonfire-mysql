@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -87,5 +88,13 @@ public interface SysFileService extends IService<SysFileEntity> {
      * @return ResponseEntity<Resource>
      */
     ResponseEntity<Resource> downloadFile(String token);
+
+    /**
+     * 创建导出数据的excel文件
+     *
+     * @param exportData 待导出数据
+     * @return 文件名filename
+     */
+    String createExportExcel(List<Map<String, Object>> exportData);
 
 }

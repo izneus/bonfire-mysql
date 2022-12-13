@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 @ApiModel("导出文件vo")
 @Builder
-public class ExportVO {
+public class ExportFileVO {
 
     @ApiModelProperty("文件名")
     private String filename;

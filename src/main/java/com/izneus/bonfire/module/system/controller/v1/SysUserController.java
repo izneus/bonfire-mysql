@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.common.base.BasePageVO;
 import com.izneus.bonfire.module.system.controller.v1.query.*;
-import com.izneus.bonfire.module.system.controller.v1.vo.ExportVO;
+import com.izneus.bonfire.module.system.controller.v1.vo.ExportFileVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.IdVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.ListUserVO;
 import com.izneus.bonfire.module.system.controller.v1.vo.UserVO;
@@ -126,19 +126,10 @@ public class SysUserController {
     @ApiOperation("导出用户")
     @PostMapping("/export")
     @PreAuthorize("hasAuthority('sys:user:export') or hasAuthority('admin')")
-    public ExportVO exportUsers(@Validated @RequestBody ListUserQuery query) {
+    public ExportFileVO exportUsers(@Validated @RequestBody ListUserQuery query) {
         String filename = userService.exportUsers(query);
-        /// 暂时注释
-        /*Map<String, Object> claims = new HashMap<>(2);
-        claims.put("filename", filename);
-        claims.put("fileType", TEMP_FILE);*/
-        // 生成文件下载的临时token
-        // String token = jwtUtil.createToken(CurrentUserUtil.getUserId(), 120L, claims);
         String token = fileService.getFileToken(filename, TEMP_FILE);
-        return ExportVO.builder()
-                .filename(filename)
-                .token(token)
-                .build();
+        return ExportFileVO.builder().filename(filename).token(token).build();
     }
 
     @AccessLog("导入用户")

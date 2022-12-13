@@ -4,6 +4,8 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.poi.excel.BigExcelWriter;
+import cn.hutool.poi.excel.ExcelUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -24,6 +26,7 @@ import com.izneus.bonfire.module.system.service.SysFileService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -214,4 +217,20 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFileEntity
         }
         return ResponseEntity.notFound().build();
     }
+
+    @Override
+    public String createExportExcel(List<Map<String, Object>> exportData) {
+        String filename = IdUtil.fastSimpleUUID() + ".xlsx";
+        String filePath = bonfireConfig.getPath().getTempPath() + File.separator + filename;
+        // 创建excel writer
+        BigExcelWriter writer = ExcelUtil.getBigWriter(filePath);
+        // 写文件
+        writer.write(exportData, true);
+        SXSSFSheet sheet = (SXSSFSheet) writer.getSheet();
+        sheet.trackAllColumnsForAutoSizing();
+        writer.autoSizeColumnAll();
+        writer.close();
+        return filename;
+    }
+
 }

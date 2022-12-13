@@ -125,10 +125,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
 
     @Override
     public String exportUsers(ListUserQuery query) {
-        String filename = IdUtil.fastSimpleUUID() + ".xlsx";
-        String filePath = bonfireConfig.getPath().getTempPath() + File.separator + filename;
-        // 创建excel writer
-        BigExcelWriter writer = ExcelUtil.getBigWriter(filePath);
+        // 准备数据
         List<Map<String, Object>> exportData = new ArrayList<>();
         List<SysUserEntity> users = listUsers(query).getRecords();
         // 填充数据
@@ -145,13 +142,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
             map.put("账号状态", user.getStatus());
             exportData.add(map);
         }
-        // 写文件
-        writer.write(exportData, true);
-        SXSSFSheet sheet = (SXSSFSheet) writer.getSheet();
-        sheet.trackAllColumnsForAutoSizing();
-        writer.autoSizeColumnAll();
-        writer.close();
-        return filename;
+        // 生成临时文件，返回文件名
+        return fileService.createExportExcel(exportData);
     }
 
     @Override
