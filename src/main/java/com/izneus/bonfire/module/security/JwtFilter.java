@@ -2,8 +2,10 @@ package com.izneus.bonfire.module.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -13,6 +15,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Izneus
@@ -26,9 +30,34 @@ public class JwtFilter extends OncePerRequestFilter {
     private final JwtConfig jwtConfig;
     private final JwtUtil jwtUtil;
 
+    /**
+     * 不过滤jwt的白名单，防止前端误加了鉴权头信息拦截
+     */
+    private static List<String> skipFilterUrls = Arrays.asList(
+            // 登录相关
+            "/api/*/login",
+            "/api/*/captcha",
+            // 文件get方式下载
+            "/api/*/file/download",
+            // 可能存在的静态文件
+            "/*.html",
+            "/favicon.ico",
+            "/**/*.html",
+            "/**/*.css",
+            "/**/*.js"
+    );
+
     @Override
-    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
-                                    FilterChain filterChain) throws ServletException, IOException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        /// 默认返回
+        // return super.shouldNotFilter(request);
+        return skipFilterUrls.stream().anyMatch(url -> new AntPathRequestMatcher(url).matches(request));
+    }
+
+    @Override
+    protected void doFilterInternal(@NotNull HttpServletRequest httpServletRequest,
+                                    @NotNull HttpServletResponse httpServletResponse,
+                                    @NotNull FilterChain filterChain) throws ServletException, IOException {
         String token = resolveToken(httpServletRequest);
         if (StringUtils.hasText(token)) {
             Authentication authentication = jwtUtil.getAuthentication(token);

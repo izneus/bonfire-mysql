@@ -11,9 +11,14 @@ import lombok.Data;
 @Data
 @ApiModel("字典详情dto")
 public class DictDetailDTO {
+
+    @ApiModelProperty("id")
+    private String id;
+
     @ApiModelProperty("字典值(编码)")
     private String dictValue;
 
     @ApiModelProperty("字典标签(中文)")
     private String dictLabel;
+
 }
