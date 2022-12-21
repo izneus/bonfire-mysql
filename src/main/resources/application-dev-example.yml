@@ -60,10 +60,24 @@ minio:
 
 # 钉钉相关参数
 dingtalk:
-  agentId: agent_id
-  appKey: app_key
-  appSecret: app_secret
-  adminUserId: admin_user_id
+  # app1
+  appBonfire:
+    corpId: ding123456
+    agentId: 123456
+    appKey: abcdefg
+    appSecret: abcdefg
+    accessTokenKey: bf:dd:fire:accessToken
+    jsapiTicketKey: bf:dd:fire:jsapiTicket
+    adminUserId: '123abc'
+  # app2
+  appLamp:
+    corpId: ding123456
+    agentId: 123456
+    appKey: abcdefg
+    appSecret: abcdefg
+    accessTokenKey: bf:dd:lamp:accessToken
+    jsapiTicketKey: bf:dd:lamp:jsapiTicket
+    adminUserId: '123abc'
 
 server:
   # port: 8084

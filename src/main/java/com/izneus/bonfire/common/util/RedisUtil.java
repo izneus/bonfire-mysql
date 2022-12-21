@@ -14,16 +14,16 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 @Component
 public class RedisUtil {
+    // todo 这个其实更加应该作为service存在，而不是common工具类，不过我也想不到放在什么地方好
+
     private final RedisTemplate<String, Object> redisTemplate;
-//    StringRedisTemplate
-    /**
-     * 默认过期时长，单位：秒
-     */
-//    public final static long DEFAULT_EXPIRE = 60 * 60 * 24;
-    /**
-     * 不设置过期时长
-     */
-//    public final static long NOT_EXPIRE = -1;
+    // StringRedisTemplate
+
+    // 默认过期时长，单位：秒
+    // public final static long DEFAULT_EXPIRE = 60 * 60 * 24;
+
+    // 不设置过期时长
+    // public final static long NOT_EXPIRE = -1;
 
     /**
      * 写redis，key不宜过长影响性能，也不宜过短影响可读性，
@@ -70,6 +70,11 @@ public class RedisUtil {
         return StringUtils.hasText(key) ? redisTemplate.opsForValue().get(key) : null;
     }
 
+    /**
+     * 删除redis
+     *
+     * @param key 键
+     */
     public void del(String key) {
         redisTemplate.delete(key);
     }

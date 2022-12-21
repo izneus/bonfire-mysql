@@ -21,4 +21,7 @@ public class ConfigQuery {
     @ApiModelProperty("value")
     private String cfgValue;
 
+    @ApiModelProperty("备注")
+    private String remark;
+
 }

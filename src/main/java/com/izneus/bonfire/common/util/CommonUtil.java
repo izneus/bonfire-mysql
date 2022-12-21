@@ -14,7 +14,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 /**
@@ -74,6 +77,12 @@ public class CommonUtil {
         return new BCryptPasswordEncoder().encode(plaintext);
     }
 
+    /**
+     * 校验起止时间使用数组的参数
+     *
+     * @param dateRange 起止时间
+     * @return 起止时间
+     */
     public static List<Date> parseDateRange(List<Date> dateRange) {
         Date startTime = null;
         Date endTime = null;

@@ -24,6 +24,9 @@ public class ListConfigVO {
     @ApiModelProperty("设置项value")
     private String cfgValue;
 
+    @ApiModelProperty("备注")
+    private String remark;
+
     @ApiModelProperty("创建时间")
     @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
