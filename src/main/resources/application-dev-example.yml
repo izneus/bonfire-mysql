@@ -35,6 +35,7 @@ spring:
 
 # 工程自定义参数
 bonfire:
+  projectName: @project.name@
   version: @project.version@
   # 登录是否启用验证码校验
   captchaEnabled: true
@@ -51,6 +52,27 @@ bonfire:
   linux:
     uploadPath: /home/bonfire/upload
     tempPath: /home/bonfire/temp
+  # 不校验token的url
+  skipFilterUrls:
+    # swagger相关
+    - /authenticate
+    - /swagger-resources/**
+    - /swagger-ui/**
+    - /*/api-docs
+    - /webjars/**
+    # knife4j
+    - /doc.html
+    # 登录相关
+    - /api/**/login
+    - /api/*/captcha
+    # 文件get方式下载
+    - /api/*/file/download
+    # 可能存在的静态文件
+    - /*.html
+    - /favicon.ico
+    - /**/*.html
+    - /**/*.css
+    - /**/*.js
 
 # minio相关参数
 minio:
@@ -58,7 +80,7 @@ minio:
   accessKey: access_key
   secretKey: secret_key
 
-# 钉钉相关参数
+# 钉钉相关参数，极端情况如同一个应用部署在3000个钉钉组织，可以保存在数据库，做好对应关系
 dingtalk:
   # app1
   appBonfire:
@@ -66,6 +88,7 @@ dingtalk:
     agentId: 123456
     appKey: abcdefg
     appSecret: abcdefg
+    # 缓存在redis的key，注意保证不同app之间唯一
     accessTokenKey: bf:dd:fire:accessToken
     jsapiTicketKey: bf:dd:fire:jsapiTicket
     adminUserId: '123abc'

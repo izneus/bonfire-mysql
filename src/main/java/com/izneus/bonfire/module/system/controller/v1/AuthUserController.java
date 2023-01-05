@@ -5,7 +5,6 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.izneus.bonfire.common.annotation.AccessLog;
 import com.izneus.bonfire.common.base.BasePageVO;
-import com.izneus.bonfire.common.constant.Constant;
 import com.izneus.bonfire.common.util.RedisUtil;
 import com.izneus.bonfire.module.security.CurrentUserUtil;
 import com.izneus.bonfire.module.system.controller.v1.query.ChangePasswordQuery;
@@ -77,7 +76,7 @@ public class AuthUserController {
     public UserInfoVO getUserInfo() {
         // 获得redis里登录时组装好的角色+权限字符串
         String userId = CurrentUserUtil.getUserId();
-        String key = StrUtil.format(Constant.RedisKey.PRIVILEGE, userId);
+        String key = redisUtil.getPrivilegeKey(userId);
         String authString = (String) redisUtil.get(key);
         // 按照前端要求，字符串切分后转数组，包含角色和权限
         List<String> roles = StrUtil.split(authString, ',');

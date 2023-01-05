@@ -1,15 +1,12 @@
 package com.izneus.bonfire.module.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.poi.excel.BigExcelWriter;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.izneus.bonfire.common.constant.Constant;
 import com.izneus.bonfire.common.constant.ErrorCode;
 import com.izneus.bonfire.common.exception.BadRequestException;
 import com.izneus.bonfire.common.util.CommonUtil;
@@ -29,7 +26,6 @@ import com.izneus.bonfire.module.system.service.SysFileService;
 import com.izneus.bonfire.module.system.service.SysUserRoleService;
 import com.izneus.bonfire.module.system.service.SysUserService;
 import lombok.RequiredArgsConstructor;
-import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -181,14 +177,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
 
     @Override
     public void unlockUser(String username) {
-        String retryKey = StrUtil.format(Constant.RedisKey.RETRY_COUNT, username);
+        String retryKey = redisUtil.getRetryCountKey(username);
         redisUtil.del(retryKey);
     }
 
     @Override
     public void kickOut(String userId) {
         // 删除白名单
-        String key = StrUtil.format(Constant.RedisKey.PRIVILEGE, userId);
+        String key = redisUtil.getPrivilegeKey(userId);
         redisUtil.del(key);
     }
 

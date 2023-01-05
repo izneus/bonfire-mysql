@@ -1,5 +1,7 @@
 package com.izneus.bonfire.module.security;
 
+import cn.hutool.core.util.ArrayUtil;
+import com.izneus.bonfire.config.BonfireConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,28 +26,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final BonfireConfig bonfireConfig;
     private final JwtFilter jwtFilter;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
-    /**
-     * 允许匿名访问的白名单，不需要加Authorization Header即可访问的地址
-     */
-    private static final String[] AUTH_WHITELIST = {
-            // swagger相关
-            "/authenticate",
-            "/swagger-resources/**",
-            "/swagger-ui/**",
-            "/*/api-docs",
-            "/webjars/**",
-            // knife4j
-            "/doc.html",
-            // 登录相关
-            "/api/*/login",
-            "/api/*/captcha",
-            // 文件get方式下载
-            "/api/*/file/download"
-    };
 
     /*@Bean
     GrantedAuthorityDefaults grantedAuthorityDefaults() {
@@ -77,7 +61,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(AUTH_WHITELIST).permitAll()
+                // 不校验的url
+                .antMatchers(ArrayUtil.toArray(bonfireConfig.getSkipFilterUrls(), String.class)).permitAll()
                 .anyRequest().authenticated();
     }
 }

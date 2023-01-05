@@ -6,6 +6,8 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
+
 /**
  * bonfire工程使用的一些自定义参数，具体含义可以参考.yml内注释
  *
@@ -24,6 +26,7 @@ public class BonfireConfig {
         private String tempPath;
     }
 
+    private String projectName;
     private String version;
     private Boolean captchaEnabled;
     private String defaultPassword;
@@ -31,6 +34,7 @@ public class BonfireConfig {
     private BonfirePath mac;
     private BonfirePath win;
     private BonfirePath linux;
+    private List<String> skipFilterUrls;
 
     public BonfirePath getPath() {
         OsInfo osInfo = SystemUtil.getOsInfo();

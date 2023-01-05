@@ -2,6 +2,7 @@ package com.izneus.bonfire.module.dingtalk.service;
 
 import com.izneus.bonfire.config.DingTalkAppConfig;
 import com.izneus.bonfire.module.dingtalk.controller.v1.vo.GetSignVO;
+import com.izneus.bonfire.module.system.controller.v1.vo.LoginVO;
 
 /**
  * @author Izneus
@@ -32,4 +33,14 @@ public interface DingTalkService {
      * @return 前端js鉴权所需要的参数
      */
     GetSignVO getSign(DingTalkAppConfig appConfig, String url);
+
+    /**
+     * 钉钉免登
+     *
+     * @param code      前端传递的临时授权码
+     * @param appConfig 应用参数
+     * @return 登录vo
+     */
+    LoginVO ddLogin(String code, DingTalkAppConfig appConfig);
+
 }

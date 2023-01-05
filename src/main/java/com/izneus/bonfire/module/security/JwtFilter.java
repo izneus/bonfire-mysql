@@ -1,5 +1,6 @@
 package com.izneus.bonfire.module.security;
 
+import com.izneus.bonfire.config.BonfireConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -15,8 +16,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author Izneus
@@ -29,29 +28,17 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtConfig jwtConfig;
     private final JwtUtil jwtUtil;
+    private final BonfireConfig bonfireConfig;
 
     /**
      * 不过滤jwt的白名单，防止前端误加了鉴权头信息拦截
      */
-    private static List<String> skipFilterUrls = Arrays.asList(
-            // 登录相关
-            "/api/*/login",
-            "/api/*/captcha",
-            // 文件get方式下载
-            "/api/*/file/download",
-            // 可能存在的静态文件
-            "/*.html",
-            "/favicon.ico",
-            "/**/*.html",
-            "/**/*.css",
-            "/**/*.js"
-    );
-
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         /// 默认返回
         // return super.shouldNotFilter(request);
-        return skipFilterUrls.stream().anyMatch(url -> new AntPathRequestMatcher(url).matches(request));
+        return bonfireConfig.getSkipFilterUrls().stream()
+                .anyMatch(url -> new AntPathRequestMatcher(url).matches(request));
     }
 
     @Override

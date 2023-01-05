@@ -1,5 +1,6 @@
 package com.izneus.bonfire.common.util;
 
+import com.izneus.bonfire.config.BonfireConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class RedisUtil {
     // todo 这个其实更加应该作为service存在，而不是common工具类，不过我也想不到放在什么地方好
 
+    private final BonfireConfig bonfireConfig;
     private final RedisTemplate<String, Object> redisTemplate;
     // StringRedisTemplate
 
@@ -98,6 +100,36 @@ public class RedisUtil {
      */
     public Long incr(String key) {
         return redisTemplate.opsForValue().increment(key);
+    }
+
+    /**
+     * 登录界面的验证码redisKey
+     *
+     * @param captchaId uuid
+     * @return 形如 bonfire:captcha:b17f24ff026d40949c85a24f4f375d42
+     */
+    public String getCaptchaKey(String captchaId) {
+        return String.format("%s:captcha:%s", bonfireConfig.getProjectName(), captchaId);
+    }
+
+    /**
+     * 登陆重试次数redisKey，重试一般指的是密码错误
+     *
+     * @param username 用户名
+     * @return 形如 bonfire:loginRetryCount:admin
+     */
+    public String getRetryCountKey(String username) {
+        return String.format("%s:loginRetryCount:%s", bonfireConfig.getProjectName(), username);
+    }
+
+    /**
+     * 用户权限redisKey
+     *
+     * @param userId 用户id
+     * @return 形如 bonfire:userId:123456:privilege
+     */
+    public String getPrivilegeKey(String userId) {
+        return String.format("%s:userId:%s:privilege", bonfireConfig.getProjectName(), userId);
     }
 
 }
