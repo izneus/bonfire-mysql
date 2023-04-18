@@ -345,6 +345,25 @@ CREATE TABLE `sys_file_chunk`
 ;
 
 -- ----------------------------
+-- 系统_设置表
+-- ----------------------------
+CREATE TABLE `sys_config`
+(
+    `id`          varchar(64) NOT NULL COMMENT 'pk',
+    `cfg_key`     varchar(20)  DEFAULT NULL COMMENT '设置项的key',
+    `cfg_value`   varchar(20)  DEFAULT NULL COMMENT '设置项的value',
+    `create_time` datetime     DEFAULT NULL,
+    `create_user` varchar(64)  DEFAULT NULL,
+    `update_time` datetime     DEFAULT NULL,
+    `update_user` varchar(64)  DEFAULT NULL,
+    `remark`      varchar(100) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_cfg_key` (`cfg_key`) USING BTREE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='系统 设置'
+;
+
+-- ----------------------------
 -- 初始化数据
 -- ----------------------------
 -- sched_job
@@ -474,3 +493,5 @@ INSERT INTO sys_user (id, username, password, nickname, fullname, email, mobile,
 -- sys_user_role
 INSERT INTO sys_user_role (id, user_id, role_id, create_time, create_user, update_time, update_user, remark) VALUES ('1503698920629452802', '1', '1', '2022-03-15 19:45:35', '1', '2022-03-15 19:45:35', '1', null);
 INSERT INTO sys_user_role (id, user_id, role_id, create_time, create_user, update_time, update_user, remark) VALUES ('1503699533425655809', '2', '1503698668706971650', '2022-03-15 19:48:01', '1', '2022-03-15 19:48:01', '1', null);
+
+INSERT INTO sys_config (id, cfg_key, cfg_value, create_time, create_user, update_time, update_user, remark) VALUES ('1', 'version', '1.1.2', '2022-12-19 09:32:26', '1', null, null, '版本号');
