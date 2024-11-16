@@ -1,10 +1,12 @@
 package com.izneus.bonfire.common.util;
 
+import cn.hutool.core.bean.BeanUtil;
 import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * @author Izneus
@@ -41,4 +43,11 @@ public class BeanCopyUtil {
         }
         return list;
     }
+
+    public static <T> List<T> copyListProperties(List<?> source, Class<T> tClass, String... ignoreProperties) {
+        return source.stream()
+                .map(i -> BeanUtil.copyProperties(i, tClass, ignoreProperties))
+                .collect(Collectors.toList());
+    }
+
 }

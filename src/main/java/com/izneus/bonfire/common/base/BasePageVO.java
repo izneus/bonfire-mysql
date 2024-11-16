@@ -1,6 +1,7 @@
 package com.izneus.bonfire.common.base;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.izneus.bonfire.common.util.BeanCopyUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -43,6 +44,17 @@ public class BasePageVO<T> {
         this.pageNum = page.getCurrent();
         this.pageSize = page.getSize();
         this.rows = page.getRecords();
+    }
+
+    public BasePageVO(Page page, Class<T> tClass, String... ignoreProperties) {
+        this.totalSize = page.getTotal();
+        this.pageNum = page.getCurrent();
+        this.pageSize = page.getSize();
+        this.rows = BeanCopyUtil.copyListProperties(page.getRecords(), tClass, ignoreProperties);
+    }
+
+    public static <T> BasePageVO<T> of(Page page, Class<T> tClass, String... ignoreProperties) {
+        return new BasePageVO<>(page, tClass, ignoreProperties);
     }
 
 }

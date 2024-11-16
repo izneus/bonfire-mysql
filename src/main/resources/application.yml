@@ -43,6 +43,8 @@ flowable:
   db-history-used: true
   check-process-definitions: false
   history-level: full
+  # 关闭定时任务JOB，主要是为了方便debug的时候打印过多日志
+  async-executor-activate: false
 
 # ssl 开启https
 # mac的chrome或者新版chrome不允许访问自签证书（以前可以选择跳过、继续访问），提示ERR_CERT_INVALID，
